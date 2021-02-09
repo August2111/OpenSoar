@@ -126,10 +126,18 @@ dlgConfigurationBlueFlyVarioShowModal(Device &_device)
 
   const DialogLook &look = UIGlobals::GetDialogLook();
 
-  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(),
-                      look,
+#if  !defined(_MSC_VER)
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(), look,
                       _T("BlueFly Vario"),
                       new BlueFlyConfigurationWidget(look, dialog, device));
+#else
+  WidgetDialog dialog(WidgetDialog::Auto{}, UIGlobals::GetMainWindow(), look,
+    _T("BlueFly Vario"));
+  // unfortunately this internal declaration isn't possible with MSVC!
+  // so I have to set this widget later...
+  dialog.FinishPreliminary(
+      new BlueFlyConfigurationWidget(look, dialog, device));
+#endif
 
   dialog.AddButton(_("Cancel"), mrCancel);
   dialog.ShowModal();
