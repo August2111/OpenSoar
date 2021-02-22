@@ -178,3 +178,22 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   return ret;
 }
+
+#if _MSC_VER  // TODO(August12111): Workaround for openssl ???
+//----------------------------------------------------------------------------
+// the symbol _iob has to be available...
+// https://stackoverflow.com/questions/50411270/error-lnk2001-unresolved-external-symbol-iob-func-in-vs2017
+#define stdin  (__acrt_iob_func(0))
+#define stdout (__acrt_iob_func(1))
+#define stderr (__acrt_iob_func(2))
+
+FILE _iob[] = { *stdin, *stdout, *stderr };
+extern "C" FILE * __cdecl __iob_func(void) { return _iob; }
+
+//----------------------------------------------------------------------------
+// Missing __imp__vsnprintf in "", see:
+// https://stackoverflow.com/questions/31053670/unresolved-external-symbol-vsnprintf-in-dxerr-lib
+#pragma comment(lib, "legacy_stdio_definitions.lib")
+//----------------------------------------------------------------------------
+
+#endif  // __MSC_VER  // TODO(August12111): Workaround for openssl ???
