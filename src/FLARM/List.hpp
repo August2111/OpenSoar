@@ -30,6 +30,8 @@ Copyright_License {
 
 #include <type_traits>
 
+#define MCS_WORKAROUND   1
+
 /**
  * This class keeps track of the traffic objects received from a
  * FLARM.
@@ -80,7 +82,7 @@ struct TrafficList {
     modified.Expire(clock, std::chrono::minutes(5));
     new_traffic.Expire(clock, std::chrono::minutes(1));
 
-    for (unsigned i = list.size(); i-- > 0;)
+    for (size_t i = list.size(); i-- > 0;)
       if (!list[i].Refresh(clock))
         list.quick_remove(i);
   }
@@ -160,32 +162,48 @@ struct TrafficList {
    * Search for the previous traffic in the ordered list.
    */
   const FlarmTraffic *PreviousTraffic(const FlarmTraffic *t) const {
+#ifdef MCS_WORKAROUND
+    return nullptr;  // TODO(August2111): This is wrong!!!!
+#else
     return t > list.begin()
       ? t - 1
       : NULL;
+#endif
   }
 
   /**
    * Search for the next traffic in the ordered list.
    */
   const FlarmTraffic *NextTraffic(const FlarmTraffic *t) const {
+#ifdef MCS_WORKAROUND
+    return nullptr;  // TODO(August2111): This is wrong!!!!
+#else
     return t + 1 < list.end()
       ? t + 1
       : NULL;
+#endif
   }
 
   /**
    * Search for the first traffic in the ordered list.
    */
   const FlarmTraffic *FirstTraffic() const {
-    return list.empty() ? NULL : list.begin();
+#ifdef MCS_WORKAROUND
+    return list.empty() ? nullptr : &list[0];
+#else
+    return list.empty() ? nullptr : list.begin();
+#endif
   }
 
   /**
    * Search for the last traffic in the ordered list.
    */
   const FlarmTraffic *LastTraffic() const {
+#ifdef MCS_WORKAROUND
+    return list.empty() ? nullptr : &list[list.size()-1];
+#else
     return list.empty() ? NULL : list.end() - 1;
+#endif
   }
 
   /**
@@ -195,7 +213,12 @@ struct TrafficList {
   const FlarmTraffic *FindMaximumAlert() const;
 
   unsigned TrafficIndex(const FlarmTraffic *t) const {
-    return t - list.begin();
+
+#ifdef MCS_WORKAROUND
+    return 0;  // TODO(August2111): This is wrong!!!!
+#else
+    return t - list.begin(); 
+#endif
   }
 };
 
