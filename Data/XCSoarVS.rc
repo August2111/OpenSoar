@@ -1,0 +1,234 @@
+// Enables High Resolution Legacy Support on Windows Mobile devices (> WM 5.0)
+// (see http:/msdn.microsoft.com/en-us/library/ms889982.aspx)
+HI_RES_AWARE CEUX {1}
+
+#include "resource.h"
+
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/stringize.hpp>
+
+#   define BITMAP(name, path)    name BITMAP DISCARDABLE  path
+// #   define BITMAPX(name, path)   name BITMAP DISCARDABLE path
+
+// ---------------------------------------------------
+#define CONCAT(a,b,c) a##b##c
+#define CONCAT2(a,b,c)  CONCAT(a,b,c)
+
+#define STRINGIZELN_(x) #x
+#define STRINGIZELN(x) STRINGIZELN_(x)
+// #    define BITMAP_ICON(name, file) BITMAP(name, STRINGIZE(CONCAT(CONCAT("../output/data/icons/", file), ".bmp")))
+// #    define BITMAP_ICON(name, file) BITMAP(name, STRINGIZE(CONCAT(STRINGIZE(CONCAT("../output/data/icons/", file)), ".bmp")))
+//  #    define BITMAP_ICON(name, file) BITMAP(name, STRINGIZE("../output/data/icons/" file))
+// #define PATH STRINGIZE("../output/data/graphics/")
+// #    define BITMAP_ICON(name, file) BITMAP(name, STRINGIZE(CONCAT("../output/data/icons/", file )))  // ".bmp")
+#    define BITMAP_ICON(name, file) BITMAP(name, BOOST_PP_STRINGIZE(BOOST_PP_CAT( D:/Projects/XCSoar/cmake/output/data/icons/ , BOOST_PP_CAT( STRINGIZELN(file) , .bmp))))
+// #    define BITMAP_ICON(name, file) BITMAP(name, BOOST_PP_CAT( D:/Projects/XCSoar/cmake/output/data/icons/ , BOOST_PP_CAT( file, .bmp)))
+// #    define BITMAP_ICON(name, file) BITMAP(name, PATH file ))  // ".bmp")
+// #    define BITMAP_ICON(name, file) BITMAP(name,  CONCAT2("../output/data/icons/", file, ".bmp"  ))
+// #    define BITMAP_ICON(name, file)  name BITMAP DISCARDABLE  "../output/data/icons/" file ".bmp" 
+//   ".bmp") )
+// ---------------------------------------------------
+
+// This is WIN32 only!
+    // BITMAP_ICON(IDB_ABORT,                           "../output/data/icons/mode_abort.bmp" )
+    // BITMAP_ICON(IDB_ABORT, "mode_abort")
+#    define BITMAP_GRAPHIC(name, file) BITMAP(name,     "../output/data/graphics/" file ".bmp")
+    // aug: 
+// #    define BITMAP_ICON(name, file) BITMAP(name, "../output/data/icons/ ## file ## .bmp")
+    // aug: #define BITMAP_GRAPHIC(name, file) BITMAP(name, "D:/Projects/Gliding/XCSoarAug/output/data/graphics/" file ".bmp")
+/* only GDI knows how to deal with hatched brushes, the rest uses transparency */
+#   define HATCH_BITMAP(name, file) BITMAP_BITMAP(name, file)
+#   define SOUND(name, file) name WAVE DISCARDABLE "sound/" file ".wav"
+
+// --- Icons ---
+
+IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps/xcsoarswift.ico"
+
+
+// --- Bitmaps ---
+
+// IDB_ABORT_XXX           BITMAP   DISCARDABLE    STRINGIZELN(CONCAT("../output/data/icons/", "mode_abort", ".bmp"))
+// IDB_ABORT_XXX           BITMAP   DISCARDABLE    CONCAT("../output/data/icons/", "mode_abort", ".bmp")
+// IDB_ABORT_XXX           BITMAP   DISCARDABLE    BOOST_PP_STRINGIZE(BOOST_PP_CAT( D:/Projects/XCSoar/cmake/output/data/icons/ , BOOST_PP_CAT(mode_abort, .bmp)))
+
+BITMAP(IDB_ABORT,                              "../output/data/icons/mode_abort.bmp")
+BITMAP(IDB_ABORT_HD,                           "../output/data/icons/mode_abort_160.bmp")
+
+BITMAP_ICON(IDB_AIRPORT_REACHABLE_X, "alt_reachable_airport")  // Test!
+// BITMAP_ICON(IDB_AIRPORT_REACHABLE_X, "alt_reachable_airport")  // Test!
+BITMAP(IDB_AIRPORT_REACHABLE,                 "../output/data/icons/alt_reachable_airport.bmp")
+BITMAP(IDB_AIRPORT_REACHABLE_HD,               "../output/data/icons/alt_reachable_airport_160.bmp")
+BITMAP(IDB_AIRPORT_MARGINAL,                   "../output/data/icons/alt_marginal_airport.bmp")
+BITMAP(IDB_AIRPORT_MARGINAL_HD,                "../output/data/icons/alt_marginal_airport_160.bmp")
+BITMAP(IDB_AIRPORT_UNREACHABLE,                "../output/data/icons/alt_landable_airport.bmp")
+BITMAP(IDB_AIRPORT_UNREACHABLE_HD,             "../output/data/icons/alt_landable_airport_160.bmp")
+BITMAP(IDB_AIRPORT_MARGINAL2,                  "../output/data/icons/alt2_marginal_airport.bmp")
+BITMAP(IDB_AIRPORT_MARGINAL2_HD,               "../output/data/icons/alt2_marginal_airport_160.bmp")
+BITMAP(IDB_AIRPORT_UNREACHABLE2,               "../output/data/icons/alt2_landable_airport.bmp")
+BITMAP(IDB_AIRPORT_UNREACHABLE2_HD,            "../output/data/icons/alt2_landable_airport_160.bmp")
+
+
+BITMAP(IDB_AIRSPACEI,                          "../output/data/icons/airspace_intercept.bmp")
+BITMAP(IDB_AIRSPACEI_HD,                           "../output/data/icons/airspace_intercept_160.bmp")
+BITMAP(IDB_CRUISE,                           "../output/data/icons/mode_cruise.bmp")
+BITMAP(IDB_CRUISE_HD,                           "../output/data/icons/mode_cruise_160.bmp")
+BITMAP(IDB_CLIMB,                           "../output/data/icons/mode_climb.bmp")
+BITMAP(IDB_CLIMB_HD,                           "../output/data/icons/mode_climb_160.bmp")
+BITMAP(IDB_FOLDER,                           "../output/data/icons/folder.bmp")
+BITMAP(IDB_FOLDER_HD,                           "../output/data/icons/folder_160.bmp")
+BITMAP(IDB_SETTINGS,                           "../output/data/icons/settings.bmp")
+BITMAP(IDB_SETTINGS_HD,                           "../output/data/icons/settings_160.bmp")
+BITMAP(IDB_TASK,                           "../output/data/icons/task.bmp")
+BITMAP(IDB_TASK_HD,                           "../output/data/icons/task_160.bmp")
+BITMAP(IDB_CALCULATOR,                           "../output/data/icons/calculator.bmp")
+BITMAP(IDB_CALCULATOR_HD,                           "../output/data/icons/calculator_160.bmp")
+BITMAP(IDB_WRENCH,                           "../output/data/icons/wrench.bmp")
+BITMAP(IDB_WRENCH_HD,                           "../output/data/icons/wrench_160.bmp")
+BITMAP(IDB_GLOBE,                           "../output/data/icons/globe.bmp")
+BITMAP(IDB_GLOBE_HD,                           "../output/data/icons/globe_160.bmp")
+BITMAP(IDB_DEVICE,                           "../output/data/icons/device.bmp")
+BITMAP(IDB_DEVICE_HD,                           "../output/data/icons/device_160.bmp")
+BITMAP(IDB_RULES,                           "../output/data/icons/rules.bmp")
+BITMAP(IDB_RULES_HD,                           "../output/data/icons/rules_160.bmp")
+BITMAP(IDB_CLOCK,                           "../output/data/icons/clock.bmp")
+BITMAP(IDB_CLOCK_HD,                           "../output/data/icons/clock_160.bmp")
+
+#ifdef EYE_CANDY
+#   ifdef TESTING
+      BITMAP(IDB_DIALOGTITLE,                           "../output/data/graphics/dialog_title_red.bmp")
+#   else
+      BITMAP(IDB_DIALOGTITLE,                           "../output/data/graphics/dialog_title.bmp")
+#   endif
+#endif
+BITMAP(IDB_FINALGLIDE,                           "../output/data/icons/mode_finalglide.bmp")
+BITMAP(IDB_FINALGLIDE_HD,                           "../output/data/icons/mode_finalglide_160.bmp")
+BITMAP(IDB_TRAFFIC_SAFE,                           "../output/data/icons/flarm_traffic.bmp")
+BITMAP(IDB_TRAFFIC_SAFE_HD,                           "../output/data/icons/flarm_traffic_160.bmp")
+BITMAP(IDB_TRAFFIC_WARNING,                           "../output/data/icons/flarm_warning.bmp")
+BITMAP(IDB_TRAFFIC_WARNING_HD,                           "../output/data/icons/flarm_warning_160.bmp")
+BITMAP(IDB_TRAFFIC_ALARM,                           "../output/data/icons/flarm_alarm.bmp")
+BITMAP(IDB_TRAFFIC_ALARM_HD,                           "../output/data/icons/flarm_alarm_160.bmp")
+BITMAP(IDB_GPSSTATUS1,                           "../output/data/icons/gps_acquiring.bmp")
+BITMAP(IDB_GPSSTATUS1_HD,                           "../output/data/icons/gps_acquiring_160.bmp")
+BITMAP(IDB_GPSSTATUS2,                           "../output/data/icons/gps_disconnected.bmp")
+BITMAP(IDB_GPSSTATUS2_HD,                           "../output/data/icons/gps_disconnected_160.bmp")
+BITMAP(IDB_LANDABLE,                           "../output/data/icons/winpilot_landable.bmp")
+BITMAP(IDB_LANDABLE_HD,                           "../output/data/icons/winpilot_landable_160.bmp")
+#ifdef TESTING
+    BITMAP(IDB_LAUNCHER1,                           "../output/data/graphics/launcher_red_224_1.bmp")
+    BITMAP(IDB_LAUNCHER2,                           "../output/data/graphics/launcher_red_224_2.bmp")
+#else
+    BITMAP(IDB_LAUNCHER1,                           "../output/data/graphics/launcher_224_1.bmp")
+    BITMAP(IDB_LAUNCHER2,                           "../output/data/graphics/launcher_224_2.bmp")
+#endif
+BITMAP(IDB_MAPSCALE_LEFT,                           "../output/data/icons/scalearrow_left.bmp")
+BITMAP(IDB_MAPSCALE_RIGHT,                           "../output/data/icons/scalearrow_right.bmp")
+BITMAP(IDB_MAPSCALE_LEFT_HD,                           "../output/data/icons/scalearrow_left_160.bmp")
+BITMAP(IDB_MAPSCALE_RIGHT_HD,                           "../output/data/icons/scalearrow_right_160.bmp")
+BITMAP(IDB_MARK,                           "../output/data/icons/map_flag.bmp")
+BITMAP(IDB_MARK_HD,                           "../output/data/icons/map_flag_160.bmp")
+BITMAP(IDB_OBSTACLE,                           "../output/data/icons/map_obstacle.bmp")
+BITMAP(IDB_OBSTACLE_HD,                           "../output/data/icons/map_obstacle_160.bmp")
+BITMAP(IDB_OUTFIELD_REACHABLE,                           "../output/data/icons/alt_reachable_field.bmp")
+BITMAP(IDB_OUTFIELD_REACHABLE_HD,                           "../output/data/icons/alt_reachable_field_160.bmp")
+BITMAP(IDB_OUTFIELD_MARGINAL,                           "../output/data/icons/alt_marginal_field.bmp")
+BITMAP(IDB_OUTFIELD_MARGINAL_HD,                           "../output/data/icons/alt_marginal_field_160.bmp")
+BITMAP(IDB_OUTFIELD_UNREACHABLE,                           "../output/data/icons/alt_landable_field.bmp")
+BITMAP(IDB_OUTFIELD_UNREACHABLE_HD,                           "../output/data/icons/alt_landable_field_160.bmp")
+BITMAP(IDB_OUTFIELD_MARGINAL2,                           "../output/data/icons/alt2_marginal_field.bmp")
+BITMAP(IDB_OUTFIELD_MARGINAL2_HD,                           "../output/data/icons/alt2_marginal_field_160.bmp")
+BITMAP(IDB_OUTFIELD_UNREACHABLE2,                           "../output/data/icons/alt2_landable_field.bmp")
+BITMAP(IDB_OUTFIELD_UNREACHABLE2_HD,                           "../output/data/icons/alt2_landable_field_160.bmp")
+BITMAP(IDB_MOUNTAIN_PASS,                           "../output/data/icons/map_pass.bmp")
+BITMAP(IDB_MOUNTAIN_PASS_HD,                           "../output/data/icons/map_pass_160.bmp")
+#ifdef TESTING
+    BITMAP(IDB_PROGRESSBORDER,                           "../output/data/graphics/progress_border_red.bmp")
+#else
+    BITMAP(IDB_PROGRESSBORDER,                           "../output/data/graphics/progress_border.bmp")
+#endif
+BITMAP(IDB_REACHABLE,                           "../output/data/icons/winpilot_reachable.bmp")
+BITMAP(IDB_REACHABLE_HD,                           "../output/data/icons/winpilot_reachable_160.bmp")
+BITMAP(IDB_MARGINAL,                           "../output/data/icons/winpilot_marginal.bmp")
+BITMAP(IDB_MARGINAL_HD,                           "../output/data/icons/winpilot_marginal_160.bmp")
+BITMAP(IDB_SMALL,                           "../output/data/icons/map_small.bmp")
+BITMAP(IDB_SMALL_HD,                           "../output/data/icons/map_small_160.bmp")
+#ifdef TESTING
+    BITMAP(IDB_LOGO_HD,                           "../output/data/graphics/logo_red_160.bmp")
+    BITMAP(IDB_LOGO,                           "../output/data/graphics/logo_red_80.bmp")
+#else
+    BITMAP(IDB_LOGO_HD,                           "../output/data/graphics/logo_160.bmp")
+    BITMAP(IDB_LOGO,                           "../output/data/graphics/logo_80.bmp")
+#endif
+BITMAP(IDB_TARGET,                           "../output/data/icons/map_target.bmp")
+BITMAP(IDB_TARGET_HD,                           "../output/data/icons/map_target_160.bmp")
+BITMAP(IDB_TEAMMATE_POS,                           "../output/data/icons/map_teammate.bmp")
+BITMAP(IDB_TEAMMATE_POS_HD,                           "../output/data/icons/map_teammate_160.bmp")
+BITMAP(IDB_TERRAINWARNING,                           "../output/data/icons/map_terrainw.bmp")
+BITMAP(IDB_TERRAINWARNING_HD,                           "../output/data/icons/map_terrainw_160.bmp")
+BITMAP(IDB_THERMALSOURCE,                           "../output/data/icons/map_thermal_source.bmp")
+BITMAP(IDB_THERMALSOURCE_HD,                           "../output/data/icons/map_thermal_source_160.bmp")
+BITMAP(IDB_TOWN,                           "../output/data/icons/map_town.bmp")
+BITMAP(IDB_TOWN_HD,                           "../output/data/icons/map_town_160.bmp")
+BITMAP(IDB_TURNPOINT,                           "../output/data/icons/map_turnpoint.bmp")
+BITMAP(IDB_TURNPOINT_HD,                           "../output/data/icons/map_turnpoint_160.bmp")
+BITMAP(IDB_TASKTURNPOINT,                           "../output/data/icons/map_taskturnpoint.bmp")
+BITMAP(IDB_TASKTURNPOINT_HD,                           "../output/data/icons/map_taskturnpoint_160.bmp")
+BITMAP(IDB_MOUNTAIN_TOP,                           "../output/data/icons/map_mountain_top.bmp")
+BITMAP(IDB_MOUNTAIN_TOP_HD,                           "../output/data/icons/map_mountain_top_160.bmp")
+BITMAP(IDB_BRIDGE,                           "../output/data/icons/map_bridge.bmp")
+BITMAP(IDB_BRIDGE_HD,                           "../output/data/icons/map_bridge_160.bmp")
+BITMAP(IDB_TUNNEL,                           "../output/data/icons/map_tunnel.bmp")
+BITMAP(IDB_TUNNEL_HD,                           "../output/data/icons/map_tunnel_160.bmp")
+BITMAP(IDB_TOWER,                           "../output/data/icons/map_tower.bmp")
+BITMAP(IDB_TOWER_HD,                           "../output/data/icons/map_tower_160.bmp")
+BITMAP(IDB_POWER_PLANT,                           "../output/data/icons/map_power_plant.bmp")
+BITMAP(IDB_POWER_PLANT_HD,                           "../output/data/icons/map_power_plant_160.bmp")
+BITMAP(IDB_THERMAL_HOTSPOT,                           "../output/data/icons/map_thermal_hotspot.bmp")
+BITMAP(IDB_THERMAL_HOTSPOT_HD,                           "../output/data/icons/map_thermal_hotspot_160.bmp")
+#ifdef TESTING
+    BITMAP(IDB_TITLE,                          "../output/data/graphics/title_red_110.bmp")
+    BITMAP(IDB_TITLE_HD,                       "../output/data/graphics/title_red_320.bmp")
+#else
+    BITMAP(IDB_TITLE,                           "../output/data/graphics/title_110.bmp")
+    BITMAP(IDB_TITLE_HD,                       "../output/data/graphics/title_320.bmp")
+#endif
+BITMAP(IDB_WEATHER_STATION,                    "../output/data/icons/map_weather_station.bmp")
+BITMAP(IDB_WEATHER_STATION_HD,                 "../output/data/icons/map_weather_station_160.bmp")
+
+IDB_AIRSPACE0    PNG                           "../output/data/bitmaps/airspace0.png"
+IDB_AIRSPACE1    PNG                           "../output/data/bitmaps/airspace1.png"
+IDB_AIRSPACE2    PNG                           "../output/data/bitmaps/airspace2.png"
+IDB_AIRSPACE3    PNG                           "../output/data/bitmaps/airspace3.png"
+IDB_AIRSPACE4    PNG                           "../output/data/bitmaps/airspace4.png"
+IDB_AIRSPACE5    PNG                           "../output/data/bitmaps/airspace5.png"
+IDB_AIRSPACE6    PNG                           "../output/data/bitmaps/airspace6.png"
+IDB_AIRSPACE7    PNG                           "../output/data/bitmaps/airspace7.png"
+
+
+// BITMAP(IDB_AIRSPACE0,                       "../output/data/bitmaps/airspace0.png")
+// BITMAP(IDB_AIRSPACE1,                       "../output/data/bitmaps/airspace1.png")
+// BITMAP(IDB_AIRSPACE2,                       "../output/data/bitmaps/airspace2.png")
+// BITMAP(IDB_AIRSPACE3,                       "../output/data/bitmaps/airspace3.png")
+// BITMAP(IDB_AIRSPACE4,                       "../output/data/bitmaps/airspace4.png")
+// BITMAP(IDB_AIRSPACE5,                       "../output/data/bitmaps/airspace5.png")
+// BITMAP(IDB_AIRSPACE6,                       "../output/data/bitmaps/airspace6.png")
+// BITMAP(IDB_AIRSPACE7,                       "../output/data/bitmaps/airspace7.png")
+
+IDB_CLIMBSMALL    PNG                          "../output/data/bitmaps/climb_12.png"
+IDB_CLIMBSMALLINV PNG                          "../output/data/bitmaps/climb_12inv.png"
+IDB_VARIOSCALEA   RCDATA                       "../output/data/bitmaps/vario_scale_b.png"
+IDB_VARIOSCALEC   RCDATA                       "../output/data/bitmaps/vario_scale_c.png"
+
+IDB_ABOVETERRAIN  PNG                          "../output/data/bitmaps/aboveterrain.png"
+
+// --- Audio ---
+
+IDR_FAIL WAVE DISCARDABLE "../output/data/sound/fail.raw"
+IDR_INSERT WAVE DISCARDABLE "../output/data/sound/insert.raw"
+IDR_REMOVE WAVE DISCARDABLE "../output/data/sound/remove.raw"
+
+IDR_WAV_BEEPBWEEP WAVE DISCARDABLE "../output/data/sound/beep_bweep.raw"
+IDR_WAV_CLEAR WAVE DISCARDABLE "../output/data/sound/beep_clear.raw"
+IDR_WAV_DRIP WAVE DISCARDABLE "../output/data/sound/beep_drip.raw"
+// =========================================================
+//  End of  _WIN32
