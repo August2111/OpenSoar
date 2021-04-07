@@ -33,7 +33,15 @@
 #include <cstddef>
 #include <utility>
 
-#include <unistd.h>
+#ifdef _MSC_VER
+  typedef size_t mode_t;
+  typedef size_t ssize_t;
+# include <stdio.h>
+# include <io.h>
+#define lseek _lseek
+#else
+# include <unistd.h>
+#endif
 #include <sys/types.h>
 
 #ifdef __linux__
