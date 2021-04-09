@@ -30,8 +30,25 @@ Copyright_License {
 #include "java/Global.hxx"
 #endif
 
+#if 1  // <<<<<<< HEAD
 #include <cassert>
 
+#else  // =======
+#ifdef _WIN32
+# include <tchar.h>
+#endif
+
+#include <boost/intrusive/list.hpp>
+
+#include <cassert>
+
+#ifdef HAVE_POSIX
+#include <signal.h>
+#else
+# include "LogFile.hpp"
+#endif
+
+#endif  // >>>>>>> 9fa9ed4c7c (MSVC: thread/Thread.cpp shorten the wait time for join thread in windows)
 void
 Thread::SetIdlePriority() noexcept
 {
@@ -94,7 +111,10 @@ Thread::Join() noexcept
   pthread_join(handle, nullptr);
   defined = false;
 #else
-  ::WaitForSingleObject(handle, INFINITE);
+  DWORD result = ::WaitForSingleObject(handle, 1000);
+  if (result != WAIT_OBJECT_0) {  // TODO(August2111): Too much? INFINITE);
+      LogFormat(_T("WaitForSingleObject with error %d"), result);
+  }
   ::CloseHandle(handle);
   handle = nullptr;
 #endif
