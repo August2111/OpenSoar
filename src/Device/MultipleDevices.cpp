@@ -156,6 +156,17 @@ MultipleDevices::ExchangeRadioFrequencies(
 #endif
 
 void
+MultipleDevices::ExchangeRadioFrequencies(OperationEnvironment &env) noexcept
+{
+  for (DeviceDescriptor *i : devices) {
+    NMEAInfo basic = i->GetData();
+    if (i->ExchangeRadioFrequencies(env, basic)) {
+      blackboard.LockSetDeviceDataScheduleMerge(i->GetIndex(), basic);
+    }
+  }
+}
+
+void
 MultipleDevices::PutTransponderCode(TransponderCode code,
                                     OperationEnvironment &env) noexcept
 {
