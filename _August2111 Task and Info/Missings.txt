@@ -1,0 +1,2 @@
+output/include/Status_defaults.cpp
+output/include/resource.h
