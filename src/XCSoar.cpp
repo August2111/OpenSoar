@@ -179,7 +179,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   return ret;
 }
 
-#if _MSC_VER  // TODO(August12111): Workaround for openssl ???
+#ifdef _MSC_VER  // TODO(August12111): Workaround for openssl ???
 //----------------------------------------------------------------------------
 // the symbol _iob has to be available...
 // https://stackoverflow.com/questions/50411270/error-lnk2001-unresolved-external-symbol-iob-func-in-vs2017
