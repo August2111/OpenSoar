@@ -11,48 +11,50 @@ HI_RES_AWARE CEUX {1}
 #define BITMAP(name, path)
 #endif
 
-#ifdef WIN32
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/stringize.hpp>
+#ifdef _WIN32
+# include <boost/preprocessor/cat.hpp>
+# include <boost/preprocessor/stringize.hpp>
 
-#define CONCAT(a,b,c) a##b##c
-// #define CONCAT2(a,b,c)  CONCAT(a,b,c)
+// # define CONCAT(a,b,c) a##b##c
 
-#define BITMAP_BITMAP(name, file) BITMAP(name,  BOOST_PP_STRINGIZE(BOOST_PP_CAT( bitmaps/ , BOOST_PP_CAT( file , .bmp))))
-//#define BITMAP_ICON(name, file) BITMAP(name, CONCAT(../output/data/icons/, file, .bmp))
-#    define BITMAP_ICON(name, file) BITMAP(name, BOOST_PP_STRINGIZE(BOOST_PP_CAT( D:/Projects/XCSoar/cmake/output/data/icons/ , BOOST_PP_CAT( file , .bmp))))
-#    define BITMAP_GRAPHIC(name, file) BITMAP(name, BOOST_PP_STRINGIZE(BOOST_PP_CAT( D:/Projects/XCSoar/cmake/output/data/graphics/ , BOOST_PP_CAT( file , .bmp)))) // ../output/data/graphics/ file .bmp)
-// #define BITMAP_GRAPHIC(name, file) BITMAP(name, ../output/data/graphics/ file .bmp)
-#else
-#define BITMAP_BITMAP(name, file) BITMAP(name, ../output/data/bitmaps/ file .png)
-#ifdef ENABLE_OPENGL
-#define BITMAP_ICON(name, file) BITMAP(name, ../output/data/icons/ file .png)
-#else
-#define BITMAP_ICON(name, file) BITMAP(name, ../output/data/icons2/ file .png)
+ // Working dir is './output/msvc2019'
+# ifndef PROJECT_OUTPUT_FOLDER  // not __MSVC__ with cmake...
+#   define PROJECT_OUTPUT_FOLDER  output
+# endif
+// #define BITMAP_BITMAP(name, file)                                              \
+//   BITMAP(name, BOOST_PP_STRINGIZE(                                             \
+//                    BOOST_PP_CAT(bitmaps /, BOOST_PP_CAT(file, .bmp))))
+#if 0
+# define BITMAP_ICON(name, file)    BITMAP(name, BOOST_PP_STRINGIZE(BOOST_PP_CAT( icons/ ,    BOOST_PP_CAT( file , .bmp))))
+# define BITMAP_GRAPHIC(name, file) BITMAP(name, BOOST_PP_STRINGIZE(BOOST_PP_CAT( graphics/ , BOOST_PP_CAT( file , .bmp))))
+  #else
+// ../output/data/graphics/ file .bmp)
+# define BITMAP_BITMAP(name, file) BITMAP(name, BOOST_PP_STRINGIZE(BOOST_PP_CAT( bitmaps/ , BOOST_PP_CAT( file , .bmp))))
+# define BITMAP_ICON(name, file) BITMAP(name, BOOST_PP_STRINGIZE(BOOST_PP_CAT( PROJECT_OUTPUT_FOLDER/data/icons/ , BOOST_PP_CAT( file , .bmp))))
+# define BITMAP_GRAPHIC(name, file) BITMAP(name, BOOST_PP_STRINGIZE(BOOST_PP_CAT( PROJECT_OUTPUT_FOLDER/data/graphics/ , BOOST_PP_CAT( file , .bmp)))) // ../output/data/graphics/ file .bmp)
 #endif
-#define BITMAP_GRAPHIC(name, file) BITMAP(name, ../output/data/graphics2/ file .png)
-#endif
-
-#ifdef WIN32
 /* only GDI knows how to deal with hatched brushes, the rest uses
    transparency */
-#define HATCH_BITMAP(name, file) BITMAP_BITMAP(name, file)
-#else
-#define HATCH_BITMAP(name, file)
-#endif
-
-#ifdef WIN32
-// #define SOUND(name, file) name WAVE DISCARDABLE sound/ file .wav
-#define SOUND(name, file) name WAVE DISCARDABLE BOOST_PP_STRINGIZE(BOOST_PP_CAT( sound/ , BOOST_PP_CAT( file , .wav)))
-#elif defined(ANDROID)
+# define HATCH_BITMAP(name, file) BITMAP_BITMAP(name, file)
+# define SOUND(name, file) name WAVE DISCARDABLE BOOST_PP_STRINGIZE(BOOST_PP_CAT( sound/ , BOOST_PP_CAT(file, .wav)))
+#else // _WIN32
+# define BITMAP_BITMAP(name, file) BITMAP(name, ../output/data/bitmaps/ file .png)
+# ifdef ENABLE_OPENGL
+#   define BITMAP_ICON(name, file) BITMAP(name, ../output/data/icons/ file .png)
+# else
+#   define BITMAP_ICON(name, file) BITMAP(name, ../output/data/icons2/ file .png)
+# endif
+# define BITMAP_GRAPHIC(name, file) BITMAP(name, ../output/data/graphics2/ file .png)
+# define HATCH_BITMAP(name, file)
+# if defined(ANDROID)
 /* included as Android resources */
-#define SOUND(name, file)
-#else
-#define SOUND(name, file) name WAVE DISCARDABLE ../output/data/sound/ file .raw
+#   define SOUND(name, file)
+# else
+#   define SOUND(name, file) name WAVE DISCARDABLE../output/ data/sound/file.raw
+#endif
 #endif
 
 // --- Icons ---
-
 IDI_XCSOAR              ICON    DISCARDABLE     bitmaps/xcsoarswift.ico
 
 // --- Bitmaps ---
@@ -73,7 +75,7 @@ BITMAP_ICON(IDB_AIRPORT_MARGINAL2_HD, alt2_marginal_airport_160)
 BITMAP_ICON(IDB_AIRPORT_UNREACHABLE2, alt2_landable_airport)
 BITMAP_ICON(IDB_AIRPORT_UNREACHABLE2_HD, alt2_landable_airport_160)
 
-HATCH_BITMAP(IDB_AIRSPACE0, airspace0)
+HATCH_BITMAP(IDB_AIRSPACE0, airspace3)  // bad design on PCand WIN64
 HATCH_BITMAP(IDB_AIRSPACE1, airspace1)
 HATCH_BITMAP(IDB_AIRSPACE2, airspace2)
 HATCH_BITMAP(IDB_AIRSPACE3, airspace3)
@@ -131,11 +133,11 @@ BITMAP_ICON(IDB_GPSSTATUS2_HD, gps_disconnected_160)
 BITMAP_ICON(IDB_LANDABLE, winpilot_landable)
 BITMAP_ICON(IDB_LANDABLE_HD, winpilot_landable_160)
 #ifdef XCSOAR_TESTING
-BITMAP_GRAPHIC(IDB_LAUNCHER1, launcher_red_224_1)
-BITMAP_GRAPHIC(IDB_LAUNCHER2, launcher_red_224_2)
+BITMAP_GRAPHIC(IDB_LAUNCHER1, launcher_red_640_1)
+BITMAP_GRAPHIC(IDB_LAUNCHER2, launcher_red_640_2)
 #else
-BITMAP_GRAPHIC(IDB_LAUNCHER1, launcher_224_1)
-BITMAP_GRAPHIC(IDB_LAUNCHER2, launcher_224_2)
+BITMAP_GRAPHIC(IDB_LAUNCHER1, launcher_640_1)
+BITMAP_GRAPHIC(IDB_LAUNCHER2, launcher_640_2)
 #endif
 BITMAP_ICON(IDB_MAPSCALE_LEFT, scalearrow_left)
 BITMAP_ICON(IDB_MAPSCALE_RIGHT, scalearrow_right)
@@ -201,8 +203,6 @@ BITMAP_ICON(IDB_POWER_PLANT, map_power_plant)
 BITMAP_ICON(IDB_POWER_PLANT_HD, map_power_plant_160)
 BITMAP_ICON(IDB_THERMAL_HOTSPOT, map_thermal_hotspot)
 BITMAP_ICON(IDB_THERMAL_HOTSPOT_HD, map_thermal_hotspot_160)
-BITMAP_BITMAP(IDB_VARIOSCALEA, vario_scale_b)
-BITMAP_BITMAP(IDB_VARIOSCALEC, vario_scale_c)
 #ifdef XCSOAR_TESTING
 BITMAP_GRAPHIC(IDB_TITLE, title_red_110)
 BITMAP_GRAPHIC(IDB_TITLE_HD, title_red_320)
