@@ -384,7 +384,11 @@ endif()
 #xxx        list(APPEND SOURCE_FILES "${PROJECTGROUP_SOURCE_DIR}/temp/data/memory_fields.c")
 
 
-set(BITMAP_EXTENSION  .bmp)
+if(WIN32)
+    set(BITMAP_EXTENSION  .bmp)
+else()
+    set(BITMAP_EXTENSION  .png)
+endif()
 
 list(APPEND SOURCE_FILES "src/XCSoar.cpp")
 list(APPEND SOURCE_FILES "src/Version.cpp")
@@ -455,7 +459,7 @@ endif()
   #==========================================================
   #==========================================================
 
-set(SCRIPT_FILES
+list(APPEND SCRIPT_FILES
     CMakeSource.cmake
     VERSION.txt
     NEWS.txt
