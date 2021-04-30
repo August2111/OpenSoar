@@ -314,6 +314,12 @@ type=gesture
 data=LDRDL
 event=Status all
 
+mode=default
+type=gesture
+# char: "Q"
+data=ULDR
+event=QuickMenu
+
 ###
 
 mode=default
