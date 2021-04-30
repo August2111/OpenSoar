@@ -47,7 +47,7 @@ static_assert(ARRAY_SIZE(validation_error_strings) == unsigned(TaskValidationErr
               "Wrong array size");
 
 const TCHAR*
-getTaskValidationErrors(const TaskValidationErrorSet v)
+getTaskValidationErrors(const TaskValidationErrorSet& v)
 {
   static TCHAR err[MAX_PATH];
   err[0] = '\0';

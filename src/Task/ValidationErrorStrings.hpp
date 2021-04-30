@@ -30,7 +30,7 @@ Copyright_License {
 
 [[gnu::const]]
 const TCHAR *
-getTaskValidationErrors(const TaskValidationErrorSet v);
+getTaskValidationErrors(const TaskValidationErrorSet& v);
 
 #endif
 
