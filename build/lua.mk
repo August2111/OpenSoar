@@ -36,6 +36,7 @@ LUA_SOURCES = \
 	$(SRC)/lua/Tracking.cpp \
 	$(SRC)/lua/Replay.cpp \
 	$(SRC)/lua/InputEvent.cpp \
+	$(SRC)/lua/Cloud.cpp \
 
 ifeq ($(TARGET),ANDROID)
 LUA_SOURCES += $(SRC)/lua/Android.cpp
