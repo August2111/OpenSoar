@@ -33,6 +33,10 @@ Copyright_License {
 #include "Gauge/BigThermalAssistantWidget.hpp"
 #include "Look/Look.hpp"
 #include "HorizonWidget.hpp"
+#if defined(_DEBUG) // && defined(AUGUS2111)
+# include "Interface.hpp"
+#endif
+
 
 static bool force_shutdown = false;
 
@@ -49,7 +53,14 @@ UIActions::CheckShutdown()
   if (force_shutdown)
     return true;
 
-  return ShowMessageBox(_("Quit program?"), _T("XCSoar"),
+#if defined(_DEBUG) // && defined(AUGUS2111)
+  // TODO(August2111): Make a real setting for this, now only for me yet!
+  // check force_shutdown!
+  if (CommonInterface::GetComputerSettings().weglide.pilot_id == 511)
+    return true;
+#endif
+
+   return ShowMessageBox(_("Quit program?"), _T("XCSoar"),
                      MB_YESNO | MB_ICONQUESTION) == IDYES;
 
 }
