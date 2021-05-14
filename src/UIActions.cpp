@@ -33,6 +33,8 @@ Copyright_License {
 #include "Gauge/BigThermalAssistantWidget.hpp"
 #include "Look/Look.hpp"
 #include "HorizonWidget.hpp"
+#include "Interface.hpp"
+
 
 static bool force_shutdown = false;
 
@@ -47,6 +49,11 @@ bool
 UIActions::CheckShutdown()
 {
   if (force_shutdown)
+    return true;
+
+  // TODO(August2111): Make a real setting for this, now only for me yet!
+  // check force_shutdown!
+  if (CommonInterface::GetComputerSettings().weglide.pilot.id == 511)
     return true;
 
   return ShowMessageBox(_("Quit program?"), _T("XCSoar"),
