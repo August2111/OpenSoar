@@ -28,6 +28,19 @@ Version 7.20 - 2021/10/22
   - disable background location access due to Google Play Store policy
   - fix compatibility with Android older than 7
 
+* cloud server
+  - upload IGC Files to cloud server (starting with WeGlide)
+* logger
+  - automatic upload after downloading flight from logger (setable)
+    with pilot id (Profile setting) and glider id (Airplane setting)
+* user interface
+  - add a simple date picker for date of birth selection
+  - add a integer selection picker for large numbers
+  - new Settings "WeGlide PilotID, DayOfBirth, Password"
+  - new Glider setting "WeGlide GliderID"
+* internet
+  - add functionality for uploading igc files
+
 Version 7.19 - 2021/10/01
 * data files
   - fix bug in OpenAir arc parser
