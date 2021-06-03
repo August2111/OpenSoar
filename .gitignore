@@ -29,9 +29,15 @@ test/data/private
 massif.out.*
 build/local-config.mk
 
+/Compile-XCSoar.cmd
+/git_update.cmd
+/Data/Input/default - Kopie.xci
+/.august
+/_tmp
+/my_patch
+
 *.pyc
 *.pyo
 *.bak
 .*.swp
-
 .idea
