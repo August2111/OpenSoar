@@ -43,6 +43,11 @@ Copyright_License {
 #include <fnmatch.h>
 #include <utime.h>
 #include <time.h>
+#else
+# ifdef _MSC_VER
+#   include <corecrt_io.h>
+typedef size_t ssize_t;
+# endif
 #endif
 
 void
