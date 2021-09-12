@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2021 The XCSoar Project
+  Copyright (C) 2000-2022 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -23,27 +23,20 @@ Copyright_License {
 
 #pragma once
 
+#include "WeGlideObjects.hpp"
 #include "co/Task.hxx"
 
-#include <memory>
+#include <boost/json/fwd.hpp>
+#include <boost/json/value.hpp>
 
-class OrderedTask;
-class CurlGlobal;
-struct WeGlideSettings;
-struct TaskBehaviour;
-class Waypoints;
-class ProgressListener;
+#include <cstdint>
+
+class AllocatedPath;
 
 namespace WeGlide {
 
-/**
- * Download the task declared in WeGlide.  Returns nullptr if no task
- * is declared and throws on error.
- */
-Co::Task<std::unique_ptr<OrderedTask>>
-DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
-                     const TaskBehaviour &task_behaviour,
-                     const Waypoints *waypoints,
-                     ProgressListener &progress);
+AllocatedPath DownloadTaskFile(User user);
+
+AllocatedPath TaskToFile(User user) noexcept;
 
 } // namespace WeGlide

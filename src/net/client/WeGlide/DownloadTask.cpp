@@ -1,5 +1,5 @@
 /*
-  Copyright_License {
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2021 The XCSoar Project
@@ -22,65 +22,234 @@
 */
 
 #include "DownloadTask.hpp"
-#include "Settings.hpp"
-#include "Task/Ordered/OrderedTask.hpp"
-#include "Task/Deserialiser.hpp"
-#include "XML/DataNodeXML.hpp"
-#include "XML/Node.hpp"
-#include "XML/Parser.hpp"
-#include "net/http/Progress.hpp"
-#include "lib/curl/CoStreamRequest.hxx"
+
+#ifdef VERSUCH_1
+
+#if 1 // TODO(August2111)!!!!
+// TODO(August2111): Check includes
+#include "WeGlideSettings.hpp"
 #include "lib/curl/Easy.hxx"
+#include "lib/curl/Mime.hxx"
 #include "lib/curl/Setup.hxx"
-#include "io/StringOutputStream.hxx"
+#include "net/http/CoStreamRequest.hxx"
+#include "net/http/Init.hpp"
+#include "net/http/Progress.hpp"
+#include "system/ConvertPathName.hpp"
+#include "system/Path.hpp"
+#include "util/StaticString.hxx"
+#include "json/ParserOutputStream.hxx"
+#endif
+
+namespace WeGlide {
+#if 1 // TODO(August2111)!!!!
+
+// struct WeGlideHttpResponse {
+//   unsigned code;
+//   boost::json::value json_value;
+// };
+
+Co::Task<WeGlideHttpResponse> DownloadTask(CurlGlobal &curl, const User &user,
+                                           ProgressListener &progress) {
+  NarrowString<0x200> url;
+  url.Format("%s/task", WeGlideSettings::default_url);
+  CurlEasy easy{url.c_str()};
+  Curl::Setup(easy);
+  const Net::ProgressAdapter progress_adapter{easy, progress};
+  // easy.SetFailOnError disabled: HTTP errors are dealt with here at the end
+
+  Json::ParserOutputStream parser;
+  const auto response =
+      co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
+  co_return WeGlideHttpResponse({response.status, parser.Finish()});
+}
+#endif
+
+} // namespace WeGlide
+//=================================================================================
+#include "Dialogs/CoDialog.hpp"
+#include "Dialogs/Error.hpp"
+#include "Interface.hpp"
+#include "LogFile.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "UIGlobals.hpp"
+#include "co/InvokeTask.hxx"
 #include "util/ConvertString.hpp"
 
-#include <cassert>
+#include "Cloud/weglide/WeGlideSettings.hpp"
+#include "Dialogs/CoDialog.hpp"
+#include "Dialogs/Contest/WeGlide/FlightUploadResponse.hpp"
+#include "Dialogs/Error.hpp"
+#include "Dialogs/Message.hpp"
+#include "Formatter/TimeFormatter.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
+#include "LogFile.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "UIGlobals.hpp"
+// #include "UploadIGCFile.hpp"
+#include "co/InvokeTask.hxx"
+#include "net/http/Init.hpp"
+#include "system/ConvertPathName.hpp"
+#include "system/FileUtil.hpp"
+#include "util/ConvertString.hpp"
+#include "util/StaticString.hxx"
+#include "json/ParserOutputStream.hxx"
 
-using std::string_view_literals::operator""sv;
+#include <cinttypes>
 
 namespace WeGlide {
 
-Co::Task<std::unique_ptr<OrderedTask>>
-DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
-                     const TaskBehaviour &task_behaviour,
-                     const Waypoints *waypoints,
-                     ProgressListener &progress)
-{
-  assert(settings.pilot.id != 0);
+struct CoInstance {
+  WeGlideHttpResponse http = {0};
+  Co::InvokeTask CoDownloadTask(const User &user, ProgressListener &progress) {
+    http = co_await DownloadTask(*Net::curl, user, progress);
+  }
+};
 
-  char url[256];
-  snprintf(url, sizeof(url), "%s/task/declaration/%u?cup=false&tsk=true",
-           settings.default_url, settings.pilot.id);
+static bool DownloadTask(User user, StaticString<0x1000> &msg) noexcept try {
+  const auto settings = CommonInterface::GetComputerSettings();
+  if (user.id == 0)
+    user = settings.weglide.user;
 
-  CurlEasy easy{url};
-  Curl::Setup(easy);
-  const Net::ProgressAdapter progress_adapter{easy, progress};
-  easy.SetFailOnError();
+  PluggableOperationEnvironment env;
+  CoInstance instance;
+  if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                   _("Upload Flight"), instance.CoDownloadTask(user, env),
+                   &env) == false) {
+    msg.Format(_("'User %u' - %s"), user.id, _("ShowCoDialog with failure"));
+  } else {
+    switch (instance.http.code) {
+    case 400:
+      msg.Format(_T("%s: %u '%s'\n%s!"), _("HTTP failure code"),
+                 instance.http.code, _("Bad Request"),
+                 _("Probably one of the parameter is wrong"));
+      break;
+    case 406:
+      msg.Format(_T("%s: %u '%s'\n%s!"), _("HTTP failure code"),
+                 instance.http.code, _("Not Acceptable"),
+                 _("The IGC file probably already exists on the server"));
+      break;
+    default:
+      if (instance.http.code >= 200 && instance.http.code < 400 &&
+          !instance.http.json_value.is_null()) {
 
-  StringOutputStream sos;
-  const auto response =
-    co_await Curl::CoStreamRequest(curl, std::move(easy), sos);
+        // read the important data from json in a structure
+        // auto flight/task_data =
+        // UploadJsonInterpreter(instance.http.json_value);
+        return true; // upload successful!
+      } else {
+        msg.Format(_T("%s: %u"), _("HTTP failure code"), instance.http.code);
+      }
+      break;
+    }
+  }
+  return false; // failure...
+  // ???} catch (const std::exception &e) {
+  // ???  msg.Format(_("'%s' - %s"), _T("Task"),
+  // ???             UTF8ToWideConverter(e.what()).c_str());
+  // ???  return false;
+} catch (...) {
+  msg.Format(_("'%s' - %s"), _("General Exception"), _T("Task"));
+  // ???  ShowError(std::current_exception(), _T("WeGlide UploadFile"));
+  return false;
+}
 
-  if (const auto i = response.headers.find("content-type"sv);
-      i != response.headers.end() && i->second == "application/json"sv)
-    /* on error, WeGlide returns a JSON document, and if a user does
-       not have a declared task (or if the user does not exist), it
-       returns a JSON "null" value */
-    co_return nullptr;
+bool
+// DownloadOwnTask(uint_least32_t user_id)
+DownloadTask(uint_least32_t user_id) {
+  user_id = 511; // Test!!!!
+  StaticString<0x1000> msg;
+  User user(user_id);
+  auto response = DownloadTask(user, msg);
+  return true;
+}
 
-  /* XCSoar task files are returned with
-     "Content-Type:application/octet-stream", and we could verify
-     that, but it's not the correct MIME type, and may change
-     eventually, so let's just ignore the Content-Type for now and
-     hope the XML parser catches syntax errors */
-
-  const auto xml_node = XML::ParseString(UTF8ToWideConverter{sos.GetValue().c_str()});
-  const ConstDataNodeXML data_node{xml_node};
-
-  auto task = std::make_unique<OrderedTask>(task_behaviour);
-  LoadTask(*task, data_node, waypoints);
-  co_return task;
+bool DownloadUserTask() {
+  // Dialog!!!!
+  return true;
 }
 
 } // namespace WeGlide
+
+#endif // Versuch_1
+//==========================================================================================================
+//==========================================================================================================
+//==========================================================================================================
+
+#include "Dialogs/CoDialog.hpp"
+#include "Dialogs/Error.hpp"
+#include "Interface.hpp"
+#include "Language/Language.hpp"
+#include "LocalPath.hpp"
+#include "LogFile.hpp"
+#include "Operation/PluggableOperationEnvironment.hpp"
+#include "Settings.hpp"
+#include "UIGlobals.hpp"
+#include "co/InvokeTask.hxx"
+#include "io/FileTransaction.hpp"
+#include "net/http/CoDownloadToFile.hpp"
+#include "net/http/Init.hpp"
+#include "system/Path.hpp"
+
+#include <cinttypes>
+
+static Co::InvokeTask DownloadToFile(const char *url, Path path,
+                                     ProgressListener &progress) {
+  const auto ignored_response = co_await Net::CoDownloadToFile(
+      *Net::curl, url, nullptr, nullptr, path, nullptr, progress);
+}
+
+namespace WeGlide {
+
+AllocatedPath TaskToFile(User user) noexcept try {
+  //  bool result = false;
+
+  if (user.IsValid()) {
+    NarrowString<0x100> url;
+    //    const auto cache_path = MakeCacheDirectory(_T("weglide"));
+    url.Format("%s/igcfile", WeGlideSettings::default_url);
+    //    NarrowString<0x100> url(WeGlideSettings::default_url);
+    //    url.AppendFormat("/task/declaration/%d?cup=false&tsk=true", user.id);
+    url.AppendFormat("/task/declaration/%d", user.id);
+
+    // Path path = cache_path;
+    //  path += _T("/weglide.tsk");
+    auto path = AllocatedPath::Build(MakeCacheDirectory(_T("weglide")),
+                                     _T("weglide.tsk"));
+    FileTransaction transaction(path);
+    PluggableOperationEnvironment env;
+
+    if (!ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                      _("Download WeGlide Task"),
+                      DownloadToFile(url, transaction.GetTemporaryPath(), env),
+                      &env))
+      return AllocatedPath(); // -> dialog with failure!
+
+    transaction.Commit();
+    return path;
+  } else {
+    // user is invalid!
+    return AllocatedPath();
+  }
+} catch (...) {
+  // prevent a general exception in Download
+  ShowError(std::current_exception(), _("WeGlide Task to File"));
+  return AllocatedPath();
+}
+
+AllocatedPath DownloadTaskFile(User user) {
+  if (!user.IsValid()) {
+    // maybe select an other id!
+    // TODO: Asking to load the Task with decision from which pilot!!!
+    user = CommonInterface::GetComputerSettings()
+               .weglide.pilot; // the preset value
+  }
+
+  return TaskToFile(user);
+}
+
+} // namespace WeGlide
+
+//==========================================================================================================
+//==========================================================================================================
+//==========================================================================================================
