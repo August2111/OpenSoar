@@ -34,7 +34,6 @@ Copyright_License {
 #include "json/Lookup.hxx"
 #endif
 
-
 namespace WeGlide {
 #if 0
     static Co::InvokeTask UpdateTask(const char *uri,
@@ -76,3 +75,4 @@ bool DownloadTask(uint_least32_t pilot_id) {
 }
 
 } // namespace WeGlide
+
