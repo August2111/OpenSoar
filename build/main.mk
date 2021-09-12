@@ -139,6 +139,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Tracking/CloudEnableDialog.cpp \
 	\
 	$(SRC)/Dialogs/Cloud/WeGlideUploadDialog.cpp \
+	$(SRC)/Dialogs/Cloud/WeGlideTaskDialog.cpp \
 	\
 	$(SRC)/Dialogs/NumberEntry.cpp \
 	$(SRC)/Dialogs/TextEntry.cpp \

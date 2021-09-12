@@ -23,10 +23,56 @@ Copyright_License {
 
 #include "DownloadTask.hpp"
 
+#include "net/http/CoStreamRequest.hxx"
+#include "net/http/Easy.hxx"
+#include "net/http/Mime.hxx"
+#include "net/http/Progress.hpp"
+#include "net/http/Setup.hxx"
+#include "Formatter/TimeFormatter.hpp"
+#include "json/ParserOutputStream.hxx"
+#include "json/Lookup.hxx"
+
+
+
 namespace WeGlide {
+#if 0
+    static Co::InvokeTask UpdateTask(const char *uri,
+                                 const WeGlide::Pilot &pilot,
+                                 UploadResponse &response,
+                                 ProgressListener &progress) noexcept {
+  boost::json::value json = co_await WeGlide::UploadFlight(
+      *Net::curl, uri, pilot, glider_id, igc_path, progress);
+
+  auto json_value = json.get_array().at(0);
+  response.scoring_date = UTF8ToWideConverter(
+      Json::Lookup(json_value, "scoring_date")->get_string().c_str());
+  response.flight_id = Json::Lookup(json_value, "id")->get_int64();
+  response.registration = UTF8ToWideConverter(
+      Json::Lookup(json_value, "registration")->get_string().c_str());
+  response.competition_id = UTF8ToWideConverter(
+      Json::Lookup(json_value, "competition_id")->get_string().c_str());
+  auto user = Json::Lookup(json_value, "user")->as_object();
+
+  response.pilot.id = Json::Lookup(user, "id")->get_int64();
+  response.pilot.name =
+      UTF8ToWideConverter(Json::Lookup(user, "name")->get_string().c_str());
+
+  auto aircraft = Json::Lookup(json_value, "aircraft")->as_object();
+
+  response.glider.id = Json::Lookup(aircraft, "id")->get_int64();
+  response.glider.name =
+      UTF8ToWideConverter(Json::Lookup(aircraft, "name")->get_string().c_str());
+  response.glider.kind =
+      UTF8ToWideConverter(Json::Lookup(aircraft, "kind")->get_string().c_str());
+  response.glider.sc_class = UTF8ToWideConverter(
+      Json::Lookup(aircraft, "sc_class")->get_string().c_str());
+}
+#endif
+
 bool DownloadTask(uint_least32_t pilot_id) {
   
   return true; 
 }
 
 } // namespace WeGlide
+
