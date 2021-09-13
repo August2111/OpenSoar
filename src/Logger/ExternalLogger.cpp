@@ -44,6 +44,10 @@
 #include "IGC/IGCHeader.hpp"
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "time/BrokenDate.hpp"
+#include "Interface.hpp"
+#include "Dialogs/Cloud/WeGlideUploadDialog.hpp"
+
+
 
 class DeclareJob {
   DeviceDescriptor &device;
@@ -336,12 +340,20 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     FormatIGCFilenameLong(name, date, header.manufacturer, header.id,
                           header.flight);
 
-    transaction.SetPath(AllocatedPath::Build(logs_path, name));
-
+    Path igc_path = AllocatedPath::Build(logs_path, name);
+    transaction.SetPath(igc_path);
+    
     try {
       transaction.Commit();
     } catch (...) {
       ShowError(std::current_exception(), _("Download flight"));
+    }
+
+    // ask whether this IGC should be uploaded to WeGlide
+    WeGlideSettings weglide_settings =
+      CommonInterface::GetComputerSettings().weglide;
+    if (weglide_settings.enabled && weglide_settings.automatic_upload) {
+      WeGlide::UploadFlightDialog(igc_path, weglide_settings.pilot);
     }
 
     if (ShowMessageBox(_("Do you want to download another flight?"),
