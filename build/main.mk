@@ -663,11 +663,13 @@ XCSOAR_SOURCES += \
 endif
 
 XCSOAR_SOURCES += \
+	$(SRC)/Cloud/weglide/UploadFlight.cpp \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
 	$(SRC)/Tracking/SkyLines/Assemble.cpp \
 	$(SRC)/Tracking/SkyLines/Key.cpp \
 	$(SRC)/Tracking/SkyLines/Glue.cpp \
 	$(SRC)/Tracking/TrackingGlue.cpp
+	
 
 ifeq ($(HAVE_PCM_PLAYER),y)
 XCSOAR_SOURCES += $(SRC)/Audio/VarioGlue.cpp
@@ -691,7 +693,7 @@ XCSOAR_DEPENDS = \
 	SHAPELIB ZZIP \
 	OPERATION \
 	LIBNET TIME OS THREAD \
-	UTIL GEO MATH
+	UTIL GEO MATH JSON
 
 ifeq ($(TARGET_IS_DARWIN),y)
 XCSOAR_LDLIBS += -framework CoreLocation

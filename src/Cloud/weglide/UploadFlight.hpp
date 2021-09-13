@@ -29,17 +29,16 @@ Copyright_License {
 
 #include <cstdint>
 
-struct WeGlideSettings;
 class Path;
 class CurlGlobal;
 class ProgressListener;
 
 namespace WeGlide {
+struct Pilot;
 
 Co::Task<boost::json::value>
-UploadFlight(CurlGlobal &curl, const WeGlideSettings &settings,
-             uint_least32_t glider_type,
-             Path igc_path,
+UploadFlight(CurlGlobal &curl, const char *url, const Pilot &pilot,
+             uint_least32_t glider_type, Path igc_path,
              ProgressListener &progress);
 
 } // namespace WeGlide

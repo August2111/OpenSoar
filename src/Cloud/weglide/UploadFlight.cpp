@@ -31,7 +31,7 @@
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
 #include "system/ConvertPathName.hpp"
-#include "system/Path.hpp"
+#include "LocalPath.hpp"
 #include "util/StaticString.hxx"
 
 #include <cinttypes>
@@ -39,17 +39,17 @@
 namespace WeGlide {
 
 static CurlMime
-MakeUploadFlightMime(CURL *easy, const WeGlideSettings &settings,
+MakeUploadFlightMime(CURL *easy, const WeGlide::Pilot &pilot,
                      uint_least32_t glider_type,
                      Path igc_path)
 {
   CurlMime mime{easy};
-  mime.Add("file").Filename("igc_file").FileData(NarrowPathName{igc_path});
+  mime.Add("file").Filename("igc_file").FileData(NarrowPathName{LocalPath(igc_path)});
 
   char buffer[32];
-  sprintf(buffer, "%u", settings.pilot_id);
+  sprintf(buffer, "%u", pilot.id);
   mime.Add("user_id").Data(buffer);
-  FormatISO8601(buffer, settings.pilot_birthdate);
+  FormatISO8601(buffer, pilot.birthdate);
   mime.Add("date_of_birth").Data(buffer);
   sprintf(buffer, "%" PRIuLEAST32, glider_type);
   mime.Add("aircraft_id").Data(buffer);
@@ -58,26 +58,25 @@ MakeUploadFlightMime(CURL *easy, const WeGlideSettings &settings,
 }
 
 Co::Task<boost::json::value>
-UploadFlight(CurlGlobal &curl, const WeGlideSettings &settings,
+UploadFlight(CurlGlobal &curl, const char *url,
+             const WeGlide::Pilot &pilot,
              uint_least32_t glider_type,
              Path igc_path,
              ProgressListener &progress)
 {
-  NarrowString<0x200> url(settings.default_url);
-  url += "/igcfile";
-
   CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
   easy.SetFailOnError();
 
-  const auto mime = MakeUploadFlightMime(easy.Get(), settings,
+  const auto mime = MakeUploadFlightMime(easy.Get(), pilot,
                                          glider_type, igc_path);
   easy.SetMimePost(mime.get());
 
   Json::ParserOutputStream parser;
   const auto response =
     co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
+
   co_return parser.Finish();
 }
 
