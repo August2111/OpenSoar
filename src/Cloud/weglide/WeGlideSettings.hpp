@@ -25,10 +25,20 @@ Copyright_License {
 #define XCSOAR_CLOUD_WEGLIDE_WEGLIDESETTINGS_HPP
 
 #include "time/BrokenDate.hpp"
+#include "util/StaticString.hxx"
 
 #include <cstdint>
 
-/**
+namespace WeGlide {
+struct Pilot {
+  uint32_t id;
+  BrokenDate birthdate;
+  StaticString<0x40> name;
+};
+
+}
+
+  /**
  * Settings for the WeGlide access for following tasks:
  * - Uploading IGC files to the server
  * - Get the active task from server
@@ -55,8 +65,7 @@ struct WeGlideSettings {
   static constexpr char gliderlist_uri[] = "https://raw.githubusercontent.com/"
     "weglide/GliderList/master/gliderlist.csv";
 
-  uint32_t pilot_id;
-  BrokenDate pilot_birthdate;
+  WeGlide::Pilot pilot;
 
   void SetDefaults() noexcept;
 };
