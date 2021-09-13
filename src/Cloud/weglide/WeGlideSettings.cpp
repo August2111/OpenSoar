@@ -26,8 +26,9 @@ Copyright_License {
 void
 WeGlideSettings::SetDefaults() noexcept
 {
-  pilot_id = 0;
-  pilot_birthdate.Clear();
+  user.id = 0;
+  user.birthdate.Clear();
+  user.name.clear();
 
   enabled = false;
   automatic_upload = true;  // after enabling WeGlide!
