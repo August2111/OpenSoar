@@ -38,8 +38,8 @@ Copyright_License {
 enum ControlIndex {
   WeGlideEnabled,
   WeGlideAutomaticUpload,
-  WeGlidePilotID,
-  WeGlidePilotBirthDate,
+  WeGlideUserID,
+  WeGlideUserBirthDate,
 };
 
 
@@ -64,8 +64,8 @@ void
 WeGlideConfigPanel::SetEnabled(bool enabled) noexcept
 {
   SetRowEnabled(WeGlideAutomaticUpload, enabled);
-  SetRowEnabled(WeGlidePilotBirthDate, enabled);
-  SetRowEnabled(WeGlidePilotID, enabled);
+  SetRowEnabled(WeGlideUserBirthDate, enabled);
+  SetRowEnabled(WeGlideUserID, enabled);
 }
 
 void
@@ -94,10 +94,10 @@ WeGlideConfigPanel::Prepare(ContainerWindow &parent,
 
   AddInteger(_("Pilot"),
              _("Take this from your WeGlide Profile. Or set to 0 if not used."),
-             _T("%d"), _T("%d"), 1, 99999, 1, weglide.pilot_id);
+             _T("%d"), _T("%d"), 1, 99999, 1, weglide.user.id);
 
-  AddDate(_("Pilot date of birth"), nullptr,
-          weglide.pilot_birthdate);
+  AddDate(_("User date of birth"), nullptr,
+          weglide.user.birthdate);
 
   SetEnabled(weglide.enabled);
 }
@@ -113,12 +113,12 @@ WeGlideConfigPanel::Save(bool &_changed) noexcept
                        ProfileKeys::WeGlideAutomaticUpload,
                        weglide.automatic_upload);
 
-  changed |= SaveValue(WeGlidePilotID, ProfileKeys::WeGlidePilotID,
-                       weglide.pilot_id);
+  changed |= SaveValue(WeGlideUserID, ProfileKeys::WeGlideUserID,
+                       weglide.user.id);
 
-  changed |= SaveValue(WeGlidePilotBirthDate,
-                       ProfileKeys::WeGlidePilotBirthDate,
-                       weglide.pilot_birthdate);
+  changed |= SaveValue(WeGlideUserBirthDate,
+                       ProfileKeys::WeGlideUserBirthDate,
+                       weglide.user.birthdate);
 
   changed |= SaveValue(WeGlideEnabled, ProfileKeys::WeGlideEnabled,
                        weglide.enabled);
