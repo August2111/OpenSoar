@@ -38,9 +38,8 @@ Copyright_License {
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
-#include "LocalPath.hpp"
-#include "system/FileUtil.hpp"
-#include "net/http/DownloadManager.hpp"
+#include "Cloud/weglide/DownloadTask.hpp"
+// August2111:  #include "Dialogs/Cloud/WeGlideTaskDialog.hpp"
 
 TaskActionsPanel::TaskActionsPanel(TaskManagerDialog &_dialog,
                                    TaskMiscPanel &_parent,
@@ -109,18 +108,10 @@ TaskActionsPanel::OnDeclareClicked()
 inline void
 TaskActionsPanel::OnDownloadClicked()
 {
-  const ComputerSettings &settings = CommonInterface::GetComputerSettings();
-  char url[256];
-  char id[20];
-
-  strcpy(id, settings.logger.pilot_weglide_id.c_str());
-  snprintf(url, sizeof(url),"https://api.weglide.org/v1/task/declaration/%s?cup=false&tsk=true",id);
-  
-  const auto cache_path = MakeLocalPath(_T("weglide"));
-  File::Delete(LocalPath(_T("weglide/weglide_declared.tsk")));
-  Net::DownloadManager::Enqueue(url, Path(_T("weglide/weglide_declared.tsk")));
-  
-  DirtyTaskListPanel();
+  // August2111:    if (WeGlide::DownloadTaskDialog()) {
+  if (WeGlide::DownloadTask(0)) {
+    DirtyTaskListPanel();
+  }
 }
 
 void
