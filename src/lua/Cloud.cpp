@@ -25,6 +25,7 @@ Copyright_License {
 #include "Util.hxx"
 #include "Interface.hpp"
 #include "Dialogs/Cloud/WeGlideUploadDialog.hpp"
+#include "Dialogs/Cloud/WeGlideTaskDialog.hpp"
 
 extern "C" {
 #include <lauxlib.h>
@@ -69,8 +70,17 @@ l_igcfile_upload(lua_State *L) {
   return 0;
 }
 
-static constexpr struct luaL_Reg settings_funcs[] = {
+static int l_task_download(lua_State *L) {
+  if (lua_gettop(L) > 1)
+    return luaL_error(L, "Invalid parameters");
+  int pilot_id = lua_gettop(L) > 0 ? luaL_checknumber(L, 1) : 0;
 
+  WeGlide::DownloadTaskDialog();
+  return 0;
+}
+
+static constexpr struct luaL_Reg settings_funcs[] = {
+  {"task_download", l_task_download},
   {"igcfile_upload", l_igcfile_upload},
   {nullptr, nullptr}
 };
