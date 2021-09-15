@@ -88,7 +88,9 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Device/MultipleDevices.hpp"
 
 #include "Form/DataField/File.hpp"
+#include "Dialogs/FilePicker.hpp"
 #include "Dialogs/Cloud/WeGlideUploadDialog.hpp"
+#include "Dialogs/Cloud/WeGlideTaskDialog.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -754,4 +756,8 @@ InputEvents::eventUploadIGCFile(const TCHAR* misc) {
             // success!
           }
     }
+}
+
+void InputEvents::eventDownloadTask(const TCHAR *misc) {
+  WeGlide::DownloadTaskDialog();
 }
