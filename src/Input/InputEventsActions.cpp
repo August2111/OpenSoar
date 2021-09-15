@@ -61,6 +61,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/FileManager.hpp"
 #include "Dialogs/ReplayDialog.hpp"
+#include "Dialogs/Contest/WeGlide/TaskDownloadDialog.hpp"
 #include "Message.hpp"
 #include "Markers/Markers.hpp"
 #include "MainWindow.hpp"
@@ -90,6 +91,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Contest/WeGlide/FlightUploadDialog.hpp"
 #include "Dialogs/Contest/WeGlide/FlightPatchDialog.hpp"
 #include "Dialogs/Contest/WeGlide/FlightDeleteDialog.hpp"
+#include "net/client/WeGlide/DownloadTask.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -768,4 +770,11 @@ InputEvents::eventDeleteIGCFile([[maybe_unused]] const TCHAR *misc)
   if (WeGlide::FlightDeleteDialog()) {
       // success!
   }
+}
+
+void 
+InputEvents::eventDownloadTask([[maybe_unused]] const TCHAR *misc)
+{
+  const auto settings = CommonInterface::GetComputerSettings();
+  WeGlide::TaskDownloadDialog(settings.weglide.pilot, _T("Event Load Task"));
 }
