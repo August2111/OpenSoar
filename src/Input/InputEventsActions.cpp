@@ -90,6 +90,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
 #include "contest/weglide/UploadIGCFile.hpp"
+#include "Cloud/weglide/DownloadTask.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -755,4 +756,9 @@ InputEvents::eventUploadIGCFile(const TCHAR *misc) {
         // success!
       }
   }
+}
+
+void 
+InputEvents::eventDownloadTask(const TCHAR *misc) {
+  WeGlide::DownloadTask(0);
 }
