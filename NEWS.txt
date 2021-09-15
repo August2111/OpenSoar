@@ -36,10 +36,12 @@ Version 7.20 - 2021/10/22
 * user interface
   - add a simple date picker for date of birth selection
   - add a integer selection picker for large numbers
-  - new Settings "WeGlide PilotID, DayOfBirth, Password"
+  - new Profile Settings "WeGlidePilotID, WeGlidePilotBirthDate"
   - new Glider setting "WeGlide GliderID"
 * internet
   - add functionality for uploading igc files
+* task
+  - add download WeGlide declared task
 
 Version 7.19 - 2021/10/01
 * data files
