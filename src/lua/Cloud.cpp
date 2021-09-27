@@ -73,9 +73,11 @@ l_igcfile_upload(lua_State *L) {
 static int l_task_download(lua_State *L) {
   if (lua_gettop(L) > 1)
     return luaL_error(L, "Invalid parameters");
-  int pilot_id = lua_gettop(L) > 0 ? luaL_checknumber(L, 1) : 0;
+    
+  WeGlide::Pilot pilot = {0, {0, 0, 0}};
+  pilot.id = lua_gettop(L) > 0 ? luaL_checknumber(L, 1) : 0;
 
-  WeGlide::DownloadTaskDialog();
+  WeGlide::DownloadTaskDialog(pilot.id);
   return 0;
 }
 
