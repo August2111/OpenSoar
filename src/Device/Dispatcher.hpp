@@ -24,7 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DISPATCHER_HPP
 #define XCSOAR_DEVICE_DISPATCHER_HPP
 
-#include "Device/Util/LineHandler.hpp"
+#ifdef ANDROID
+# include "Device/util/LineHandler.hpp"
+#else
+# include "Device/Util/LineHandler.hpp"
+#endif
 
 class MultipleDevices;
 
