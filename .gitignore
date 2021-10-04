@@ -41,3 +41,10 @@ build/local-config.mk
 *.bak
 .*.swp
 .idea
+CMakeLists.txt
+*.cmake
+CMakeLists.txt
+*.cmake
+/3rd_party/CMakeLists.txt
+/3rd_party/boost/CMakeLists.txt
+/3rd_party/*.cmake
