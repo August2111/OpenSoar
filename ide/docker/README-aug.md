@@ -50,3 +50,14 @@ curl -O https://www.python.org/ftp/python/3.8.3/Python-3.8.3.tar.xz
 extract python
 tar -xf Python-3.8.3.tar.xz
 
+
+
+Linux:
+--------
+docker build --file ide/docker/Dockerfile -t xcsoar/xcsoar-main:latest ./ide/
+docker run --mount type=bind,source="$(pwd)",target=/opt/xcsoar -it xcsoar/xcsoar-main:latest /bin/bash
+
+Windows:
+--------
+docker build --file ide/docker/Dockerfile -t xcsoar/xcsoar-main:latest ./ide/
+docker run --mount type=bind,source="%CD:\=/%",target=/opt/xcsoar -it xcsoar/xcsoar-main:latest /bin/bash
