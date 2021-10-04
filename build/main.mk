@@ -666,6 +666,7 @@ endif
 
 XCSOAR_SOURCES += \
 	$(SRC)/Cloud/weglide/UploadFlight.cpp \
+	$(SRC)/Cloud/weglide/DownloadTask.cpp \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
 	$(SRC)/Tracking/SkyLines/Assemble.cpp \
 	$(SRC)/Tracking/SkyLines/Key.cpp \
