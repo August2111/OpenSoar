@@ -666,6 +666,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/net/client/tim/Client.cpp \
 	$(SRC)/net/client/tim/Glue.cpp \
 	$(SRC)/Cloud/weglide/UploadFlight.cpp \
+	$(SRC)/Cloud/weglide/DownloadTask.cpp \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
 	$(SRC)/Tracking/SkyLines/Assemble.cpp \
 	$(SRC)/Tracking/SkyLines/Key.cpp \
