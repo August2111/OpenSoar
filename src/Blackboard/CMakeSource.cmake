@@ -1,0 +1,10 @@
+set(Blackboard_SOURCES
+        Blackboard/BlackboardListener.cpp
+        Blackboard/DeviceBlackboard.cpp
+        Blackboard/InterfaceBlackboard.cpp
+        Blackboard/LiveBlackboard.cpp
+        Blackboard/ProxyBlackboardListener.cpp
+        Blackboard/RateLimitedBlackboardListener.cpp
+        Blackboard/ScopeCalculatedListener.cpp
+        Blackboard/ScopeGPSListener.cpp
+)
