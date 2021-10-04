@@ -1,0 +1,50 @@
+git cherry-pick 6d7d77186f7674c90b38185d5a1bc213ccd003f3^..8c14766183864295d327806799f13c8de6ba8999
+git cherry-pick 6d7d77186f7674c90b38185d5a1bc213ccd003f3^..f3490cb82319e760b49f801d353c896d1cef873c
+git cherry-pick 6d7d77186f7674c90b38185d5a1bc213ccd003f3^..c4520c00eafb6910461c798a07f114b91599dd39
+git cherry-pick 890c2305ecbe00331ca34649c1cdd6c612e550bb..0c835713f1fc78d6c0c76765c83f787a6a6619b0
+git cherry-pick ec67e786b85a9ce32a9834ca9cdc5c826be66759^..5339f55d2a8b1df1a6f7ccfa31563a16d5332af6
+git cherry-pick d205c1cf092e818ae02ba8fef2dfcca50a6ba14b..b52643de7ab0a45d009cd007b795c9e65f7e6d61
+git cherry-pick ^..
+
+git checkout weglide
+git reset --hard master
+git cherry-pick 890c2305ecbe00331ca34649c1cdd6c612e550bb..0134809fce77b2d0037f05d0040f4b9a2757465b
+
+git reset --hard weglide_01
+git cherry-pick weglide_PR_01^..5490a0327546e37e5135c61701b120ca4a8d3d1f
+
+
+WeGlide Vorlaeufiger Commit der Dateien
+Danach weiter splitten!!!
+Vielleicht vorher einen PR?
+
+WeGlide Add WeGlide panel 
+
+Enable to set the WeGlide pilot ID and the day of birtth
+Additional an Enable flag and a flag for the automatic upload
+
+git rebase --onto weglide_msvc 7753ed0c1f57b9bf609ccbe590ca17601adb936a weglide_tmp
+
+For rebase --onto
+weglide_tmp:
+12.05.2021, xx:xxUhr:        9fa841a276fda1bb1bcce4fdffb911c1cea1f9b3
+14.05.2021, 11:55Uhr:        e5f62ec63bf1b4740309011ef3b32600b2318364
+14.05.2021, 12:05Uhr:        4178d58384cfefc65d876dabce3d39ae15294436
+weglide_msvc:       b31ce28e3fc24a912c6c91faa269e77f370799fe
+master:             c1b2909248a3a45cb1225ce875fce280ac412658
+
+
+git reset --hard master
+weglide_tmp:
+
+
+git rebase --onto weglide_tmp weglide_msvc_01 weglide_msvc
+
+git cherry-pick msvc..weglide_msvc
+
+
+rename tag:
+Create a new tag from old:
+git tag msvc_01 weglide_msvc_01
+delete old tag:
+git tag -d weglide_msvc_01
