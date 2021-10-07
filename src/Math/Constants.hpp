@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_MATH_CONSTANTS_HPP
 #define XCSOAR_MATH_CONSTANTS_HPP
 
+#ifdef __MSVC__
+# include <corecrt_math_defines.h>
+#endif
+
 #include <math.h>
 
 #ifndef M_PI
