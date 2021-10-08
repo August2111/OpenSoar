@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MATH_CONSTANTS_HPP
 #define XCSOAR_MATH_CONSTANTS_HPP
 
-#ifdef _WIN32
+#ifdef __MSVC__
 # include <corecrt_math_defines.h>
 #endif
 
