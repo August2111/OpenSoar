@@ -104,7 +104,19 @@ LocalPath(Path file) noexcept
 {
   assert(file != nullptr);
 
+if 1
   return AllocatedPath::Build(GetPrimaryDataPath(), file);
+#else
+  if (file.c_str()[0] == '/')
+    return AllocatedPath(file);
+ #if _WIN32
+  else if (file.c_str()[0] == '\\')
+    return AllocatedPath(file);
+  else if (file.c_str()[1] == ':' && (file.c_str()[2] == '\\' || file.c_str()[2] == '/'))
+    return AllocatedPath(file);
+#endif
+  return AllocatedPath::Build(data_path, file);
+  endif   // >>>>>>> 5957db7bcf (LocalPath.cpp don't add the datapath if filepath starts with '/' ( or D:/ on Windows))
 }
 
 AllocatedPath
