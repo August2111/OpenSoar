@@ -1,10 +1,14 @@
+// #ifndef _WIN32
+// #define _MSC_VER 1900
+#if defined(RC_FILE)
+#define MAKE_RESOURCE(name, id) const int name = id
+#else
 #include "ResourceId.hpp"
+// #endif
 
 #if defined(USE_GDI) || defined(ANDROID)
-
 #define MAKE_RESOURCE(name, id) \
   static constexpr ResourceId name(id);
-
 #else
 
 #include <cstddef>
@@ -18,6 +22,7 @@
   static constexpr ResourceId name(resource_ ##id, &resource_ ## id ## _size);
 
 #endif
+#endif   // RC_FILE
 
 MAKE_RESOURCE(IDB_LANDABLE, 139);
 MAKE_RESOURCE(IDB_LANDABLE_HD, 5139);
