@@ -356,6 +356,7 @@ InputEvents::ProcessKey(Mode mode, unsigned key_code) noexcept
 
   // Which key - can be defined locally or at default (fall back to default)
   unsigned event_id = key_to_event(mode, overlay_mode, key_code);
+  LogFormat(_T("Invalid key data: %u / %u at %u"), key_code, overlay_mode, event_id);
   if (event_id == 0)
     return false;
 
