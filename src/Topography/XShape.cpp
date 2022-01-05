@@ -39,6 +39,8 @@ Copyright_License {
 #endif
 
 #include <algorithm>
+#include <stdexcept>  // is missing, because 'std::runtime_error'
+
 
 #include <tchar.h>
 
