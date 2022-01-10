@@ -170,7 +170,7 @@ void eventRepeatStatusMessage(const TCHAR *misc);
 void eventRun(const TCHAR *misc);
 void eventScreenModes(const TCHAR *misc);
 void eventDevice(const TCHAR *misc);
-void eventSendNMEA(const TCHAR *misc);
+// void eventSendNMEA(const TCHAR *misc);
 void eventSendNMEAPort1(const TCHAR *misc);
 void eventSendNMEAPort2(const TCHAR *misc);
 void eventSetup(const TCHAR *misc);
