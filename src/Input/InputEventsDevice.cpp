@@ -37,14 +37,14 @@ Copyright_License {
 //   and appended with the checksum e.g. '*40'.  The user needs only
 //   to provide the text in between the '$' and '*'.
 //
-void
-InputEvents::eventSendNMEA(const TCHAR *misc)
-{
-  if (misc != NULL) {
-    PopupOperationEnvironment env;
-    VarioWriteNMEA(misc, env);
-  }
-}
+// aug void
+// aug InputEvents::eventSendNMEA(const TCHAR *misc)
+// aug {
+// aug   if (misc != NULL) {
+// aug     PopupOperationEnvironment env;
+// aug     VarioWriteNMEA(misc, env);
+// aug   }
+// aug }
 
 void
 InputEvents::eventSendNMEAPort1(const TCHAR *misc)
