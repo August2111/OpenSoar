@@ -71,7 +71,20 @@ l_igcfile_upload(lua_State *L) {
   return 0;
 }
 
+static int 
+l_task_download(lua_State *L) {
+  if (lua_gettop(L) > 1)
+    return luaL_error(L, "Invalid parameters");
+    
+  WeGlide::Pilot pilot = {0, {0, 0, 0}};
+  pilot.id = lua_gettop(L) > 0 ? luaL_checknumber(L, 1) : 0;
+
+  WeGlide::DownloadTask(pilot.id);
+  return 0;
+}
+
 static constexpr struct luaL_Reg settings_funcs[] = {
+  {"task_download", l_task_download},
   {"igcfile_upload", l_igcfile_upload},
   {nullptr, nullptr}
 };
