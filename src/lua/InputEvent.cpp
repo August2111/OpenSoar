@@ -374,6 +374,20 @@ bool Lua::IsGesture(const TCHAR* gesture) {
   return event_store_gesture.HasHandler(gesture);
 }
 
+#if 0
 bool Lua::FireKey(unsigned key) {
   return event_store_key.Fire(key);
 }
+#else  // 0/1
+#include "Message.hpp"
+
+bool Lua::FireKey(unsigned key) {
+  auto result = event_store_key.Fire(key);
+  if (!result) {
+    StaticString<0x1000> msg;
+    msg.Format(_T("Key: 0x%X"), key);  //  UTF8ToWideConverter(key);
+    Message::AddMessage(msg);
+  }  
+  return result;
+}
+#endif  // 0/1
