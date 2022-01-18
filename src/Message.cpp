@@ -32,3 +32,11 @@ Message::AddMessage(const TCHAR* text, const TCHAR *data)
   if (CommonInterface::main_window->popup != nullptr)
     CommonInterface::main_window->popup->AddMessage(text, data);
 }
+
+void
+Message::AddMessage(const TCHAR *data, long long ms_delay)
+{
+  if (CommonInterface::main_window->popup != nullptr)
+    CommonInterface::main_window->popup->AddMessage(
+      data, std::chrono::milliseconds(ms_delay));
+}

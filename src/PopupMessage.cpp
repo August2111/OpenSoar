@@ -277,7 +277,7 @@ PopupMessage::GetEmptySlot()
 }
 
 void
-PopupMessage::AddMessage(std::chrono::steady_clock::duration tshow, Type type,
+PopupMessage::AddMessage/*Intern*/(std::chrono::steady_clock::duration tshow, Type type,
                          const TCHAR *Text) noexcept
 {
   const auto now = std::chrono::steady_clock::now();
@@ -362,6 +362,15 @@ PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
       _tcscat(msgcache, data);
     }
 
-    AddMessage(msg.delay, MSG_USERINTERFACE, msgcache);
+    AddMessage/*Intern*/(msg.delay, MSG_USERINTERFACE, msgcache);
   }
+}
+
+void 
+PopupMessage::AddMessage(const TCHAR* text,
+  std::chrono::steady_clock::duration delay)
+{
+  std::lock_guard<Mutex> lock(mutex);
+
+  AddMessage/*Intern*/(delay, MSG_USERINTERFACE, text);
 }

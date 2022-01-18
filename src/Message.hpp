@@ -27,7 +27,8 @@ Copyright_License {
 #include <tchar.h>
 
 namespace Message {
-  void AddMessage(const TCHAR* text, const TCHAR *data=nullptr);
+  void AddMessage(const TCHAR *text, const TCHAR *data=nullptr);
+  void AddMessage(const TCHAR *data, long long  ms_delay);
 };
 
 #endif

@@ -138,11 +138,13 @@ public:
 
 protected:
   /** Caller must hold the lock. */
-  void AddMessage(std::chrono::steady_clock::duration tshow, Type type,
+  void AddMessage/*Intern*/(std::chrono::steady_clock::duration tshow, Type type,
                   const TCHAR *Text) noexcept;
 
 public:
   void AddMessage(const TCHAR* text, const TCHAR *data=nullptr);
+
+  void AddMessage(const TCHAR* text, std::chrono::steady_clock::duration tshow);
 
   /**
    * Repeats last non-visible message of specified type
