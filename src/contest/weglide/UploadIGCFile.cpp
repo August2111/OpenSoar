@@ -40,6 +40,7 @@
 #include "system/FileUtil.hpp"
 #include "util/StaticString.hxx"
 #include "util/ConvertString.hpp"
+#include "Message.hpp"
 
 #include <cinttypes>
 
@@ -137,7 +138,7 @@ UploadSuccessDialog(const UploadResponse& response, const Path igc_path) {
   msg.AppendFormat(_T("%s: %s\n"), _("cid"),
     response.competition_id.c_str());
 
-  ShowMessageBox(msg, _T("WeGlide Upload"), MB_OK | MB_ICONEXCLAMATION);
+  Message::AddMessage(msg, 10000);
 }
 
 static Co::InvokeTask
@@ -202,7 +203,7 @@ UploadIGCFile(Path filepath, Pilot pilot,
     msg.append(igc_path.c_str());
 
     LogFormat(_("WeGlide Upload Error: %s"), msg.c_str());
-    ShowMessageBox(msg, _("WeGlide Upload"), MB_OK | MB_ICONEXCLAMATION);
+    Message::AddMessage(msg, 10000);
     return false;
   }
 }
