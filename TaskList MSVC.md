@@ -35,7 +35,18 @@ List.hpp- WorkAround unbedingt beseitigen, dass MUSS ordentlich laufen!
 
  
 Jasper bei Terrain 'herausoperieren'...
- 
+
+
+BOUND_NOEXCEPT 
+==============
+In der Main-Software sind viele Funktionen mit 'noexcept' abgesichert.
+Das funktioniert auch mit MSVC, aber nicht bei 'gebundenen' Callbacks,,;-(, Dafür habe ich das (leere) DEFINE BOUND_NOEXCEPT eingeführt, dass 
+für alle anderen Compiler wirken soll - das ist natürlich schlecht für das Design. Lösungen:
+- generel´le Definition '#define BOUND_NOEXCEPT noexcept' für alle anderen Compiler (schlechte Lösung, muss ja auch in die Make-Dateien...
+- Mache MSVC fit für noexcept callbacks ...
+
+
+
 
 
 
