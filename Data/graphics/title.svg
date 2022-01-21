@@ -9,7 +9,7 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="90"
+   width="120"
    height="15"
    id="svg3040"
    version="1.1"
@@ -90,6 +90,6 @@
          id="tspan9395-4-7-2"
          x="77.828217"
          y="13.240745"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.93197632px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans Bold';fill:#3f76a8;fill-opacity:1">7</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.93197632px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans Bold';fill:#3f76a8;fill-opacity:1">7.x</tspan></text>
   </g>
 </svg>
