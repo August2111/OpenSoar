@@ -1,0 +1,1 @@
+%PATH%;D:\Programs\Python\Python39;D:\Programs\Python\Python39\Scripts
