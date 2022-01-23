@@ -42,12 +42,12 @@ struct Instance : CoInstance {
 
   boost::json::value value;
 
-  Co::InvokeTask DoRun(const WeGlideSettings &settings,
+  Co::InvokeTask DoRun(const struct WeGlide::Pilot &pilot,
                        uint_least32_t glider_type,
                        Path igc_path,
                        ProgressListener &progress)
   {
-    value = co_await WeGlide::UploadFlight(*Net::curl, settings, glider_type,
+    value = co_await WeGlide::UploadFlight(*Net::curl, pilot, glider_type,
                                            igc_path, progress);
   }
 };
@@ -55,25 +55,26 @@ struct Instance : CoInstance {
 int
 main(int argc, char *argv[])
 try {
+  WeGlide::User user;
   Args args(argc, argv, "PILOT BIRTHDAY GLIDER IGCFILE");
-  const unsigned pilot = atoi(args.ExpectNext());
+  user.id = atoi(args.ExpectNext());
   const char *birthday_s = args.ExpectNext();
   const unsigned glider = atoi(args.ExpectNext());
   const auto igc_path = args.ExpectNextPath();
+
   args.ExpectEnd();
 
   unsigned year, month, day;
   if (sscanf(birthday_s, "%04u-%02u-%02u", &year, &month, &day) != 3)
     throw "Failed to parse date";
 
-  WeGlideSettings settings;
-  settings.pilot_id = pilot;
-  settings.pilot_birthdate = {year, month, day};
+  user.birthdate = {year, month, day};
+
 
   Instance instance;
   ConsoleOperationEnvironment env;
 
-  instance.Run(instance.DoRun(settings, glider,
+  instance.Run(instance.DoRun(user, glider,
                               igc_path, env));
 
   StdioOutputStream _stdout(stdout);
