@@ -23,7 +23,6 @@
 
 #include "UploadIGCFile.hpp"
 #include "UploadFlight.hpp"
-#include "Settings.hpp"
 #include "WeGlideObjects.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
@@ -100,22 +99,26 @@ UploadSuccessDialog(const Flight &flight_data, const TCHAR *msg)
 struct CoInstance {
   boost::json::value value;
   Co::InvokeTask
-  UpdateTask(Path igc_path, const WeGlideSettings &settings,
-    uint_least32_t glider_id, ProgressListener &progress)
+  UpdateTask(Path igc_path, const User &user,
+    const Aircraft &aircraft, ProgressListener &progress)
   {
-    value = co_await UploadFlight(*Net::curl, settings, glider_id,
+    value = co_await UploadFlight(*Net::curl, user, aircraft,
       igc_path, progress);
   }
 };
 
 static Flight
-UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
+UploadFile(Path igc_path, User user, Aircraft aircraft,
+  StaticString<0x1000> &msg) noexcept
 {
-  Flight flight_data({ 0 });
+  Flight flight_data;
   try {
-    WeGlideSettings settings = CommonInterface::GetComputerSettings().weglide;
-    uint32_t glider_id = CommonInterface::GetComputerSettings().plane
-      .weglide_glider_type;
+    if (!aircraft.IsValid())
+      aircraft = Aircraft({CommonInterface::GetComputerSettings().plane
+        .weglide_glider_type});
+    if (!user.IsValid()) {
+      user = CommonInterface::GetComputerSettings().weglide.pilot;
+    }
 
     if (!File::Exists(igc_path)) {
       msg.Format(_T("'%s' - %s"), igc_path.c_str(), _("Not found"));
@@ -125,9 +128,10 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
     PluggableOperationEnvironment env;
     CoInstance instance;
     if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-      _("Upload Flight"), instance.UpdateTask(igc_path, settings,
-        glider_id, env), &env) == false) {
-      msg.Format(_T("'%s' - %s"), igc_path.c_str(), _("Error"));
+      _("Upload Flight"), instance.UpdateTask(igc_path, user,
+        aircraft, env), &env) == false) {
+      msg.Format(_T("'%s' - %s"), igc_path.c_str(),
+        _("ShowCoDialog with failure"));
       return flight_data;  // with flight_id = 0!
     }
 
@@ -145,11 +149,11 @@ UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
 }
 
 bool
-UploadIGCFile(Path igc_path) noexcept
-{ 
+UploadIGCFile(Path igc_path, const User &user,
+  const Aircraft &aircraft) noexcept { 
   try {
     StaticString<0x1000> msg;
-    auto flight_data = UploadFile(igc_path, msg);
+    auto flight_data = UploadFile(igc_path, user, aircraft, msg);
     if (flight_data.flight_id > 0) {
       // upload successful!
       LogFormat(_T("%s: %s"), _("WeGlide Upload"), msg.c_str());
