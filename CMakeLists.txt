@@ -493,6 +493,7 @@ endif (JASPER_OUTSIDE)
     add_subdirectory(src/io)
     add_subdirectory(src/MapWindow)
     add_subdirectory(src/Tracking)
+    add_subdirectory(src/contest)
 if(NOT ZZIP_OUTSIDE)
     add_subdirectory(src/zzip)   # aug: new!!
 endif()

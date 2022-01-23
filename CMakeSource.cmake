@@ -59,6 +59,7 @@ set(XCSOAR_LIB_LISTS
     Dialogs
     MapWindow
     Tracking
+    contest
 
     time
 )
