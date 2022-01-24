@@ -30,18 +30,19 @@ Copyright_License {
 #include <cstdint>
 
 namespace WeGlide {
-struct Pilot {
-  uint32_t id = 0;
-  BrokenDate birthdate;
-};
+  struct Pilot {
+    uint32_t id;
+    BrokenDate birthdate;
+    StaticString<0x40> name;
+  };
 
 }
 
-  /**
- * Settings for the WeGlide access for following tasks:
- * - Uploading IGC files to the server
- * - Get the active task from server
- */
+/**
+* Settings for the WeGlide access for following tasks:
+* - Uploading IGC files to the server
+* - Get the active task from server
+*/
 struct WeGlideSettings {
   /**
    * Enable the general communication to the WeGlide server
