@@ -56,6 +56,8 @@ struct WeGlideSettings {
    * https://api.weglide.org/docs
   */
   static constexpr char default_url[] = "https://api.weglide.org/v1";
+  static constexpr char gliderlist_uri[] = "https://raw.githubusercontent.com/"
+    "weglide/GliderList/master/gliderlist.csv";
 
   WeGlide::User user;
 
