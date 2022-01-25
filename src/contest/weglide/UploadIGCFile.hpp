@@ -23,12 +23,16 @@ Copyright_License {
 
 #pragma once
 
+#include "Cloud/weglide/WeGlideObjects.hpp"
+
 #include <cstdint>
 
 class Path;
 
 namespace WeGlide {
 
-bool UploadIGCFile(Path igc_path) noexcept;
+bool UploadIGCFile(Path igc_filepath) noexcept;
+bool UploadIGCFile(Path igc_filepath, const User& user,
+                   uint_least32_t glider_id) noexcept;
 
 } // namespace WeGlide
