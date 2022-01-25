@@ -26,9 +26,11 @@ Copyright_License {
 #include <cstdint>
 
 class Path;
+struct User;
 
 namespace WeGlide {
 
-bool UploadIGCFile(Path igc_path);
+bool UploadIGCFile(Path igc_filepath, User user,
+                   uint_least32_t glider_id) noexcept;
 
 } // namespace WeGlide

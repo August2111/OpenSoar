@@ -141,29 +141,30 @@ UploadSuccessDialog(const UploadResponse& response, const Path igc_path) {
 }
 
 static Co::InvokeTask
-UpdateTask(Path igc_path, const WeGlideSettings& settings,
+UpdateTask(Path igc_path, const char* url, const User& user,
   uint_least32_t glider_id, boost::json::value& json,
   ProgressListener& progress) {
-  json = co_await UploadFlight(*Net::curl, settings, glider_id,
+  json = co_await UploadFlight(*Net::curl, url, user, glider_id,
     igc_path, progress);
 }
 
 bool
-UploadIGCFile(Path filepath) {
-  const WeGlideSettings& weglide_settings =
-  CommonInterface::GetComputerSettings().weglide;
-  NarrowString<0x200> url(weglide_settings.default_url);
+UploadIGCFile(Path filepath, Pilot pilot,
+              uint_least32_t glider_id) noexcept {
+  NarrowString<0x200> url(WeGlideSettings::default_url);
   url += "/igcfile";
   auto igc_path = filepath.IsAbsolute() ? AllocatedPath(filepath) :
     LocalPath(filepath);
 
   try {
     WeGlideSettings settings = CommonInterface::GetComputerSettings().weglide;
-    uint32_t glider_id = CommonInterface::GetComputerSettings().plane
+    if (glider_id == 0)
+      glider_id = CommonInterface::GetComputerSettings().plane
       .weglide_glider_type;
+    if (pilot.id == 0) {
+      pilot = CommonInterface::GetComputerSettings().weglide.pilot;
+    }
 
-      UploadResponse response;
-    PluggableOperationEnvironment env;
     LogFormat(_("WeGlide Upload: %s"), igc_path.c_str());
     if (!File::Exists(igc_path)) {
       StaticString<0x200> msg;
@@ -174,9 +175,11 @@ UploadIGCFile(Path filepath) {
       return false;
     }
 
+    UploadResponse response;
+    PluggableOperationEnvironment env;
     boost::json::value json;
     if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-      _("Upload Flight"), UpdateTask(igc_path, settings,
+      _("Upload Flight"), UpdateTask(igc_path, url.c_str(), pilot,
         glider_id, json, env), &env) == false)
     {
       return false;
