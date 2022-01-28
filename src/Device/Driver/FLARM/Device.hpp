@@ -287,6 +287,14 @@ private:
    */
   bool DownloadFlight(Path path, OperationEnvironment &env);
 
+  /**
+   * Sends GetIGCData messages to the Flarm and downloads the currently
+   * selected flight
+   * @param path Path to the IGC file to write into
+   * @return True if received and written successfully, otherwise False
+   */
+  bool DownloadMemory(Path path, OperationEnvironment &env);
+
 public:
   /**
    * Reads a RecordedFlightList from the Flarm

@@ -82,6 +82,12 @@ ManageFLARMWidget::Prepare(ContainerWindow &parent,
                         _T("FLARM"), widget);
   });
 
+  AddButton(_("Memory Download"), [this](){
+    FLARMConfigWidget widget(GetLook(), device);
+    DefaultWidgetDialog(UIGlobals::GetMainWindow(), GetLook(),
+                        _T("FLARM"), widget);
+  });
+
   AddButton(_("Reboot"), [this](){
     MessageOperationEnvironment env;
     device.Restart(env);
