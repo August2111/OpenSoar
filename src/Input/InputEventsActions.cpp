@@ -45,6 +45,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 */
 
 #include "InputEvents.hpp"
+#include "LocalPath.hpp"
 #include "Protection.hpp"
 #include "UIState.hpp"
 #include "Computer/Settings.hpp"
@@ -750,9 +751,12 @@ InputEvents::eventUploadIGCFile(const TCHAR *misc) {
   df.SetFileType(FileType::IGC);
   if (FilePicker(_T("IGC-FilePicker"), df)) {
     auto path = df.GetValue();
-    if (!path.IsEmpty())
-      if (WeGlide::UploadIGCFile(path)) {
-        // success!
-      }
+    if (!path.IsEmpty()) {
+      // the path in the pickewr could be absolute - or relativ to the 
+      // data directory (local path)
+      if (!path.IsAbsolute())
+        LocalPath(path);
+      WeGlide::UploadIGCFile(path, { 0 }, 0);
+    }
   }
 }

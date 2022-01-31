@@ -32,7 +32,7 @@ class Path;
 namespace WeGlide {
 
 bool UploadIGCFile(Path igc_filepath) noexcept;
-bool UploadIGCFile(Path igc_filepath, const User& user,
+bool UploadIGCFile(Path igc_filepath, const User &user,
                    uint_least32_t glider_id) noexcept;
 
 } // namespace WeGlide
