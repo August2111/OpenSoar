@@ -113,7 +113,6 @@ UploadFile(Path igc_path, User user, uint_least32_t glider_id,
 {
   Flight flight_data({ 0 });
   try {
-    WeGlideSettings settings = CommonInterface::GetComputerSettings().weglide;
     if (glider_id == 0)
       glider_id = CommonInterface::GetComputerSettings().plane
       .weglide_glider_type;
