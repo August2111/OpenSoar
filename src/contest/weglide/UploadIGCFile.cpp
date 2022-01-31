@@ -29,6 +29,7 @@
 #include "Cloud/weglide/WeGlideSettings.hpp"
 #include "co/InvokeTask.hxx"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Contest/WeGlide/FlightDataDialog.hpp"
 #include "Dialogs/CoDialog.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
@@ -75,27 +76,6 @@ UploadJsonInterpreter(const boost::json::value &json)
   return flight_data;
 }
 
-// UploadSuccessDialog is only a preliminary DialogBox to show the 
-// result of this upload
-static void
-UploadSuccessDialog(const Flight &flight_data, const TCHAR *msg)
-{
-  StaticString<0x1000> display_string;
-  // TODO: Create a real Dialog with fields in 'src/Dialogs/Cloud/weglide'!
-  // With this Dialog insert the possibilty to update/patch the flight
-  // f.e. copilot in double seater, scoring class, short comment and so on
-  display_string.Format(_T("%s\n\n%s: %u\n%s: %s\n%s: %s (%d)\n"
-    "%s: %s (%u)\n%s: %s, %s: %s"), msg,
-    _("Flight ID"), flight_data.flight_id,
-    _("Scoring Date"), flight_data.scoring_date.c_str(),
-    _("User"), flight_data.user.name.c_str(), flight_data.user.id,
-    _("Aircraft"), flight_data.aircraft.name.c_str(), flight_data.aircraft.id,
-    _("Reg."), flight_data.registration.c_str(),
-    _("Comp. ID"), flight_data.competition_id.c_str());
-
-  ShowMessageBox(display_string.c_str(), _("WeGlide Upload"), MB_OK);
-}
-
 struct CoInstance {
   boost::json::value value;
   Co::InvokeTask
@@ -109,56 +89,53 @@ UpdateTask(Path igc_path, const User &user,
 
 static Flight
 UploadFile(Path igc_path, User user, uint_least32_t glider_id,
-  StaticString<0x1000> &msg) noexcept
+           StaticString<0x1000> &msg) noexcept
 {
-  Flight flight_data({ 0 });
   try {
     if (glider_id == 0)
-      glider_id = CommonInterface::GetComputerSettings().plane
-      .weglide_glider_type;
+      glider_id =
+          CommonInterface::GetComputerSettings().plane.weglide_glider_type;
     if (user.id == 0) {
       user = CommonInterface::GetComputerSettings().weglide.user;
     }
 
-    if (!File::Exists(igc_path)) {
-      msg.Format(_("'%s' - %s"), igc_path.c_str(), _("File doesn't exist"));
-      return flight_data;  // with flight_id = 0!
-    }
-
     PluggableOperationEnvironment env;
     CoInstance instance;
-    if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
-      _("Upload Flight"), instance.UpdateTask(igc_path, user,
-        glider_id, env), &env) == false) {
+    if (!File::Exists(igc_path)) {
+      msg.Format(_("'%s' - %s"), igc_path.c_str(), _("File doesn't exist"));
+    } else if (ShowCoDialog(UIGlobals::GetMainWindow(), UIGlobals::GetDialogLook(),
+                     _("Upload Flight"),
+                     instance.UpdateTask(igc_path, user, glider_id, env),
+                     &env) == false) {
       msg.Format(_("'%s' - %s"), igc_path.c_str(),
-        _("ShowCoDialog with failure"));
-      return flight_data;  // with flight_id = 0!
+                 _("ShowCoDialog with failure"));
+    } else {
+      // read the important data from json in a structure
+      Flight flight_data(UploadJsonInterpreter(instance.value));
+      flight_data.igc_name = igc_path.GetBase().c_str();
+
+      msg.Format(_("File upload '%s' was successful"),
+                 flight_data.igc_name.c_str()); // igc_path.c_str());
+      return flight_data;                       // upload successful!
     }
-
-    // read the important data from json in a structure
-    flight_data = UploadJsonInterpreter(instance.value);
-
-    msg.Format(_("File upload '%s' was successful"), igc_path.c_str());
-    return flight_data;  // upload successful!
   }
   catch (const std::exception &e) {
     msg.Format(_("'%s' - %s"), igc_path.c_str(),
       UTF8ToWideConverter(e.what()).c_str());
-    return flight_data;  // with flight_id = 0!
   }
+  return Flight({0});  // upload failed!
 }
 
 bool
 UploadIGCFile(Path igc_path, const User &user,
-  uint_least32_t glider_id) noexcept
+              uint_least32_t glider_id) noexcept
 { 
   try {
     StaticString<0x1000> msg;
     auto flight_data = UploadFile(igc_path, user, glider_id, msg);
     if (flight_data.flight_id > 0) {
       // upload successful!
-      LogFormat(_("%s: %s"), _("WeGlide Upload"), msg.c_str());
-      UploadSuccessDialog(flight_data, msg.c_str());
+      FlightDataDialog(flight_data, msg.c_str());
       return true;
     } else {
       // upload failed!
