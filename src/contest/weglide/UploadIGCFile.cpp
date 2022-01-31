@@ -29,6 +29,7 @@
 #include "Cloud/weglide/WeGlideSettings.hpp"
 #include "co/InvokeTask.hxx"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/Contest/WeGlide/FlightDataDialog.hpp"
 #include "Dialogs/CoDialog.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
@@ -75,6 +76,7 @@ UploadJsonInterpreter(const boost::json::value &json)
   return flight_data;
 }
 
+#if 0  // TODO(August2111):
 // UploadSuccessDialog is only a preliminary DialogBox to show the 
 // result of this upload
 static void
@@ -95,6 +97,7 @@ UploadSuccessDialog(const Flight &flight_data, const TCHAR *msg)
 
   ShowMessageBox(display_string.c_str(), _("WeGlide Upload"), MB_OK);
 }
+#endif
 
 struct CoInstance {
   boost::json::value value;
@@ -157,8 +160,9 @@ UploadIGCFile(Path igc_path, const User &user,
     auto flight_data = UploadFile(igc_path, user, glider_id, msg);
     if (flight_data.flight_id > 0) {
       // upload successful!
-      LogFormat(_("%s: %s"), _("WeGlide Upload"), msg.c_str());
-      UploadSuccessDialog(flight_data, msg.c_str());
+      // LogFormat(_("%s: %s"), _("WeGlide Upload"), msg.c_str());
+      // UploadSuccessDialog(flight_data, msg.c_str());
+      FlightDataDialog(flight_data, msg.c_str());
       return true;
     } else {
       // upload failed!
