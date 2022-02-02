@@ -48,3 +48,16 @@ CMakeLists.txt
 /3rd_party/CMakeLists.txt
 /3rd_party/boost/CMakeLists.txt
 /3rd_party/*.cmake
+/build/cmake/xcsoar.cmake
+/build/cmake/CMakeLists.txt
+/Data/CMakeLists.txt
+/src/zzip/CMakeLists.txt
+/test/CMakeLists.txt
+/test/src/CMakeLists.txt
+/test/src/CMakeSource.cmake
+/tools/CMakeLists.txt
+/src/util/CMakeLists.txt
+/src/time/CMakeLists.txt
+/src/thread/CMakeLists.txt
+/src/system/CMakeLists.txt
+/*.cmake
