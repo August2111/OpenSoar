@@ -31,6 +31,7 @@
 #include "Dialogs/Message.hpp"
 #include "Dialogs/Contest/WeGlide/FlightDataDialog.hpp"
 #include "Dialogs/CoDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
 #include "Language/Language.hpp"
@@ -115,7 +116,7 @@ UploadFile(Path igc_path, User user, uint_least32_t glider_id,
       flight_data.igc_name = igc_path.GetBase().c_str();
 
       msg.Format(_("File upload '%s' was successful"),
-                 flight_data.igc_name.c_str()); // igc_path.c_str());
+                 flight_data.igc_name.c_str());
       return flight_data;                       // upload successful!
     }
   }
@@ -129,8 +130,7 @@ UploadFile(Path igc_path, User user, uint_least32_t glider_id,
 bool
 UploadIGCFile(Path igc_path, const User &user,
               uint_least32_t glider_id) noexcept
-{ 
-  try {
+try {
     StaticString<0x1000> msg;
     auto flight_data = UploadFile(igc_path, user, glider_id, msg);
     if (flight_data.flight_id > 0) {
@@ -143,14 +143,15 @@ UploadIGCFile(Path igc_path, const User &user,
       ShowMessageBox(msg.c_str(), _("WeGlide Upload Error"),
         MB_ICONEXCLAMATION);
     }
-  } catch (...) {
-    LogError(std::current_exception());
-  }
+  return false;
+} catch (...) {
+  ShowError(std::current_exception(), _T("WeGlide UploadIGCFile"));
   return false;
 }
 
 bool
-UploadIGCFile(Path igc_path) noexcept {
+UploadIGCFile(Path igc_path) noexcept
+{
   return UploadIGCFile(igc_path, { 0 }, 0);
 }
 
