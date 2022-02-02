@@ -25,9 +25,6 @@ Copyright_License {
 
 #include "Cloud/weglide/WeGlideObjects.hpp"
 
-#include <tchar.h>
-#include <cinttypes>
-
 namespace WeGlide {
 
 int FlightDataDialog(const Flight &flightdata, const TCHAR *message);

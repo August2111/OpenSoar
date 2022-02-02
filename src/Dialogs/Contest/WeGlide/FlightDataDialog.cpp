@@ -33,10 +33,10 @@ Copyright_License {
 // #include "system/Sleep.h"
 #include "Widget/RowFormWidget.hpp"
 
-static class UploadTestWidget final : public RowFormWidget {
+static class UploadResponseWidget final : public RowFormWidget {
 
 public:
-  UploadTestWidget(const DialogLook &look, const WeGlide::Flight &_flightdata,
+  UploadResponseWidget(const DialogLook &look, const WeGlide::Flight &_flightdata,
                    const TCHAR * msg)
       : RowFormWidget(look), flightdata(_flightdata), update_message(msg) {}
 
@@ -50,9 +50,9 @@ private:
 };
 
 
-void UploadTestWidget::Prepare(ContainerWindow &parent,
-                                const PixelRect &rc) noexcept {
-
+void UploadResponseWidget::Prepare(ContainerWindow &parent,
+                                const PixelRect &rc) noexcept
+{
   TCHAR buffer[0x100];
   AddSpacer();
   AddReadOnly(_("IGC File"), NULL, flightdata.igc_name.c_str());
@@ -69,7 +69,8 @@ void UploadTestWidget::Prepare(ContainerWindow &parent,
   AddMultiLine(update_message);
 }
 
-bool UploadTestWidget::Save(bool &_changed) noexcept try {
+bool UploadResponseWidget::Save(bool &_changed) noexcept
+try {
   PopupOperationEnvironment env;
   // bool changed = false;
   // NarrowString<32> buffer;
@@ -87,7 +88,7 @@ namespace WeGlide {
 
 int FlightDataDialog(const WeGlide::Flight &flightdata, const TCHAR *msg) {
   LogFormat(_T("%s: %s"), _("WeGlide Upload"), msg);
-  UploadTestWidget widget(UIGlobals::GetDialogLook(), flightdata, msg);
+  UploadResponseWidget widget(UIGlobals::GetDialogLook(), flightdata, msg);
   return DefaultWidgetDialog(UIGlobals::GetMainWindow(),
     UIGlobals::GetDialogLook(), _("WeGlide Upload"), widget);
 }
