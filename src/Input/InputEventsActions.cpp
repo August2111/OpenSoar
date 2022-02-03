@@ -90,7 +90,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
-#include "contest/weglide/UploadIGCFile.hpp"
+// #include "contest/weglide/UploadIGCFile.hpp"
+#include "Dialogs/Contest/WeGlide/PrepareFlightUploadDialog.hpp"
 #include "Cloud/weglide/DownloadTask.hpp"
 
 #include <cassert>
@@ -757,7 +758,8 @@ InputEvents::eventUploadIGCFile(const TCHAR *misc) {
       // data directory (local path)
       if (!path.IsAbsolute())
         LocalPath(path);
-      WeGlide::UploadIGCFile(path, { 0 }, 0);
+      // WeGlide::UploadIGCFile(path, { 0 }, 0);
+      WeGlide::PrepareFlightUploadDialog(path);
     }
   }
 }
