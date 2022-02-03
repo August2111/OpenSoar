@@ -161,8 +161,9 @@ UploadIGCFile(Path igc_path, const User &user,
       return true;
     } else {
       // upload failed!
-      LogFormat(_T("%s: %s"), _("Error"), msg.c_str());
-      ShowMessageBox(msg.c_str(), _("Error"), MB_ICONEXCLAMATION);
+      LogFormat(_T("%s: %s"), _("WeGlide Upload Error"), msg.c_str());
+      ShowMessageBox(msg.c_str(), _("WeGlide Upload Error"), 
+                     MB_ICONEXCLAMATION);
     }
   } catch (...) {
     LogError(std::current_exception());
