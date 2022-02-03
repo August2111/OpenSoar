@@ -30,23 +30,26 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Operation/Cancelled.hpp"
 #include "Operation/PopupOperationEnvironment.hpp"
+#include "system/Path.hpp"
 // #include "system/Sleep.h"
 #include "Widget/RowFormWidget.hpp"
 
-static class UploadPrepareWidget final : public RowFormWidget {
+class UploadPrepareWidget final : public RowFormWidget {
 
 public:
-  UploadPrepareWidget(const DialogLook &look, const WeGlide::Flight &_flightdata,
-                   const TCHAR * msg)
-      : RowFormWidget(look), flightdata(_flightdata), update_message(msg) {}
+  UploadPrepareWidget(const DialogLook &look, const Path &igc_path, const WeGlide::User &user_,
+                      const uint_least32_t glider_id)
+      : RowFormWidget(look), igcpath(igc_path), user(user),
+        aircraft_id(glider_id) {}
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
   bool Save(bool &changed) noexcept override;
 
 private:
-  WeGlide::Flight flightdata;
-  const TCHAR *update_message;
+  Path igcpath;
+  const WeGlide::User user;
+  uint_least32_t aircraft_id;
 };
 
 
@@ -55,18 +58,17 @@ void UploadPrepareWidget::Prepare(ContainerWindow &parent,
 
   TCHAR buffer[0x100];
   AddSpacer();
-  AddReadOnly(_("IGC File"), NULL, flightdata.igc_name.c_str());
-  AddReadOnly(_("Flight ID"), NULL, _T("%.0f"), flightdata.flight_id);
+  AddReadOnly(_("IGC File"), NULL, igcpath.c_str());
   AddSpacer();
-  AddReadOnly(_("Date"), NULL, flightdata.scoring_date.c_str());
-  AddReadOnly(_("Pilot"), NULL, flightdata.user.name.c_str());
-  AddReadOnly(_("Aircraft"), NULL, flightdata.aircraft.name.c_str());
-  _stprintf(buffer, _T("%s, %s =  %s"), flightdata.registration.c_str(),
-      _("cid"), flightdata.competition_id.c_str());
-  AddReadOnly(_("Glider"), NULL, buffer);
+  _stprintf(buffer, _T("%s (%u)"), _("August"), user.id);
+  AddReadOnly(_("Pilot"), NULL, buffer);
+  _stprintf(buffer, _T("%s (%u)"), _("Twin"), aircraft_id);
+  AddReadOnly(_("Aircraft"), NULL, buffer);
+  //      _("cid"), flightdata.competition_id.c_str());
+  //  AddReadOnly(_("Glider"), NULL, buffer);
 
   AddSpacer();
-  AddMultiLine(update_message);
+  AddMultiLine(_("Do you want to upload this flight to WeGlide?"));
 }
 
 bool UploadPrepareWidget::Save(bool &_changed) noexcept try {
@@ -85,11 +87,15 @@ bool UploadPrepareWidget::Save(bool &_changed) noexcept try {
 
 namespace WeGlide {
 
-int PrepareFlightUploadDialog(const WeGlide::Flight &flightdata, const TCHAR *msg) {
-  LogFormat(_T("%s: %s"), _("WeGlide Upload"), msg);
-  UploadPrepareWidget widget(UIGlobals::GetDialogLook(), flightdata, msg);
+int 
+PrepareFlightUploadDialog(const Path &igc_path, const User &user,
+                          const uint_least32_t glider_id) noexcept
+{
+  // LogFormat(_T("%s: %s"), _("WeGlide Upload"), msg);
+  UploadPrepareWidget widget(UIGlobals::GetDialogLook(), igc_path,
+                             user, glider_id);
   return DefaultWidgetDialog(UIGlobals::GetMainWindow(),
-    UIGlobals::GetDialogLook(), _("WeGlide Upload"), widget);
+    UIGlobals::GetDialogLook(), _("Upload Flight"), widget);
 }
 
 } // namespace WeGlide

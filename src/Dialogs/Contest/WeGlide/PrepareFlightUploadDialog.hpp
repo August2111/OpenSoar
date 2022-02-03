@@ -24,10 +24,12 @@ Copyright_License {
 #pragma once
 
 #include "Cloud/weglide/WeGlideObjects.hpp"
+class Path;
 
 namespace WeGlide {
 
-int PrepareFlightUploadDialog(const Flight &flightdata, const TCHAR *message);
+int PrepareFlightUploadDialog(const Path &igc_path, const User &user = {0},
+                              const uint_least32_t glider_id = 0) noexcept;
 
 }
 
