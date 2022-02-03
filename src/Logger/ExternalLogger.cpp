@@ -45,7 +45,8 @@
 #include "Formatter/IGCFilenameFormatter.hpp"
 #include "time/BrokenDate.hpp"
 #include "Interface.hpp"
-#include "contest/weglide/UploadIGCFile.hpp"
+// #include "contest/weglide/UploadIGCFile.hpp"
+#include "Dialogs/Contest/WeGlide/PrepareFlightUploadDialog.hpp"
 
 
 class DeclareJob {
@@ -356,12 +357,14 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
           CommonInterface::GetComputerSettings().plane.weglide_glider_type;
       if (weglide_user.id > 0 && weglide_aircraft) {
         // ask whether this IGC should be uploaded to WeGlide
-        if (ShowMessageBox(_("Do you want to upload this flight to WeGlide?"),
-                           _("Upload flight"),
-                           MB_YESNO | MB_ICONQUESTION) == IDYES) {
-          WeGlide::UploadIGCFile((Path)igc_path,
-                                 weglide_user, weglide_aircraft);
-        }
+        //        if (ShowMessageBox(_("Do you want to upload this flight to WeGlide?"),
+//                           _("Upload Flight"),
+//                           MB_YESNO | MB_ICONQUESTION) == IDYES) {
+//          WeGlide::UploadIGCFile((Path)igc_path,
+//                                 weglide_user, weglide_aircraft);
+//        }
+        PrepareFlightUploadDialog((Path)igc_path,
+                                  weglide_user, weglide_aircraft);
       }
     }
 
