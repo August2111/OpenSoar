@@ -30,6 +30,7 @@
 #include "co/InvokeTask.hxx"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/CoDialog.hpp"
+#include "Dialogs/Error.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
 #include "Language/Language.hpp"
@@ -166,7 +167,7 @@ UploadIGCFile(Path igc_path, const User &user,
                      MB_ICONEXCLAMATION);
     }
   } catch (...) {
-    LogError(std::current_exception());
+	ShowError(std::current_exception(), _("WeGlide UploadIGCFile"));
   }
   return false;
 }
