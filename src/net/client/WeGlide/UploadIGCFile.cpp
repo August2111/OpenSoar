@@ -32,6 +32,7 @@
 #include "Dialogs/Message.hpp"
 #include "Dialogs/CoDialog.hpp"
 #include "Dialogs/Error.hpp"
+#include "Dialogs/Contest/WeGlide/FlightUploadResponse.hpp"
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
 #include "Language/Language.hpp"
@@ -112,27 +113,6 @@ UploadErrorInterpreter(const HttpResponse &http)
   return error_string;
 }
 
-// UploadSuccessDialog is only a preliminary DialogBox to show the 
-// result of this upload
-static void
-UploadSuccessDialog(const Flight &flight_data, const TCHAR *msg)
-{
-  StaticString<0x1000> display_string;
-  // TODO: Create a real Dialog with fields in 'src/Dialogs/Cloud/weglide'!
-  // With this Dialog insert the possibilty to update/patch the flight
-  // f.e. copilot in double seater, scoring class, short comment and so on
-  display_string.Format(_T("%s\n\n%s: %u\n%s: %s\n%s: %s (%d)\n"
-    "%s: %s (%u)\n%s: %s, %s: %s"), msg,
-    _T("Flight ID"), flight_data.flight_id,
-    _("Date"), flight_data.scoring_date.c_str(),
-    _("Username"), flight_data.user.name.c_str(), flight_data.user.id,
-    _("Plane"), flight_data.aircraft.name.c_str(), flight_data.aircraft.id,
-    _("Registration"), flight_data.registration.c_str(),
-    _("Comp. ID"), flight_data.competition_id.c_str());
-
-  ShowMessageBox(display_string.c_str(), _("WeGlide Upload"), MB_OK);
-}
-
 struct CoInstance {
   HttpResponse http;
   Co::InvokeTask
@@ -206,11 +186,12 @@ UploadIGCFile(Path igc_path, const User &user,
   const Aircraft &aircraft) noexcept { 
   try {
     StaticString<0x1000> msg;
-    auto flight_data = UploadFile(igc_path, user, aircraft, msg);
-    if (flight_data.flight_id > 0) {
-      // upload successful!
-      LogFormat(_T("%s: %s"), _("WeGlide Upload"), msg.c_str());
       UploadSuccessDialog(flight_data, msg.c_str());
+    auto flight_data = UploadFile(igc_path, user, aircraft, msg);
+    if (flight_data.IsValid()) {
+      // upload successful and call a dialog with this flight
+      LogFormat(_T("%s: %s"), _("WeGlide Upload"), msg.c_str());
+      FlightUploadResponse(flight_data, msg.c_str());
       return true;
     } else {
       // upload failed!
