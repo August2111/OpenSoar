@@ -76,7 +76,7 @@ EditDataFieldDialog(const TCHAR *caption, DataField &df,
     if (!DateEntryDialog(caption, date, true))
       return false;
 
-    dfd.SetValue(date);
+    dfd.ModifyValue(date);
     return true;
   } else if (type == DataField::Type::INTEGER) {
     auto &dfi = static_cast<DataFieldInteger &>(df);
