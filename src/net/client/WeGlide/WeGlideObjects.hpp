@@ -32,6 +32,7 @@ struct User {
   uint32_t id;
   BrokenDate birthdate;
   StaticString<0x80> name;
+  StaticString<0x40> club;
 
   constexpr bool IsValid() const noexcept
   {
