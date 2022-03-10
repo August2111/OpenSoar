@@ -25,6 +25,7 @@
 #include "UploadFlight.hpp"
 #include "WeGlideObjects.hpp"
 #include "HttpResponse.hpp"
+#include "GetJsonString.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "LogFile.hpp"
@@ -44,20 +45,6 @@
 #include "util/ConvertString.hpp"
 
 #include <cinttypes>
-
-// Wrapper for getting converted string values of a json string
-static const StaticString<0x40>
-GetJsonString(boost::json::standalone::value json_value,
-              std::string_view key) noexcept {
-  StaticString<0x40> str;
-  auto value = json_value.as_object().if_contains(key);
-  if (value != nullptr)
-    str = UTF8ToWideConverter(value->get_string().c_str());
-  else
-    str.Format(_T("'%s' %s"), UTF8ToWideConverter(key.data()).c_str(),
-               _("not found"));
-  return str;
-}
 
 namespace WeGlide {
 
