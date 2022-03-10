@@ -23,6 +23,7 @@
 
 #include "UploadFlight.hpp"
 #include "Settings.hpp"
+#include "HttpResponse.hpp"
 #include "net/http/Progress.hpp"
 #include "lib/curl/CoStreamRequest.hxx"
 #include "lib/curl/Easy.hxx"
@@ -37,6 +38,11 @@
 
 #include <cinttypes>
 
+
+#if 1
+# define WEGLIDE_STAGING 1
+#endif
+
 namespace WeGlide {
 
 static CurlMime
@@ -48,17 +54,26 @@ MakeUploadFlightMime(CURL *easy, const User &user,
   mime.Add("file").Filename("igc_file").FileData(NarrowPathName{igc_path});
 
   char buffer[32];
+  if (user.token.empty()) {
+#if WEGLIDE_STAGING
+  sprintf(buffer, "%u", user.id);
+  mime.Add("user_id").Data(buffer);
+  sprintf(buffer, "1970-01-01");
+  mime.Add("date_of_birth").Data(buffer);
+#else  // WEGLIDE_STAGING
   sprintf(buffer, "%u", user.id);
   mime.Add("user_id").Data(buffer);
   FormatISO8601(buffer, user.birthdate);
+#endif
   mime.Add("date_of_birth").Data(buffer);
   sprintf(buffer, "%" PRIuLEAST32, aircraft.id);
+  }
   mime.Add("aircraft_id").Data(buffer);
 
   return mime;
 }
 
-Co::Task<boost::json::value>
+Co::Task<HttpResponse>
 UploadFlight(CurlGlobal &curl,
              const User &user,
              const Aircraft &aircraft,
@@ -66,20 +81,34 @@ UploadFlight(CurlGlobal &curl,
              ProgressListener &progress)
 {
   NarrowString<0x200> url;
+#if defined(_DEBUG) && defined(__MSVC__) && 1
+  url.Format("%s/igcfile", WeGlideSettings::test_url);
+#else
   url.Format("%s/igcfile", WeGlideSettings::default_url);
+#endif
   CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
-  easy.SetFailOnError();
+  // easy.SetFailOnError disabled: HTTP errors are dealt with here at the end
 
   const auto mime = MakeUploadFlightMime(easy.Get(), user,
                                          aircraft, igc_path);
   easy.SetMimePost(mime.get());
 
+
+  struct curl_slist *list = nullptr;
+  if (!user.token.empty()) {
+    list = curl_slist_append(list, user.GetTokenString().c_str());
+    easy.SetRequestHeaders(list);
+  }
   Json::ParserOutputStream parser;
   const auto response =
     co_await Curl::CoStreamRequest(curl, std::move(easy), parser);
-  co_return parser.Finish();
+#if 1
+  if (list)
+    curl_slist_free_all(list); /* free the list */
+#endif
+  co_return HttpResponse({response.status, parser.Finish()});
 }
 
 } // namespace WeGlide

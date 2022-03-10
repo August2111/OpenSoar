@@ -24,6 +24,7 @@
 #include "UploadIGCFile.hpp"
 #include "UploadFlight.hpp"
 #include "WeGlideObjects.hpp"
+#include "HttpResponse.hpp"
 #include "Interface.hpp"
 #include "UIGlobals.hpp"
 #include "LogFile.hpp"
@@ -98,12 +99,12 @@ UploadSuccessDialog(const Flight &flight_data, const TCHAR *msg)
 }
 
 struct CoInstance {
-  boost::json::value value;
+  HttpResponse http;
   Co::InvokeTask
   UpdateTask(Path igc_path, const User &user,
     const Aircraft &aircraft, ProgressListener &progress)
   {
-    value = co_await UploadFlight(*Net::curl, user, aircraft,
+    http = co_await UploadFlight(*Net::curl, user, aircraft,
       igc_path, progress);
   }
 };
@@ -136,10 +137,18 @@ UploadFile(Path igc_path, User user, Aircraft aircraft,
       return flight_data;  // with flight_id = 0!
     }
 
-    // read the important data from json in a structure
-    flight_data = UploadJsonInterpreter(instance.value);
+    if (instance.http.code >= 200 && instance.http.code < 400 &&
+      !instance.http.json_value.is_null()) {
 
-    msg = _("Success");
+      // read the important data from json in a structure
+      flight_data = UploadJsonInterpreter(instance.http.json_value);
+      flight_data.igc_name = igc_path.GetBase().c_str();
+
+      msg.Format(_("File upload '%s' was successful"),
+                 flight_data.igc_name.c_str());
+    } else {
+      msg.Format(_T("%s: %u"), _("HTTP failure code"), instance.http.code);
+    }
     return flight_data;  // upload successful!
   }
   catch (const std::exception &e) {
