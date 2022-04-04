@@ -35,10 +35,12 @@ Copyright_License {
 
 #include "json/ParserOutputStream.hxx"
 
-class ResponseDialog final : public WidgetDialog {
+#include <sstream>
+
+class UploadResponseDialog final : public WidgetDialog {
 
 public:
-  ResponseDialog(Auto style, UI::SingleWindow &parent,
+  UploadResponseDialog(Auto style, UI::SingleWindow &parent,
                        const DialogLook &look, const TCHAR *caption,
                        Widget *widget) noexcept
       : WidgetDialog(style, parent, look, caption, widget) {}
@@ -91,7 +93,7 @@ UploadResponseWidget::Prepare(ContainerWindow &parent,
 int
 UploadResponseWidget::ShowSuccessDialog()
 {
-  ResponseDialog dialog(WidgetDialog::Auto{},
+  UploadResponseDialog dialog(WidgetDialog::Auto{},
                               UIGlobals::GetMainWindow(),
                               UIGlobals::GetDialogLook(),
                               _("Upload Flight"), this);

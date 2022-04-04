@@ -56,8 +56,8 @@ class DeleteWidget final : public RowFormWidget, DataFieldListener {
 
 public:
   DeleteWidget(const DialogLook &look, const WeGlide::User &user_,
-              const uint_least32_t glider_id)
-      : RowFormWidget(look), user(user_), flight_id(flight_id) {}
+               const uint_least32_t flight_id_)
+      : RowFormWidget(look), user(user_), flight_id(flight_id_) {}
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;

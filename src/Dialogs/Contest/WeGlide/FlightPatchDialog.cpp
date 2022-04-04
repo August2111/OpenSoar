@@ -57,9 +57,9 @@ class PatchWidget final : public RowFormWidget, DataFieldListener {
 
 public:
   PatchWidget(const DialogLook &look, const WeGlide::User &user_,
-              const uint_least32_t glider_id)
+              const uint_least32_t flight_id_)
       : RowFormWidget(look), user(user_),
-        flight_id(flight_id) {}
+        flight_id(flight_id_) {}
 
   /* virtual methods from Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
@@ -137,7 +137,7 @@ PatchWidget::Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept
 {
   RowFormWidget::Prepare(parent, rc);
 
-  const auto settings = CommonInterface::GetComputerSettings(); 
+//  const auto settings = CommonInterface::GetComputerSettings(); 
 //  if (user.id == 0 || user.id = settings.weglide.pilot.id)
 //    user = settings.weglide.pilot;
 

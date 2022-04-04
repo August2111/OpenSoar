@@ -36,9 +36,9 @@
 #include "system/Path.hpp"
 #include "util/StaticString.hxx"
 
-#if _DEBUG  // August2111
-#include "LogFile.hpp"
-#endif
+// #ifdef _DEBUG  // August2111
+// #include "LogFile.hpp"
+// #endif
 
 #include <cinttypes>
 
@@ -81,11 +81,7 @@ DeleteFlight(CurlGlobal &curl, const User &user, uint_least32_t flight_id,
             ProgressListener &progress)
 {
   NarrowString<0x200> url;
-#if defined(_DEBUG) && defined(__MSVC__) && 1
-  url.Format("%s/flightdetail/%u", WeGlideSettings::test_url, flight_id);
-#else
   url.Format("%s/flightdetail/%u", WeGlideSettings::default_url, flight_id);
-#endif
   CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};

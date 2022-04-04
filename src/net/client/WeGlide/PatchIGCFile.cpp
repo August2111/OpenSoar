@@ -45,6 +45,7 @@
 #include "util/ConvertString.hpp"
 
 #include <cinttypes>
+#include <sstream>
 
 // #include <boost/property_tree/json_parser.hpp>
 // #include <boost/property_tree/ptree.hpp>
@@ -58,7 +59,7 @@ static Flight
 PatchJsonInterpreter(const boost::json::value &json)
 {
   // boost::property_tree::ptree tree;
-  std::ostringstream ss;
+  std::stringstream ss;
   ss << json;
   // boost::property_tree::write_json(ss, tree);
 //  auto _str = ss.str();

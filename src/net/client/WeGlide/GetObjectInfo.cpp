@@ -59,8 +59,10 @@ struct CoInstance {
                             ProgressListener &progress) {
     http = co_await GetObjectInfoTask(*Net::curl, url,
                                  progress);
+#ifdef _DEBUG  // TODO(August2111)
     std::string str = http.json_value.as_object().if_contains("name")->get_string().c_str();
     str = str;
+#endif
   }
 };
 
@@ -70,7 +72,7 @@ boost::json::object
 GetJsonObject(const char *field, uint32_t object_id) noexcept
 try {
   if (field) {
-    StaticString<0x400> msg;
+    // StaticString<0x400> msg;
     PluggableOperationEnvironment env;
     CoInstance instance;
     NarrowString<0x100> url;
@@ -82,8 +84,8 @@ try {
           !instance.http.json_value.is_null()) {
         return instance.http.json_value.as_object();
       }
-    return 0;
   }
+  return 0;
 } catch (...) {
   return 0;
 }
@@ -93,7 +95,7 @@ GetUserInfo(uint32_t user_id) noexcept
 try {
   const auto wg_user = GetJsonObject("user", user_id);
   if (!wg_user.empty()) {
-    User user(user_id);
+    User user({user_id});  // TODO(August2111): set user with id!?!
     user.name = GetJsonString(wg_user, "name");
 #ifdef _DEBUG
     StaticString<0x40> str;
@@ -118,7 +120,7 @@ GetAircraftInfo(uint32_t aircraft_id) noexcept
 try {
   const auto wg_aircraft = GetJsonObject("aircraft", aircraft_id);
   if (!wg_aircraft.empty()) {
-    Aircraft aircraft(aircraft_id);
+    Aircraft aircraft({aircraft_id});  // TODO(August2111): set Aircraft with id!?!
     aircraft.name = GetJsonString(wg_aircraft, "name");
     return aircraft;
   }

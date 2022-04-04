@@ -40,7 +40,7 @@
 
 
 #if 1
-# define WEGLIDE_STAGING 1
+# define WEGLIDE_STAGING 0
 #endif
 
 namespace WeGlide {
@@ -81,11 +81,7 @@ UploadFlight(CurlGlobal &curl,
              ProgressListener &progress)
 {
   NarrowString<0x200> url;
-#if defined(_DEBUG) && defined(__MSVC__) && 1
-  url.Format("%s/igcfile", WeGlideSettings::test_url);
-#else
   url.Format("%s/igcfile", WeGlideSettings::default_url);
-#endif
   CurlEasy easy{url};
   Curl::Setup(easy);
   const Net::ProgressAdapter progress_adapter{easy, progress};
