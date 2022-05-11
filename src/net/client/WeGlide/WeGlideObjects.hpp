@@ -33,10 +33,20 @@ struct User {
   BrokenDate birthdate;
   StaticString<0x80> name;
   StaticString<0x40> club;
+  StaticString<0x10> token;
 
   constexpr bool IsValid() const noexcept
   {
     return id > 0;
+  }
+
+  const NarrowString<0x20> GetTokenString() const noexcept
+  {
+    NarrowString<0x20> list_string("xcsoar-token: ");
+    NarrowString<8 + 1> token_str;
+    token_str.SetASCII(token);
+    list_string.append(token_str.c_str());
+    return list_string;
   }
 
   void Clear() noexcept
