@@ -196,6 +196,14 @@ public:
 	void SetMimePost(const curl_mime *mime) {
 		SetOption(CURLOPT_MIMEPOST, mime);
 	}
+#if 1  // August2111
+	void DeleteRequest() {
+		SetOption(CURLOPT_CUSTOMREQUEST, "DELETE");
+	}
+	void PatchRequest() {
+		SetOption(CURLOPT_CUSTOMREQUEST, "PATCH");
+	}
+#endif
 
 	template<typename T>
 	bool GetInfo(CURLINFO info, T value_r) const noexcept {
