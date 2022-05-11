@@ -99,6 +99,7 @@ const char PilotName[] = "PilotName";
 const char WeGlideEnabled[] = "WeGlideEnabled";
 const char WeGlidePilotID[] = "WeGlidePilotID";
 const char WeGlidePilotBirthDate[] = "WeGlidePilotBirthDate";
+const char WeGlidePilotToken[] = "WeGlidePilotToken";
 const char WeGlideAircraftType[] = "WeGlideAircraftType";
 const char WeGlideAutomaticUpload[] = "WeGlideAutomaticUpload";
 const char CoPilotName[] = "CoPilotName";

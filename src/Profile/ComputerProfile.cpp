@@ -100,6 +100,7 @@ Profile::Load(const ProfileMap &map, WeGlideSettings &settings)
     if (sscanf(date, "%04u-%02u-%02u", &year, &month, &day) == 3)
       settings.pilot.birthdate = {year, month, day};
   }
+  map.Get(ProfileKeys::WeGlidePilotToken, settings.pilot.token);
 }
 
 void

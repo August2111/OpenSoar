@@ -97,6 +97,7 @@ extern const char PilotName[];
 extern const char WeGlideEnabled[];
 extern const char WeGlidePilotID[];
 extern const char WeGlidePilotBirthDate[];
+extern const char WeGlidePilotToken[];
 extern const char WeGlideAircraftType[];
 extern const char WeGlideAutomaticUpload[];
 extern const char CoPilotName[];
