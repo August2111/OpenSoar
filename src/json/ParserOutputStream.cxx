@@ -39,4 +39,10 @@ ParserOutputStream::Write(const void *data, size_t size)
 	parser.write((const char *)data, size);
 }
 
+void
+ParserOutputStream::Reset()
+{
+	parser.reset();
+}
+
 } // namespace Json

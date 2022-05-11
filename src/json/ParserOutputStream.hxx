@@ -51,6 +51,9 @@ public:
 
 	/* virtual methods from class OutputStream */
 	void Write(const void *data, size_t size) override;
+
+  /* virtual methods from class OutputStream */
+  void Reset();  //    override;
 };
 
 } // namespace Json
