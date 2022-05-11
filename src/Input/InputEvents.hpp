@@ -210,6 +210,8 @@ void eventResetTask(const TCHAR *misc);
 void eventLockScreen(const TCHAR *misc);
 void eventExchangeFrequencies(const TCHAR *misc);
 void eventUploadIGCFile(const TCHAR *misc);
+void eventPatchIGCFile(const TCHAR *misc);
+void eventDeleteIGCFile(const TCHAR *misc);
 // -------
 
 } // namespace InputEvents

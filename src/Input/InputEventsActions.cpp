@@ -88,6 +88,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Form/DataField/File.hpp"
 #include "Dialogs/FilePicker.hpp"
 #include "Dialogs/Contest/WeGlide/FlightUploadDialog.hpp"
+#include "Dialogs/Contest/WeGlide/FlightPatchDialog.hpp"
+#include "Dialogs/Contest/WeGlide/FlightDeleteDialog.hpp"
 
 #include <cassert>
 #include <tchar.h>
@@ -748,6 +750,22 @@ void
 InputEvents::eventUploadIGCFile([[maybe_unused]] const TCHAR *misc)
 {
   if (WeGlide::FlightUploadDialog()) {
+      // success!
+  }
+}
+
+void
+InputEvents::eventPatchIGCFile([[maybe_unused]] const TCHAR *misc)
+{
+  if (WeGlide::FlightPatchDialog()) {
+      // success!
+  }
+}
+
+void
+InputEvents::eventDeleteIGCFile([[maybe_unused]] const TCHAR *misc)
+{
+  if (WeGlide::FlightDeleteDialog()) {
       // success!
   }
 }
