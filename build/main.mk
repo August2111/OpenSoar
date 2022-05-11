@@ -657,9 +657,12 @@ endif
 XCSOAR_SOURCES += \
 	$(SRC)/net/client/tim/Glue.cpp \
 	$(SRC)/Dialogs/Contest/WeGlide/FlightUploadDialog.cpp \
+	$(SRC)/Dialogs/Contest/WeGlide/FlightDeleteDialog.cpp \
 	$(SRC)/Dialogs/Contest/WeGlide/FlightUploadResponse.cpp \
 	$(SRC)/Dialogs/Contest/WeGlide/UserSelection.cpp \
 	$(SRC)/net/client/WeGlide/UploadFlight.cpp \
+	$(SRC)/net/client/WeGlide/DeleteFlight.cpp \
+	$(SRC)/net/client/WeGlide/DeleteIGCFile.cpp \
 	$(SRC)/net/client/WeGlide/GetJsonString.cpp \
 	$(SRC)/net/client/WeGlide/GetObjectInfo.cpp \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
