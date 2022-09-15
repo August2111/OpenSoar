@@ -69,8 +69,8 @@ private:
 
 
 void
-UploadResponseWidget::Prepare(ContainerWindow &parent,
-                              const PixelRect &rc) noexcept
+UploadResponseWidget::Prepare([[maybe_unused]] ContainerWindow &parent,  // TODO(August2111): parent is unused?
+                              [[maybe_unused]] const PixelRect &rc) noexcept  // TODO(August2111): rc is unused?
 {
   TCHAR buffer[0x100];
   AddSpacer();
@@ -110,7 +110,7 @@ UploadResponseWidget::ShowSuccessDialog()
 }
 
 bool
-UploadResponseDialog::OnAnyKeyDown(unsigned key_code) noexcept
+UploadResponseDialog::OnAnyKeyDown([[maybe_unused]] unsigned key_code) noexcept  // TODO(August2111): key_code is unused?
 {
   // any key is closing the dialog! 
   WndForm::SetModalResult(mrOK);
