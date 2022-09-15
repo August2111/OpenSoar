@@ -113,8 +113,8 @@ TaskDownloadWidget::OnModified(DataField &df) noexcept
 
 
 void
-TaskDownloadWidget::Prepare(ContainerWindow &parent,
-                            const PixelRect &rc) noexcept
+TaskDownloadWidget::Prepare([[maybe_unused]] ContainerWindow &parent,  // TODO(August2111): parent is unused?
+                              [[maybe_unused]] const PixelRect &rc) noexcept  // TODO(August2111): rc is unused?
 try {
   TCHAR buffer[0x100];
   AddSpacer();  // Field 0
