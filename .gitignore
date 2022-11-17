@@ -33,5 +33,9 @@ build/local-config.mk
 *.pyo
 *.bak
 .*.swp
-
 .idea
+
+/src/Terrain/jpc_rtc.cpp
+
+*/meson.build
+/CMake2Meson.cmd
