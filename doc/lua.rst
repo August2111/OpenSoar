@@ -155,6 +155,8 @@ contains the following names:
    - Access to replay system.  See :ref:`lua.replay`.
  * - ``tracking``
    - Access to tracking settings.  See :ref:`lua.tracking`.
+ * - ``cloud``
+   - Access to cloud services.  See :ref:`lua.cloud`.
  * - ``timer``
    - Class for scheduling periodic callbacks.  See :ref:`lua.timer`.
  * - ``http``
@@ -617,6 +619,29 @@ The following attributes are provided by ``xcsoar.tracking``:
    - Get current vehicle name.
  * - ``set_livetrack24_vehiclename(name)``
    - Sets the livetrack24 vehiclename.
+
+.. _lua.cloud:
+
+Cloud
+--------
+
+The Settings provides access to xcsoar Cloud services.
+
+The following attributes are provided by ``xcsoar.cloud``:
+
+.. list-table::
+ :widths: 40 60
+ :header-rows: 1
+
+ * - Name
+   - Description
+ * - ``igcfile_upload(server, igcfile, pilot_id=0, pilot_birthdate=0, 
+     glider_id=0)``
+   - Direkt upload an IGC file to a ``server`` ('WeGlide' only allowed in the
+     moment). ``igcfile`` is the path to the IGC file to upload, ``pilot_id``
+     is the id of the pilot on the server, ``pilot_birthdate`` is pilots date
+     of birth and ``glider_id`` is the id of the glider on the server. (The
+     last 3 params are not necesssary in case of setting in pilots profile)
 
 .. _lua.replay:
 
