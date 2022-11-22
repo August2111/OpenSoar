@@ -1,0 +1,3 @@
+### meson ### option('USE_SYSTEM_${TARGET_CNAME}', type : 'boolean', value : false, description : 'Should we use the system ${TARGET_NAME}?')
+### meson ### option('EP_BUILD_ALWAYS', type : 'boolean', value : false, description : 'Build 3rd party packages always?')
+### meson ### option('EP_BUILD_IN_SOURCE', type : 'boolean', value : false, description : 'Build 3rd party in sources (Recommended: OFF)?')

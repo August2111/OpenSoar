@@ -459,6 +459,7 @@ set(SCRIPT_FILES
     CMakeSource.cmake
     VERSION.txt
     NEWS.txt
+    meson.build  # August2111 add if available 
 )
 
 if (ANDROID)  # library!

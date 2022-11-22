@@ -1,0 +1,545 @@
+project('XCSoar-August2111', default_options : ['default_library=static'])
+# message(['STATUS', '+++ Start CMake ${CMAKE_CURRENT_SOURCE_DIR}!'])
+# get_filename_component(['PROJECTGROUP_SOURCE_DIR', cmake_current_source_dir, 'ABSOLUTE'])
+projectgroup_source_dir = 'D:/Gliding/XCSoar'
+# get_filename_component(['PROJECTGROUP_BINARY_DIR', cmake_current_binary_dir, 'ABSOLUTE'])
+projectgroup_binary_dir = projectgroup_source_dir + '
+/output'
+# message(['STATUS', '*** PROJECTGROUP_SOURCE_DIR = '${PROJECTGROUP_SOURCE_DIR}''])
+# message(['STATUS', '*** PROJECTGROUP_BINARY_DIR = '${PROJECTGROUP_BINARY_DIR}''])
+# get_filename_component(['PROJECT_NAME', cmake_current_binary_dir, 'NAME'])
+### meson ### project_name = 'XCSoar-${PROJECT_NAME}'
+### meson ### project_name = 'XCSoar-August2111'
+### meson ### project('PROJECT_NAME', default_options : ['default_library=static'])
+target_name = 'XCSoarAug'
+# get_filename_component(['OUTPUT', 'output', 'ABSOLUTE'])
+cmake_rc_compiler = 'D:/Programs/MinGW/mgw112/bin/windres.exe'
+# set(BOOST_ROOT)
+# noch falsch vom CMake-Create?
+# set(LINK_LIBS "D:/Projects/link_libs")   # for c-ares???
+# set(BOOST_ROOT ${LINK_LIBS}/boost/boost-1.77.0)
+# 2021 clear the right place:
+jasper_outside = 'OFF'
+zzip_outside = 'OFF'
+# find_program(['PYTHON_APP', 'NAMES', 'python', 'REQUIRED'])
+# find_program(['PERL_APP', 'NAMES', 'perl', 'REQUIRED'])
+# message(FATAL_ERROR "Stop: ${PYTHON_APP}")
+subdir('build/cmake')
+subdir('Data')
+subdir('po')
+#---------------------------------------------------------
+use_memory_canvas = 'OFF'
+# das ist hier auch falsch!!!!
+if 'USE_MEMORY_CANVAS'
+  # add_compile_definitions('USE_MEMORY_CANVAS')
+  # message(['FATAL_ERROR', 'USE_MEMORY_CANVAS!!!!!'])
+else
+  ### message(FATAL_ERROR "GDI-Stop!  in ./CmakeLists")
+  use_gdi = 'ON'
+  # das ist hier auch falsch!!!!
+  # add_compile_definitions('USE_GDI')
+  ##  message(FATAL_ERROR USE_GDI!!!!!)
+endif
+#---------------------------------------------------------
+# set_property(['GLOBAL', 'PROPERTY', 'USE_FOLDERS', 'ON'])
+# important for folder structure f.e. in Visual Studio
+# Setting Area ===================================================
+# possible since 3.10
+cmake_export_compile_commands = 'ON'
+# only by Makefile or Ninja generators: export compile commands
+xcsoar_lib_type = 'STATIC'
+# SHARED)
+if 'CMAKE_TOOLCHAIN_FILE'
+  # message(['STATUS', 'CMAKE_TOOLCHAIN_FILE = '${CMAKE_TOOLCHAIN_FILE}''])
+  # Die Variablen aus dem Toolchain-File Sind zwar hier nicht abrufbar, aber wirken auf Compiler uww.??? 
+  # message(STATUS "CMAKE_SYSTEM_NAME = '${CMAKE_SYSTEM_NAME}'")
+  # message(STATUS "CMAKE_CXX_COMPILER = '${CMAKE_CXX_COMPILER}'")
+  # message(STATUS "CMAKE_C_COMPILER = '${CMAKE_C_COMPILER}'")
+endif
+enable_opengl = 'ON'
+# better outside????
+enable_opengl = 'OFF'
+# better outside????
+# Target links to target GLUT::GLUT but the target was not
+# cleanup 19.04.20: set(ASIO_GROUPING ON)
+# get_filename_component(['TARGET_NAME', cmake_current_source_dir, 'NAME_WE'])
+# message(['STATUS', 'CMAKE_HOST_SYSTEM_NAME = ${CMAKE_HOST_SYSTEM_NAME} vs. CMAKE_SYSTEM_NAME = ${CMAKE_SYSTEM_NAME} '])
+src = '${PROJECTGROUP_SOURCE_DIR}/src'
+if 'WIN32' and 'MSVC'
+  target_name = 'XCSoarAug-MSVC'
+  # hardcoded yet
+  # message(['STATUS', '+++ System = WIN32 / MSVC!'])
+  # add_definitions('-DNDEBUG')
+  # ansonsten erhalte ich im VS im Debug-Mode eine Menge Assertions bezüglich der 
+  # fehlenden PNG-Bitmaps - und ich kann das Programm gar nicht debuggen ;-()
+  # add_compile_definitions('PROJECT_OUTPUT_FOLDER=${PROJECTGROUP_SOURCE_DIR}/output')
+  if not 'TOOLCHAIN'
+    toolchain = 'msvc2019'
+  endif
+  # add_compile_definitions('__MSVC__')
+  # add_compile_definitions('_UNICODE')
+  # add_compile_definitions('_AUG_MSC=1')
+  # add_compile_definitions('NO_ERROR_CHECK')
+  # EnumBitSet funktioniert m.E. noch nicht korrekt!!!!
+  # add_compile_definitions('WIN32_LEAN_AND_MEAN')
+  # warning C4996: 'xxx': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _wcsdup. See online help for details.
+  # xxx: wcscpy, wcsdup, strtok, strcpy, strdup, ....
+  # add_compile_definitions('_CRT_SECURE_NO_WARNINGS')
+  # add_compile_definitions(/std:c++17 /Zc:__cplusplus)
+  # add_definitions(['/std:c++latest', '/Zc:__cplusplus'])
+  # add_definitions('/wd5030')
+  # add_definitions(/Zc:wchar_t)
+  lib_extension = 'lib'
+  pre_lib = ''
+  # include_directories('${PROJECTGROUP_SOURCE_DIR}/temp/data')
+  # temporary data!
+  if 'ON' or 'WIN64'
+    # momentan kein Flag für 64bit verfügbar!
+    # add_compile_definitions('_AMD64_')
+  else
+    # message(['FATAL_ERROR', 'Error: WIN32 not implemented?'])
+  endif
+  # boost.cmake      set(BOOST_ROOT ${LINK_LIBS}/boost/boost-1.77.0)
+  freeglut_lib_dir = '${LINK_LIBS}/freeglut-MSVC-3.0.0-2/freeglut'
+  sodium_lib = '${LINK_LIBS}/libsodium/x64/Release/v142/static/libsodium.lib'
+  # add_compile_definitions('SODIUM_STATIC=1')
+  # MSCV only...
+  # add_compile_definitions('CURL_STATICLIB')
+  # add_compile_definitions('LDAP_STATICLIB')
+  crypto_lib = 'Crypt32.lib'
+  cares_lib = [link_libs, '/c-ares/${XCSOAR_CARES_VERSION}/lib/${TOOLCHAIN}/cares.lib']
+  # add_compile_definitions(_WINSOCKAPI_)
+  use_memory_canvas = 'OFF'
+# ?? else 
+### meson ### 
+elif 'WIN32' and 'MINGW'
+  target_name = 'XCSoarAug-MinGW'
+  # hardcoded
+  # Only MinGW / GCC:
+  # message(['STATUS', '+++ System = WIN32 / MinGW (${TOOLCHAIN})!'])
+  if not  'TOOLCHAIN'
+    toolchain = 'mgw112'
+    # set(TOOLCHAIN mgw82)
+    # message(FATAL_ERROR "No Toolchain!")
+  endif
+  lib_extension = 'a'
+  pre_lib = 'lib'
+  # no lib structure, this is failing on GCC  (serial order)???
+  # ??? #      set(XCSOAR_LIB_TYPE WITHOUT)
+  #      set(Boost_COMPILER "${TOOLCHAIN}")  # necessary: changed mgw as boost compiler to mgw73!
+  #      set(Boost_COMPILER "mgw7")  # necessary: changed mgw as boost compiler to mgw73!
+  # if(${TOOLCHAIN}  ==  'mgw73')
+  #   # include_directories("${THIRD_PARTY}/qt/Qt5.14.0/Tools/mingw730_64/x86_64-w64-mingw32/include")
+  #   add_definitions(-DBOOST_AUTO_LINK_SYSTEM)         # -DBOOST_AUTO_LINK_VERSIONED)
+  # endif()
+  if cmake_host_system_name ==  'Windows'
+    # include_directories('D:/Programs/MinGW/${TOOLCHAIN}/include')
+    #  later: include_directories("${PROJECTGROUP_SOURCE_DIR}/output/include")
+  endif
+  # include_directories('${PROJECTGROUP_SOURCE_DIR}/temp/data')
+  # temporory data!
+  # add_compile_definitions('BOOST_ASIO_SEPARATE_COMPILATION')
+  # disable WARNING !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  # add_compile_definitions('BOOST_MATH_DISABLE_DEPRECATED_03_WARNING=ON')
+  # add_compile_definitions(std=c++17) ### ??? Only a test on 11.05.2020
+  # noch einmal ausblenden?
+  #   add_definitions(-std=c++17) ### Das setzt für c- und rc-Compiler ein falsches Argument!
+  ###      set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -std=c++17")
+  cmake_cxx_flags = '${CMAKE_CXX_FLAGS} -std=c++20'
+  cmake_cxx_flags = '${CMAKE_CXX_FLAGS} -fcoroutines'
+  cmake_c_flags = '${CMAKE_C_FLAGS}'
+  # sequence from 'targets.mk' 
+  # add_compile_definitions('__MINGW__')
+  # add_compile_definitions('_AUG_MGW=1')
+  # add_compile_definitions('HAVE_MSVCRT')
+  # add_compile_definitions('_UNICODE')
+  # add_compile_definitions('UNICODE')
+  # add_compile_definitions('STRICT')
+  # add_compile_definitions('WIN32')
+  # XCSoar used this instead of _WIN32
+  # add_compile_definitions('_USE_MATH_DEFINES')
+  # necessary under C++17!
+  # add_compile_definitions('ZZIP_1_H')
+  # definition of uint32_t and Co.!
+  #      set(CMAKE_C_COMPILE_OBJECT "${CMAKE_C_COMPILER} -c <FLAGS> -o <OBJECT>")
+  #      set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
+  #    set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 ${CMAKE_CSS_STANDARD_LIBRARIES}")
+  #    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive")
+  cmake_cxx_standard_libraries = '-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 -lgdi32 -lgdiplus -lcrypt32 ${CMAKE_CXX_STANDARD_LIBRARIES}'
+  cmake_exe_linker_flags = '${CMAKE_EXE_LINKER_FLAGS} -static -static-libstdc++ -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive -v'
+  freeglut_lib_dir = '${LINK_LIBS}/freeglut-MinGW-3.0.0-1/freeglut'
+  sodium_lib = [link_libs, '/libsodium/libsodium-win64/lib/libsodium.a']
+  ssl_lib = [link_libs, '/openssl/openssl_1.1.1i/lib/mgw73/libssl.a']
+  crypto_lib = [link_libs, '/openssl/openssl_1.1.1i/lib/mgw73/libcrypto.a']
+  cares_lib = [link_libs, '/c-ares/${XCSOAR_CARES_VERSION}/lib/${TOOLCHAIN}/libcares.a']
+elif 'WIN32' and (CMAKE_CXX_COMPILER_ID  ==  'Clang' )
+  target_name = 'XCSoarAug-Clang'
+  # hardcoded
+  # message(['STATUS', '+++ System = WIN32 / Clang!'])
+  if not 'TOOLCHAIN'
+    toolchain = 'clang'
+  endif
+  # add_compile_definitions(BOOST_ASIO_SEPARATE_COMPILATION)
+  # add_compile_definitions(_AUG_MSC=1)  ### really???  ###
+  # add_compile_definitions(_UNICODE)
+  # add_compile_definitions('__CLANG__')
+  # add_compile_definitions('_AUG_CLANG=1')
+  # add_compile_definitions('HAVE_MSVCRT')
+  # add_compile_definitions('_UNICODE')
+  # add_compile_definitions('UNICODE')
+  # add_compile_definitions('STRICT')
+  # add_compile_definitions('_USE_MATH_DEFINES')
+  # necessary under C++17!
+  # add_compile_definitions(std:c++11) ### Only a test on 11.05.2020
+  # ???      add_definitions(-std=c++17) ### ??? Only a test on 11.05.2020
+  # add_compile_definitions(-std=c++17) ### ??? Only a test on 11.05.2020
+  lib_extension = 'lib'
+  pre_lib = ''
+  # include_directories('${PROJECTGROUP_SOURCE_DIR}/temp/data')
+  # temporary data!
+  if 'ON' or 'WIN64'
+    # momentan kein Flag verfügbar!
+    # add_compile_definitions('_AMD64_')
+  else
+    # message(['FATAL_ERROR', 'Error: WIN32 not implemented?'])
+  endif
+  boost_compiler = 'clang10'
+  # necessary: changed clang8 as boost compiler to clang!
+  #    set(Boost_DIR "${BOOST_ROOT}/lib/${Boost_COMPILER}/cmake/Boost-1.77.0")
+  ssl_lib = 
+  crypto_lib = 
+  cares_lib = [link_libs, '/c-ares/${XCSOAR_CARES_VERSION}/lib/${TOOLCHAIN}/cares.lib']
+elif 'WIN32' and  'CLANG'
+  # message(['FATAL_ERROR', '+++ Unbekanntes System: CLANG!'])
+elif 'WIN32' and  'NINJA'
+  # message(['FATAL_ERROR', '+++ Unbekanntes System: NINJA!'])
+elif 'UNIX'
+  # message(['STATUS', '+++ System = LINUX / GCC(?) (${TOOLCHAIN})!'])
+  lib_extension = 'a'
+  pre_lib = 'lib'
+  # no lib structure, this is failing on GCC  (serial order)???
+  # set(XCSOAR_LIB_TYPE WITHOUT)
+  if 'MINGW'
+    enable_opengl = 'OFF'
+    # das ist hier MinGWCrossCompiling für Windows! 
+    # message(['FATAL_ERROR', 'Stop MinGW'])
+  else
+    enable_opengl = 'OFF'
+  endif
+  if 'ON'
+    # 2020-05-20: inserted on pcderad0633 regarding missing 'tchar.h'
+    # add_compile_definitions('HAVE_MSVCRT')
+    # add_compile_definitions('_UNICODE')
+    # add_compile_definitions('UNICODE')
+    # add_compile_definitions('STRICT')
+  endif
+  if '$ENV{USER}' == 'pcderad0633'
+    # why?
+    boost_compiler = 'gcc9'
+    # add_compile_definitions('__LITTLE_ENDIAN=1')
+    # have to be defined!
+    # add_compile_definitions('__BIG_ENDIAN=2')
+  else
+    boost_compiler = 'gcc7'
+    # necessary: ??
+  endif
+  # set(Boost_COMPILER "${TOOLCHAIN}")  # necessary: changed mgw as boost compiler to mgw73!
+  # include_directories("D:/Programs/MinGW/${TOOLCHAIN}/include")
+  # include_directories('${PROJECTGROUP_SOURCE_DIR}/temp/data')
+  # temporary data!
+  # include_directories('${PROJECTGROUP_SOURCE_DIR}/src/unix')
+  # temporary data!
+  boost_dir = '$ENV{HOME}/Projects/link_libs/boost/boost-1.77.0/lib/unix/cmake/Boost-1.77.0'
+  cmake_cxx_standard_libraries = '-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 ${CMAKE_CXX_STANDARD_LIBRARIES}'
+  cmake_exe_linker_flags = '${CMAKE_EXE_LINKER_FLAGS} -static -static-libstdc++ -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive -v'
+  # message(FATAL_ERROR "+++ Jetzt bin ich im Linux: !")
+  ssl_lib = 
+  # empty ?
+  crypto_lib = 
+  #empty ?
+  cares_lib = [link_libs, '/c-ares/${XCSOAR_CARES_VERSION}/lib/${TOOLCHAIN}/cares.lib']
+elif 'ANDROID'
+  # message(['STATUS', '+++ System = ANDROID / ${ANDROID_ABI}!'])
+  boost_compiler = 'clang'
+  # necessary: changed clang8 as boost compiler to clang!
+else
+  # message(['FATAL_ERROR', '+++ Unbekanntes System: ${CMAKE_SYSTEM}!'])
+endif
+
+if 'MSVC'
+  # Themes for MSVC only!
+  # add_compile_definitions('GNU_CONST=')
+  # add_compile_definitions('GNU_PURE=')
+else
+  ### MSVC
+  # add_compile_definitions('GNU_CONST=[[gnu::const]]')
+  # add_compile_definitions('GNU_PURE=[[gnu::pure]]')
+endif
+### MSVC
+# include_directories('${PROJECTGROUP_SOURCE_DIR}/src/io')
+# only regarding Logfile!
+# include_directories('${PROJECTGROUP_SOURCE_DIR}/output/include')
+# git commit hash macro
+# execute_process(['COMMAND', 'git', 'rev-parse', '--short', 'HEAD', 'WORKING_DIRECTORY', projectgroup_source_dir, 'OUTPUT_VARIABLE', 'GIT_COMMIT_ID', 'OUTPUT_STRIP_TRAILING_WHITESPACE'])
+# string(SUBSTRING ${GIT_COMMIT_HASH} 0 8  GIT_COMMIT_ID)
+# add_compile_definitions('GIT_COMMIT_ID=\"${GIT_COMMIT_ID}\"')
+# 3rd Party !!!!
+#=============================
+#    set(THIRDPARTY_INCLUDES)
+subdir('3rd_party')
+# message(['STATUS', '### THIRDPARTY_INCLUDES = '${THIRDPARTY_INCLUDES}''])
+# include_directories([lua_include_dir, curl_include_dir, mapserver_include_dir, zlib_include_dir, libpng_include_dir, c-ares_include_dir])
+#      include_directories("${THIRD_PARTY}/glut/glut-3.7/include")  # neu am 27.03
+if 'JASPER_OUTSIDE'
+  # 2021
+  # external source in 3rd party lib
+  # include_directories(jasper_include_dir)
+endif
+if 'ZZIP_OUTSIDE'
+  # 2021
+  # external source in 3rd party lib
+  # include_directories(zzip_include_dir)
+endif
+#####################################################################################
+#####################################################################################
+# add_compile_definitions(USE_MEMORY_CANVAS)
+# add_compile_definitions('NOMINMAX')
+# sadd_compile_definitions(_AUG=1)
+# nur einmal definieren!!! add_compile_definitions(BOOST_ASIO_SEPARATE_COMPILATION)
+# add version string to xcsoar:
+# file(['READ', 'VERSION.txt', 'XCSOAR_VERSION'])
+# string(['STRIP', xcsoar_version, 'XCSOAR_VERSION'])
+# add_compile_definitions('XCSOAR_VERSION=\"${XCSOAR_VERSION}\"')
+# add_definitions(/std:c++11 /Zc:__cplusplus)
+if 'MSVC'
+  # add_compile_definitions(_X86_) #  _IA64_)
+  ##  add_definitions(/std:c++14 /Zc:__cplusplus)
+  # TARGET_ARCHITECTURE: _AMD64_ _X86_ _IA64_ _ARM_ _ARM64_
+endif
+# USE_MEMORY_CANVAS
+# USE_GDI
+if 'ENABLE_OPENGL'
+  # set(FreeGLUT_DIR ${LINK_LIBS}/glut/freeglut-3.2.1/lib/msvc2019/cmake/FreeGLUT)
+  # find_package(FreeGLUT REQUIRED)
+  OpenGL_dep = dependency('OpenGL')
+  # find_package(OpenCL REQUIRED)
+  # set(GLEW_ROOT D:/link_libs/glew/glew-2.1.0/lib/Release/x64)
+  # find_package(GLEW REQUIRED)
+  if not  'TARGET' or not 'OpenGL::GLU'
+    # message(['FATAL_ERROR', 'GLU could not be found'])
+  endif
+  # message(['STATUS', 'glu: ${OPENGL_glu_LIBRARY}'])
+  # get_target_property(['GLU_IMPORTED_LIBNAME', 'OpenGL::GLU', 'IMPORTED_LIBNAME'])
+  # message(['STATUS', 'glu imported libname: ${GLU_IMPORTED_LIBNAME}'])
+  # add_compile_definitions('ENABLE_OPENGL')
+  # add_compile_definitions(['USE_WIN32_RESOURCES', 'USE_WINUSER'])
+  if 'ANDROID'
+    # include_directories('D:/Programs/Android/android-ndk-r21/sysroot/usr/include/GLES2')
+  endif
+  # include_directories([boost_include_dir, '/boost/compute/interop'])
+  # include_directories([freeglut_lib_dir, '/include'])
+  # include_directories('$ENV{OCL_ROOT}/include')
+  # include_directories('D:/Programs/OCL_SDK_Light/include')
+  # alternative???
+  ###    ${OCL_ROOT}\include
+  ###    ${OCL_ROOT}\lib\x86
+  ###    ${OCL_ROOT}\lib\x86_64
+  # message(['FATAL_ERROR', 'OpenGL-Stop!  OpenGL_INCLUDE_DIR = ${OpenGL_INCLUDE_DIR}'])
+else
+  # Kein OpenGL!!!!!!!!!!!!!!
+  ##    if (USE_MEMORY_CANVAS)
+  ##       add_compile_definitions(USE_MEMORY_CANVAS)
+  ##    else()
+  ####      message(FATAL_ERROR "GDI-Stop!  in ./CmakeLists")
+  ####      message(FATAL_ERROR "OpenGL-Stop!  OpenGL_INCLUDE_DIR = ${OpenGL_INCLUDE_DIR}")
+  ##      add_compile_definitions(USE_GDI)
+  # add_compile_definitions(['USE_WIN32_RESOURCES', 'USE_WINUSER'])
+  ##    endif()
+endif
+#####################################################################################
+#####################################################################################
+# include_directories([link_libs, '/libsodium/include'])
+# include_directories(boost_include_dir)
+# link_directories([boost_root, '/lib'])
+# get_filename_component(['TEMP_INCLUDES', projectgroup_binary_dir, '/../include', 'ABSOLUTE'])
+# include_directories([projectgroup_source_dir, '/src', projectgroup_source_dir, '/src/Engine', temp_includes, boost_include_dir, '/boost/predef/other', third_party, '/glfw/glfw-3.3.2.bin.WIN64/include', link_libs, '/glm/glm-0.9.9/include'])
+if 'JASPER_OUTSIDE'
+  # 2021
+  # before add_subdirectories!!!
+  # add_compile_definitions('JASPER_OUTSIDE')
+endif
+source_files = 
+# message(FATAL_ERROR "Test-Stop!")
+# branch cmake    add_subdirectory(src/_Deprecated)
+subdir('src/Airspace')
+subdir('src/Atmosphere')
+subdir('src/Audio')
+subdir('src/Blackboard')
+subdir('src/co')
+subdir('src/Computer')
+subdir('src/Cloud')
+subdir('src/CrossSection')
+subdir('src/Engine')
+subdir('src/event')
+subdir('src/FLARM')
+subdir('src/Form')
+subdir('src/Formatter')
+subdir('src/Gauge')
+subdir('src/Geo')
+subdir('src/Hardware')
+subdir('src/IGC')
+subdir('src/InfoBoxes')
+subdir('src/Input')
+subdir('src/Job')
+subdir('src/json')
+subdir('src/Language')
+subdir('src/Logger')
+subdir('src/Look')
+subdir('src/lua')
+subdir('src/Markers')
+subdir('src/Math')
+subdir('src/Menu')
+subdir('src/Monitor')
+subdir('src/net')
+subdir('src/NMEA')
+subdir('src/Operation')
+subdir('src/system')
+subdir('src/Plane')
+subdir('src/Polar')
+subdir('src/Profile')
+subdir('src/Projection')
+subdir('src/Renderer')
+subdir('src/Replay')
+subdir('src/Repository')
+subdir('src/Screen')
+subdir('src/Task')
+subdir('src/TeamCode')
+subdir('src/Terrain')
+if not  'JASPER_OUTSIDE'
+  # 2021
+  subdir('src/Terrain/jasper')
+  # 2021
+endif
+subdir('src/thread')
+subdir('src/time')
+subdir('src/Topography')
+subdir('src/ui')
+subdir('src/UIUtil')
+subdir('src/Units')
+subdir('src/util')
+subdir('src/Waypoint')
+subdir('src/Weather')
+subdir('src/Widget')
+subdir('src/XML')
+subdir('src/Device')
+subdir('src/Dialogs')
+subdir('src/io')
+subdir('src/MapWindow')
+subdir('src/Tracking')
+if not  'ZZIP_OUTSIDE'
+  subdir('src/zzip')
+  # aug: new!!
+endif
+subdir('src')
+# libXCSoar!
+# # #   ### Translation Group
+# # #    # if (NOT UNIX)
+#xxx        set_source_files_properties(${PROJECTGROUP_SOURCE_DIR}/temp/data/memory_fields.c PROPERTIES LANGUAGE C)
+#xxx        list(APPEND SOURCE_FILES "${PROJECTGROUP_SOURCE_DIR}/temp/data/memory_fields.c")
+if 'MINGW'
+else
+  # TODO(aug) fuer MinGW erst einmal weglassen!
+endif
+# list(['APPEND', 'SOURCE_FILES', 'src/XCSoar.cpp'])
+# list(['APPEND', 'SOURCE_FILES', 'src/Version.cpp'])
+if 'MSVC'
+  # list(['APPEND', 'SOURCE_FILES', 'Data/XCSoar.def'])
+  # list(['APPEND', 'SOURCE_FILES', 'Data/XCSoar2.rc'])
+else
+  # list(['APPEND', 'SOURCE_FILES', 'Data/XCSoar.rc'])
+endif
+# list(['APPEND', 'SOURCE_FILES', 'CMakeSource.cmake'])
+#==========================================================
+#==========================================================
+# preparing target_link_libraries!
+# list(['APPEND', 'XCSOAR_LINK_LIBRARIES', 'libXCSoar', xcsoar_source_lists])
+# TODO(aug): Cleaning up this code!!!
+# External Libs
+# list(['APPEND', 'XCSOAR_LINK_LIBRARIES', lua_lib, jasper_lib, curl_lib, mapserver_lib, libpng_lib, zlib_lib, zzip_lib, sodium_lib, ssl_lib, crypto_lib, cares_lib, boost_libraries])
+### list(APPEND XCSOAR_LINK_LIBRARIES
+### #   ${ZZIP_LIB}
+###    zzip
+### #    libzzip
+### )
+if 'WIN32'
+  # Windows only:
+  if 'MSVC'
+    # list(['APPEND', 'XCSOAR_LINK_LIBRARIES', 'msimg32.lib', 'winmm.lib', 'ws2_32.lib', 'gdiplus'])
+  elif 'MINGW'
+    # list(['APPEND', 'XCSOAR_LINK_LIBRARIES', 'msimg32', 'winmm', 'pthread', 'stdc++', 'user32', 'gdi32', 'gdiplus', 'ws2_32', 'mswsock', 'm', 'kernel32', 'shell32', 'gcc_s'])
+  endif
+else
+  ###  ..  other system!
+endif
+#==========================================================
+#==========================================================
+script_files = ['CMakeSource.cmake', 'VERSION.txt', 'NEWS.txt', 'meson.build', 'TaskList MSVC.md']
+if 'ANDROID'
+  # library!
+  TARGET_NAME_lib = static_library(target_name, source_files)
+elif 'MINGW'
+  TARGET_NAME_exe = executable(target_name, source_files, script_files, ext_proj)
+  #  ${XCSOAR_LINK_LIBRARIES})
+else
+  # executable!
+  # message(['STATUS', '### add_executable(${TARGET_NAME}     ${SOURCE_FILES} ${SCRIPT_FILES} ${EXT_PROJ}'])
+  TARGET_NAME_exe = executable(target_name, source_files, script_files, ext_proj)
+endif
+# target_link_libraries(${TARGET_NAME}
+# list(['APPEND', 'XCSOAR_LINK_LIBRARIES'])
+# Reihenfolge is very important!!!!
+if 'MSVC'
+  # list(['APPEND', 'XCSOAR_LINK_LIBRARIES', link_libs, '/openssl/OpenSSL-Win64/lib/VC/static/libssl64MDd.lib', link_libs, '/openssl/OpenSSL-Win64/lib/VC/static/libcrypto64MDd.lib', 'Crypt32.lib'])
+endif
+# foreach(lib ${XCSOAR_LINK_LIBRARIES})
+#    message(STATUS "--- XCSOAR_LINK_LIB: ${lib}")
+# endforeach()
+# target_link_libraries([target_name, 'PUBLIC', xcsoar_link_libraries])
+if 'MSVC'
+  # target_link_options([target_name, 'PUBLIC', '/SUBSYSTEM:WINDOWS'])
+endif
+if 'ENABLE_OPENGL'
+  # target_link_libraries([target_name, 'PRIVATE', 'OpenGL::GL', 'OpenGL:GLU', freeglut_lib_dir, '/lib/x64/${PRE_LIB}freeglut.${LIB_EXTENSION}'])
+endif
+# add_custom_target(translation_copy    COMMAND  "${CMAKE_COMMAND}" -E copy_if_different
+# add_custom_command(['TARGET', target_name, 'PRE_BUILD', 'COMMAND', cmake_command, '-E', 'make_directory', directory, cmake_current_binary_dir, '/po'])
+# foreach(['translation', translations])
+# add_custom_command(['TARGET', target_name, 'PRE_BUILD', 'COMMAND', cmake_command, '-E', 'copy_if_different', projectgroup_source_dir, '/src/_Deprecated/${translation}.mo', cmake_current_binary_dir, '/po/${translation}.mo', 'COMMAND', cmake_command, '-E', 'copy_if_different', projectgroup_source_dir, '/src/_Deprecated/${translation}.mo.c', cmake_current_binary_dir, '/po/${translation}.mo.c'])
+#    if(NOT MSVC)
+#            list(APPEND SOURCE_FILES "${PROJECTGROUP_SOURCE_DIR}/output/data/${translation}.mo.c")
+#    endif()
+# endforeach()
+if 'OFF'
+  # only if to build
+  if 'JASPER_OUTSIDE'
+    # 2021
+    # add_dependencies([target_name, 'curl', 'lua', 'libpng'])
+    # 2021 excluded (!): jasper 
+  else
+    # add_dependencies([target_name, 'curl', 'lua', 'libpng', 'jasper'])
+  endif
+  # add_dependencies([target_name, 'zlib'])
+  # add_dependencies([target_name, 'mapserver', 'zzip'])
+  # missing: boost xmlparser
+  #        add_dependencies(${TARGET_NAME} mapserver libzzip)   # missing: boost xmlparser
+  # add_dependencies([target_name, 'googletest'])
+  # missing: boost xmlparser
+  # missing: add_dependencies(${TARGET_NAME} boost)
+  # missing: add_dependencies(${TARGET_NAME} xmlparser)
+endif
+# add_dependencies(${TARGET_NAME} libXCSoar)   # missing: boost xmlparser
+# Test-Folder !!!!
+#=============================
+subdir('test/src')
+subdir('tools')
+# message(['STATUS', '### Test  ====================='])
