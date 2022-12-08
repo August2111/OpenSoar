@@ -104,14 +104,17 @@ $(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.c | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compil
 	$(Q)$(WRAPPED_CC) $< -c -o $@ $(cc-flags)
 
 $(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cpp | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
-	@$(NQ)echo "  CXX     $@"
+	@$(NQ)echo "  CXX 1    $@"
+	# echo $(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags) -v 
+	# $(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
 	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
 ifeq ($(IWYU),y)
 	$(Q)iwyu $< $(cxx-flags)
 endif
 
 $(ABI_OUTPUT_DIR)/%$(OBJ_SUFFIX): %.cxx | $(ABI_OUTPUT_DIR)/%/../dirstamp $(compile-depends)
-	@$(NQ)echo "  CXX     $@"
+	@$(NQ)echo "  CXX    $@"
+	# $(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags) -v
 	$(Q)$(WRAPPED_CXX) $< -c -o $@ $(cxx-flags)
 ifeq ($(IWYU),y)
 	$(Q)iwyu $< $(cxx-flags)
