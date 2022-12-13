@@ -55,6 +55,7 @@ Copyright_License {
 #include "Device/Driver/LevilAHRS_G.hpp"
 #include "Device/Driver/BlueFlyVario.hpp"
 #include "Device/Driver/OpenVario.hpp"
+#include "Device/Driver/Larus.hpp"
 #include "Device/Driver/Vaulter.hpp"
 #include "Device/Driver/ATR833.hpp"
 #include "Device/Driver/XCTracer.hpp"
@@ -88,6 +89,7 @@ static const struct DeviceRegister *const driver_list[] = {
   &flytec_driver,
   &ilec_driver,
   &westerboer_driver,
+  &larus_driver,
   &imi_driver,
   &flarm_driver,
   &flynet_driver,
