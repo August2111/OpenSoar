@@ -402,6 +402,13 @@ list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/XCSoar.rc")
 list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/XCSoar.rc.in")
 list(APPEND SOURCE_FILES "CMakeSource.cmake")
 
+if (MSVC)  # only starts with branch 'cmake-msvc-end'
+  file(GLOB DEF_FILE "Data/*.def")
+  # if (NOT ${DEF_FILE} STREQUAL "")
+  if (DEF_FILE)
+    list(APPEND SOURCE_FILES ${DEF_FILE})
+  endif()
+endif()
 #==========================================================
 #==========================================================
 
