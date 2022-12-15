@@ -47,9 +47,9 @@ MakeUploadFlightMime(CURL *easy, const WeGlideSettings &settings,
   mime.Add("file").Filename("igc_file").FileData(NarrowPathName{igc_path});
 
   char buffer[32];
-  sprintf(buffer, "%u", settings.pilot_id);
+  sprintf(buffer, "%u", settings.pilot.id);
   mime.Add("user_id").Data(buffer);
-  FormatISO8601(buffer, settings.pilot_birthdate);
+  FormatISO8601(buffer, settings.pilot.birthdate);
   mime.Add("date_of_birth").Data(buffer);
   sprintf(buffer, "%" PRIuLEAST32, glider_type);
   mime.Add("aircraft_id").Data(buffer);

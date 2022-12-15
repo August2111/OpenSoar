@@ -166,7 +166,7 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   AddButton(_("Browse"), [this](){ OnBrowseClicked(); });
   AddButton(_("Save"), [this](){ SaveTask(); });
 
-  if (settings.weglide.pilot_id != 0)
+  if (settings.weglide.pilot.id != 0)
     AddButton(_("Download WeGlide task"),
               [this](){ OnDownloadClicked(); });
 

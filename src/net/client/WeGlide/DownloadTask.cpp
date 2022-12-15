@@ -47,11 +47,11 @@ DownloadDeclaredTask(CurlGlobal &curl, const WeGlideSettings &settings,
                      const Waypoints *waypoints,
                      ProgressListener &progress)
 {
-  assert(settings.pilot_id != 0);
+  assert(settings.pilot.id != 0);
 
   char url[256];
   snprintf(url, sizeof(url), "%s/task/declaration/%u?cup=false&tsk=true",
-           settings.default_url, settings.pilot_id);
+           settings.default_url, settings.pilot.id);
 
   CurlEasy easy{url};
   Curl::Setup(easy);
