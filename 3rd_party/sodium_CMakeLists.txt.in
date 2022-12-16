@@ -1,0 +1,79 @@
+cmake_minimum_required(VERSION 3.20)
+
+set (TARGET_NAME      libsodium)
+project(${TARGET_NAME})
+
+
+set(_INCLUDE_DIR  ${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/include)
+# file(GLOB_RECURSE libsodium_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/"*.c")
+file(GLOB_RECURSE ${TARGET_NAME}_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/*.c")
+file(GLOB_RECURSE HEADER_FILES "${_INCLUDE_DIR}/*.h")
+
+message(STATUS -- Sodium!!!)
+foreach(SRC ${${TARGET_NAME}_SOURCES})
+     set(${TARGET_NAME}_LIBRARY ${${TARGET_NAME}_LIBRARY} ${SRC})
+     message(STATUS -- Sodium:  ${SRC})
+endforeach()
+
+add_compile_definitions(SODIUM_STATIC)
+add_compile_definitions(SODIUM_EXPORT=)
+# add_compile_definitions(NDEBUG)
+# add_compile_definitions(_CONSOLE)
+
+include_directories(
+    ${_INCLUDE_DIR}
+    ${_INCLUDE_DIR}/sodium
+    ${CMAKE_CURRENT_SOURCE_DIR}/test/quirks  # test only 
+)
+
+# set(${TARGET_NAME}_LIBRARY coding.c struct_model0.c struct_model1.c
+#                    zzip.c block.c bwt.c)
+
+set(EXAMPLE "This is an example")
+set(VERSION "1.0")
+set(NUMBER 3)
+
+set(VERSION "1.0.18")
+
+set(SODIUM_LIBRARY_VERSION_MAJOR 10)
+set(SODIUM_LIBRARY_VERSION_MINOR 3)
+set(SODIUM_LIBRARY_MINIMAL_DEF )
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/include/sodium/version.h.in 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/include/sodium/version.h
+)
+
+# add_definitions(-DLUA_ANSI=1)
+add_library(${TARGET_NAME} STATIC ${${TARGET_NAME}_LIBRARY} ${HEADER_FILES})
+
+install(TARGETS ${TARGET_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+# install(FILES ${HEADER_FILES}  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+
+# set(SODIUM_H  ${CMAKE_CURRENT_SOURCE_DIR}/src/libsodium/include/sodium.h) 
+# list(REMOVE_ITEM HEADER_FILES ${SODIUM_H})
+# install(FILES ${SODIUM_H} DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+# install(FILES ${HEADER_FILES}  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/sodium")
+
+foreach(header ${HEADER_FILES})
+    string(REPLACE "${_INCLUDE_DIR}/" "" inc_file ${header})
+    get_filename_component(inc_path ${inc_file} DIRECTORY)
+    install(FILES ${header}  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${inc_path}")
+#    message(STATUS --- Sodium: ${header}  ==> ${CMAKE_INSTALL_INCLUDEDIR}/${inc_path})
+
+##   if(${header} MATCHES ${SODIUM_H})
+##    message(STATUS --- Sodium: ${header})
+##   else()
+##    message(STATUS +++ Sodium: ${header})
+##   endif()
+endforeach()
+## 
+
+##message(FATAL_ERROR +++ Sodium: Stop!)
+
+

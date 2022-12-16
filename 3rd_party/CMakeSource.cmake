@@ -1,0 +1,71 @@
+file(GLOB SCRIPT_FILES *.txt *.in)
+list(APPEND SCRIPT_FILES CMakeSource.cmake 3rd_party.cmake)
+
+
+set(CMAKE_FILES
+  zlib.cmake
+  lua.cmake
+  png.cmake
+  cares.cmake
+)
+if (MSVC)
+  list(APPEND CMAKE_FILES boost.cmake)
+else()
+   # message(FATAL_ERROR "+++ Stop!")
+endif()
+
+
+if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+  list(APPEND CMAKE_FILES curl.cmake)
+else()
+# TODO(August2111): only temporarely  curl.cmake
+endif()
+
+list(APPEND CMAKE_FILES sodium.cmake)
+
+if(0)  # MapServer
+    list(APPEND CMAKE_FILES mapserver.cmake)
+endif()
+if(0)  # zzip
+    list(APPEND CMAKE_FILES zzip.cmake)
+endif()
+if(0) # XML-Parser
+    list(APPEND CMAKE_FILES xmlparser.cmake)
+endif()
+
+# for icon convert:
+if(0) # RSVG
+    list(APPEND CMAKE_FILES rsvg.cmake)
+endif()
+if(0)  # InkScape
+    list(APPEND CMAKE_FILES inkscape.cmake)
+endif()
+if(0) # RSVG
+    list(APPEND CMAKE_FILES iconv.cmake)
+    list(APPEND CMAKE_FILES xml2.cmake)
+    list(APPEND CMAKE_FILES xlst.cmake)
+endif()
+
+
+# For OpenGL:
+if(0)  # freeglut
+    list(APPEND CMAKE_FILES freeglut.cmake)
+endif()
+if(ENABLE_SDL) # SDL for OpenGL?
+    list(APPEND CMAKE_FILES sdl.cmake)
+endif()
+if(ENABLE_GLM) # GLM for OpenGL?
+    list(APPEND CMAKE_FILES glm.cmake)
+endif()
+
+# branch cmake:
+## exclude: 
+#list(APPEND CMAKE_FILES 
+  # jasper.cmake  # internally disabled
+  # zzip.cmake
+  # mapserver.cmake
+  # xmlparser.cmake  # internally disabled
+  # googletest.cmake
+  # googlmock.cmake
+  # Qt5.cmake
+#)
