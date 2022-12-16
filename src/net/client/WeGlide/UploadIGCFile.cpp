@@ -64,7 +64,7 @@ struct Aircraft {
   StaticString<10> sc_class;
 };
 
-struct FlightData {
+struct Flight {
   uint64_t flight_id = 0;
   User user;
   Aircraft aircraft;
@@ -73,10 +73,10 @@ struct FlightData {
   StaticString<0x40> competition_id;
 };
 
-static FlightData
+static Flight
 UploadJsonInterpreter(const boost::json::value &json)
 {
-  FlightData flight_data;
+  Flight flight_data;
   // flight is the 1st flight object in this array ('at(0)')
   auto flight = json.as_array().at(0);
   flight_data.scoring_date = GetJsonString(flight, "scoring_date").c_str();
@@ -100,7 +100,7 @@ UploadJsonInterpreter(const boost::json::value &json)
 // UploadSuccessDialog is only a preliminary DialogBox to show the 
 // result of this upload
 static void
-UploadSuccessDialog(const FlightData &flight_data, const TCHAR *msg)
+UploadSuccessDialog(const Flight &flight_data, const TCHAR *msg)
 {
   StaticString<0x1000> display_string;
   // TODO: Create a real Dialog with fields in 'src/Dialogs/Cloud/weglide'!
@@ -129,10 +129,10 @@ struct CoInstance {
   }
 };
 
-static FlightData
+static Flight
 UploadFile(Path igc_path, StaticString<0x1000> &msg) noexcept
 {
-  FlightData flight_data({ 0 });
+  Flight flight_data({ 0 });
   try {
     WeGlideSettings settings = CommonInterface::GetComputerSettings().weglide;
     uint32_t glider_id = CommonInterface::GetComputerSettings().plane
