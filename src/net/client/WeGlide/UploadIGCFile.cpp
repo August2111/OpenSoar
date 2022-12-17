@@ -23,6 +23,7 @@
 
 #include "UploadIGCFile.hpp"
 #include "UploadFlight.hpp"
+#include "PatchIGCFile.hpp"
 #include "WeGlideObjects.hpp"
 #include "HttpResponse.hpp"
 #include "GetJsonString.hpp"
@@ -45,6 +46,7 @@
 #include "util/ConvertString.hpp"
 
 #include <cinttypes>
+#include <sstream>
 
 namespace WeGlide {
 
@@ -70,6 +72,22 @@ UploadJsonInterpreter(const boost::json::value &json)
   flight_data.aircraft.sc_class = GetJsonString(aircraft, "sc_class").c_str();
 
   return flight_data;
+}
+
+static const boost::json::value
+SetJsonData() {
+  Json::ParserOutputStream parser;
+  std::stringstream ss;
+  ss << "{";
+  ss << "\"comment\": \"Uploaded via XCSoar!\", ";
+  // maybe set the competion id from the setting here?
+  ss << "\"competition_id\": \"\", ";
+  // if aircraft -> double_seater:
+  //    ss << "\"co_user_name\": \"Copilot No1\", ";
+  ss << "\"rescore\": false ";
+  ss << "}";
+  parser.Write(ss.str().c_str(), ss.str().length());
+  return parser.Finish();
 }
 
 static const StaticString<0x100>
@@ -158,14 +176,6 @@ UploadFile(Path igc_path, User user, Aircraft aircraft,
       UTF8ToWideConverter(e.what()).c_str());
   }
   return Flight();  // failure...
-} catch (const std::exception &e) {
-  msg.Format(_T("'%s' - %s"), igc_path.c_str(),
-    UTF8ToWideConverter(e.what()).c_str());
-  return Flight();
-} catch (...) {
-  msg.Format(_T("'%s' - %s"), _("General Exception"), igc_path.c_str());
-  ShowError(std::current_exception(), _T("WeGlide UploadFile"));
-  return Flight();
 }
 
 bool
@@ -173,12 +183,14 @@ UploadIGCFile(Path igc_path, const User &user,
   const Aircraft &aircraft) noexcept { 
   try {
     StaticString<0x1000> msg;
-      UploadSuccessDialog(flight_data, msg.c_str());
-    auto flight_data = UploadFile(igc_path, user, aircraft, msg);
-    if (flight_data.IsValid()) {
-      // upload successful and call a dialog with this flight
-      LogFormat(_T("%s: %s"), _("WeGlide Upload"), msg.c_str());
-      FlightUploadResponse(flight_data, msg.c_str());
+    // ??? UploadSuccessDialog(flight_data, msg.c_str());
+    auto flightdata = UploadFile(igc_path, user, aircraft, msg);
+    if (flightdata.IsValid()) {
+      // upload successful!
+      auto json = SetJsonData();
+      if (!user.token.empty())  // patch only possible with user token!
+        flightdata = PatchIGCFlight(flightdata, json, msg);
+      FlightUploadResponse(flightdata, msg.c_str());
       return true;
     } else {
       // upload failed!
