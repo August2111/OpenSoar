@@ -658,6 +658,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/net/client/tim/Glue.cpp \
 	$(SRC)/Dialogs/Contest/WeGlide/FlightUploadDialog.cpp \
 	$(SRC)/Dialogs/Contest/WeGlide/FlightUploadResponse.cpp \
+	$(SRC)/Dialogs/Contest/WeGlide/UserSelection.cpp \
 	$(SRC)/net/client/WeGlide/UploadFlight.cpp \
 	$(SRC)/net/client/WeGlide/GetJsonString.cpp \
 	$(SRC)/Tracking/SkyLines/Client.cpp \
