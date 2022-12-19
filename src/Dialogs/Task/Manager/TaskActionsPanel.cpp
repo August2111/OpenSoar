@@ -39,10 +39,14 @@ Copyright_License {
 #include "Engine/Task/Ordered/OrderedTask.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "Operation/PluggableOperationEnvironment.hpp"
-#include "net/http/Init.hpp"
+
 #include "net/client/WeGlide/DownloadTask.hpp"
-#include "co/InvokeTask.hxx"
+
+#include "system/Path.hpp"
+#include "system/FileUtil.hpp"
+
+#include "net/client/WeGlide/WeGlideObjects.hpp"
+#include "Dialogs/Contest/WeGlide/TaskDownloadDialog.hpp"
 
 TaskActionsPanel::TaskActionsPanel(TaskManagerDialog &_dialog,
                                    TaskMiscPanel &_parent,
@@ -87,7 +91,8 @@ TaskActionsPanel::OnNewTaskClicked()
       (ShowMessageBox(_("Create new task?"), _("Task New"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     active_task->Clear();
-    active_task->SetFactory(CommonInterface::GetComputerSettings().task.task_type_default);
+    active_task->SetFactory(CommonInterface::GetComputerSettings()
+      .task.task_type_default);
     *task_modified = true;
     dialog.SwitchToPropertiesPanel();
   }
@@ -108,45 +113,35 @@ TaskActionsPanel::OnDeclareClicked()
   ExternalLogger::Declare(decl, way_points.GetHome().get());
 }
 
-static Co::InvokeTask
-DownloadWeGlideTask(std::unique_ptr<OrderedTask> &task,
-                    CurlGlobal &curl, const WeGlideSettings &settings,
-                    const TaskBehaviour &task_behaviour,
-                    const Waypoints *waypoints,
-                    ProgressListener &progress)
-{
-  task = co_await WeGlide::DownloadDeclaredTask(curl, settings,
-                                                task_behaviour, waypoints,
-                                                progress);
-}
-
 inline void
 TaskActionsPanel::OnDownloadClicked() noexcept
 try {
-  const auto &settings = CommonInterface::GetComputerSettings();
 
-  std::unique_ptr<OrderedTask> task;
-  PluggableOperationEnvironment env;
-  if (!ShowCoDialog(dialog.GetMainWindow(), GetLook(),
-                    _("Download"),
-                    DownloadWeGlideTask(task, *Net::curl, settings.weglide,
-                                        settings.task,
-                                        &way_points, env),
-                    &env))
-    return;
+  auto pilot =  CommonInterface::GetComputerSettings().weglide.pilot; // the preset value
+#ifdef _AUG_MSC  // TODO(August2111)
+  //  !!! hidden in Linux
+  // active_task =
 
-  if (!task) {
-    ShowMessageBox(_("No task"), _("Error"), MB_OK|MB_ICONEXCLAMATION);
-    return;
-  }
+  int task =
+#endif
+    TaskDownloadDialog(pilot, _T("Weglide Task"));
+  //  const auto task_file = WeGlide::DownloadTaskFile(pilot);
+//  // August2111:    if (WeGlide::DownloadTaskDialog()) {
+//  if (File::Exists(task_file))
+//    DirtyTaskListPanel();
+} catch (...) {
+  // WIP: nur Platzhalter...
+}
 
-  active_task = task->Clone(settings.task);
-  *task_modified = true;
-  dialog.ResetTaskView();
-
-  dialog.SwitchToEditTab();
-} catch (const std::runtime_error &e) {
-  ShowError(std::current_exception(), _("Download"));
+inline void
+TaskActionsPanel::OnUserWeGlideClicked() noexcept
+try {
+  const auto task_file = WeGlide::DownloadTaskFile(WeGlide::User(1752)); // zum Test: Thomas Melde...
+// August2111:    if (WeGlide::DownloadTaskDialog()) {
+  if (File::Exists(task_file))
+    DirtyTaskListPanel();
+} catch (...) {
+  // WIP: nur Platzhalter...
 }
 
 void
@@ -169,6 +164,7 @@ TaskActionsPanel::Prepare([[maybe_unused]] ContainerWindow &parent,
   if (settings.weglide.pilot.id != 0)
     AddButton(_("Download WeGlide task"),
               [this](){ OnDownloadClicked(); });
+  AddButton(_("Download User WeGlide Task"), [this]() { OnUserWeGlideClicked(); });
 
   if (is_simulator())
     /* cannot communicate with real devices in simulator mode */

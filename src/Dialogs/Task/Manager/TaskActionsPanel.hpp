@@ -55,6 +55,7 @@ private:
   void OnNewTaskClicked();
   void OnDeclareClicked();
   void OnDownloadClicked() noexcept;
+  void OnUserWeGlideClicked() noexcept;
 
   /* virtual methods from class Widget */
   void Prepare(ContainerWindow &parent, const PixelRect &rc) noexcept override;
