@@ -151,6 +151,7 @@ set(_SOURCES
         Dialogs/Weather/WeatherDialog.cpp
 
         Dialogs/Contest/WeGlide/FlightUploadDialog.cpp
+        Dialogs/Contest/WeGlide/FlightUploadResponse.cpp
 
         Dialogs/WidgetDialog.cpp
 
