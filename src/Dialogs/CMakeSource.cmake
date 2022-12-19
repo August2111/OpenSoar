@@ -155,6 +155,7 @@ set(_SOURCES
         Dialogs/Contest/WeGlide/FlightDeleteDialog.cpp
         Dialogs/Contest/WeGlide/FlightPatchDialog.cpp
         Dialogs/Contest/WeGlide/UserSelection.cpp
+        Dialogs/Contest/WeGlide/TaskDownloadDialog.cpp
 
         Dialogs/WidgetDialog.cpp
 
