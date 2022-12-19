@@ -3,6 +3,7 @@ set(_SOURCES
         DownloadTask.cpp
 
         UploadIGCFile.cpp
+        GetJsonString.cpp
 )
 
 set(SCRIPT_FILES
