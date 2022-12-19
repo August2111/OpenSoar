@@ -150,6 +150,8 @@ set(_SOURCES
         Dialogs/Weather/RASPDialog.cpp
         Dialogs/Weather/WeatherDialog.cpp
 
+        Dialogs/Contest/WeGlide/FlightUploadDialog.cpp
+
         Dialogs/WidgetDialog.cpp
 
         Dialogs/CoDialog.cpp
