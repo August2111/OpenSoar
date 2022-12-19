@@ -138,6 +138,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Task/dlgTaskHelpers.cpp \
 	$(SRC)/Dialogs/Task/TargetDialog.cpp \
 	$(SRC)/Dialogs/Task/AlternatesListDialog.cpp \
+	$(SRC)/Dialogs/Task/WeGlideTaskDialog.cpp \
 	\
 	$(SRC)/Dialogs/Tracking/CloudEnableDialog.cpp \
 	\
