@@ -4,6 +4,8 @@ set(_SOURCES
 
         UploadIGCFile.cpp
         GetJsonString.cpp
+
+        GetObjectInfo.cpp
 )
 
 set(SCRIPT_FILES
