@@ -126,6 +126,7 @@ set(_SOURCES
         Dialogs/Task/Widgets/LineSectorZoneEditWidget.cpp
         Dialogs/Task/Widgets/ObservationZoneEditWidget.cpp
         Dialogs/Task/Widgets/SectorZoneEditWidget.cpp
+        Dialogs/Task/WeGlideTaskDialog.cpp
 
         Dialogs/TextEntry.cpp
         Dialogs/TimeEntry.cpp
