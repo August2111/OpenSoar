@@ -5,6 +5,7 @@ set(_SOURCES
         lua/Basic.cpp
         lua/Blackboard.cpp
         lua/Catch.cpp
+        lua/Cloud.cpp
         lua/Dialogs.cpp
         lua/Error.cxx
         lua/Full.cpp
