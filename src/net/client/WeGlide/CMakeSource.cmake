@@ -1,10 +1,14 @@
 set(_SOURCES
         UploadFlight.cpp
         DeleteFlight.cpp
-        DownloadTask.cpp
+        PatchFlight.cpp
 
         UploadIGCFile.cpp
         DeleteIGCFile.cpp
+        PatchIGCFile.cpp
+
+        DownloadTask.cpp
+
         GetJsonString.cpp
 
         GetObjectInfo.cpp
@@ -13,5 +17,3 @@ set(_SOURCES
 set(SCRIPT_FILES
     CMakeSource.cmake
 )
-
-

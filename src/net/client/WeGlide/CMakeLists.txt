@@ -30,6 +30,6 @@ add_library(${TARGET_NAME} ${XCSOAR_LIB_TYPE}
 target_link_libraries(${TARGET_NAME} PUBLIC IGC Formatter util json co)
 
 # message(FATAL_ERROR "Stop!")
-set_target_properties(${TARGET_NAME} PROPERTIES FOLDER Libs)
+set_target_properties(${TARGET_NAME} PROPERTIES FOLDER Net)
 
 add_dependencies(${TARGET_NAME} util)
