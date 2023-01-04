@@ -25,7 +25,11 @@ add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 # add_compile_definitions(-std=c++20)
 add_definitions(/std:c++20)
 add_definitions(/Zc:__cplusplus)
-add_definitions(/wd5030)
+
+# Disabling Warnings:
+# add_definitions(/wd5030)
+add_compile_options(/wd5030)
+add_compile_options(/wd4455)  # "suffix warning?"
 
 
 add_compile_definitions(BOOST_ASIO_SEPARATE_COMPILATION)
