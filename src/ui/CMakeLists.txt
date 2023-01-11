@@ -7,10 +7,6 @@ endif()
 
 include(CMakeSource.cmake)
 # organize the files in subdirectories
-# if(AUGUST_SPECIAL)
-#    add_definitions(-DNDEBUG)  # ansonsten erhalte ich im VS im Debug-Mode eine Menge Assertions bezüglich der Bitmaps
-    # add_compile_definitions(NDEBUG)  # ansonsten erhalte ich im VS im Debug-Mode eine Menge Assertions bezüglich der Bitmaps
-# endif()
 
 set(SOURCE_FILES )
 foreach(source_file ${_SOURCES})

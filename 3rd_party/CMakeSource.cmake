@@ -3,22 +3,17 @@ list(APPEND SCRIPT_FILES CMakeSource.cmake 3rd_party.cmake)
 
 
 set(CMAKE_FILES
+  boost.cmake
   zlib.cmake
   lua.cmake
   png.cmake
   cares.cmake
 )
-if (MSVC)
-  list(APPEND CMAKE_FILES boost.cmake)
-else()
-   # message(FATAL_ERROR "+++ Stop!")
-endif()
-
 
 if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
   list(APPEND CMAKE_FILES curl.cmake)
 else()
-# TODO(August2111): only temporarely  curl.cmake
+# TODO(August2111): only temporarily curl.cmake
 endif()
 
 list(APPEND CMAKE_FILES sodium.cmake)

@@ -153,30 +153,39 @@ if(ON) # MSVC)  # mit minGW geht das nicht??
      #  if (MSVC) # in other targets not possible to add this files to the project???
        list(APPEND ICON_BITMAPS ${icon_file_out}.bmp  ${icon_file_160}.bmp)
      #  endif()
+    if (WITH_REMOVE)
+       set (REMOVE_CMD
+         COMMAND ${CMAKE_COMMAND} -E remove -f ${tmp_file}_alpha.png
+         COMMAND ${CMAKE_COMMAND} -E remove -f ${tmp_file}_rgb.png
+         COMMAND ${CMAKE_COMMAND} -E remove -f ${tmp_file}.png
+       )
+     else()
+       set (REMOVE_CMD)
+     endif()
+    if (OFF)
+       # linux is using XSLTPROC_APP, on Windows we using INKSCAPE_APP
+       set (COPY_CMD
+         COMMAND ${XSLTPROC_APP} --nonet --stringparam DisableAA_Select "MASK_NOAA_" --output  ${PROJECTGROUP_SOURCE_DIR}/build/svg_preprocess.xsl  ${icon_file}
+       )
+     else()
+       set (COPY_CMD
+         COMMAND ${INKSCAPE_APP} ${icon_file_out}.svg --export-dpi=124 --export-type=PNG --export-overwrite --export-filename=${icon_file_out}.png
+         COMMAND ${INKSCAPE_APP} ${icon_file_out}.svg --export-dpi=200 --export-type=PNG --export-overwrite --export-filename=${icon_file_160}.png
+       )
+     endif()
      add_custom_command(OUTPUT ${icon_file_out}.bmp  ${icon_file_160}.bmp
        COMMENT File aus 'icons': ${icon_file_160}.bmp
        COMMAND ${CMAKE_COMMAND} -E make_directory ${_ICONS_OUTPUT}
        COMMAND ${CMAKE_COMMAND} -E make_directory ${_TEMP_OUTPUT}/icons
        COMMAND ${CMAKE_COMMAND} -E copy ${icon_file} ${icon_file_out}.svg
-       # linux is using XSLTPROC_APP, on Windows we using INKSCAPE_APP
-       if(ON)   # ${CMAKE_HOST_SYSTEM_NAME} MATCHES "Windows")
-         COMMAND ${INKSCAPE_APP} ${icon_file_out}.svg --export-dpi=124 --export-type=PNG --export-overwrite --export-filename=${icon_file_out}.png
-         COMMAND ${INKSCAPE_APP} ${icon_file_out}.svg --export-dpi=200 --export-type=PNG --export-overwrite --export-filename=${icon_file_160}.png
-       else() # August2111:not checked up to now
-         COMMAND ${XSLTPROC_APP} --nonet --stringparam DisableAA_Select "MASK_NOAA_" --output  ${PROJECTGROUP_SOURCE_DIR}/build/svg_preprocess.xsl  ${icon_file}
-         # COMMAND ${INKSCAPE_APP} ${icon_file} --export-dpi=96 --export-type="PNG" --export-overwrite --export-background=0xffffff --export-background-opacity=0.0 --export-filename="${_ICONS_OUTPUT}/${png_hd_file}"
-       endif()
-        COMMAND ${BMP_CONVERT_APP} ${icon_file_160}.png -alpha Extract -colors 8 ${tmp_file}_alpha.png
+       ${COPY_CMD}
+       COMMAND ${BMP_CONVERT_APP} ${icon_file_160}.png -alpha Extract -colors 8 ${tmp_file}_alpha.png
        # "-alpha Off" == "+matte"
        COMMAND ${BMP_CONVERT_APP} ${icon_file_160}.png -background ${BMP_BACKGROUND} -flatten -alpha Off +dither -colors 64  ${tmp_file}_rgb.png
        COMMAND ${BMP_MONTAGE_APP} -tile 2x1 -geometry +0+0 ${tmp_file}_alpha.png ${tmp_file}_rgb.png -depth 8 ${tmp_file}.png
        COMMAND ${BMP_CONVERT_APP} ${tmp_file}.png  -resize 44x22 -colors 64 BMP3:${icon_file_160}.bmp
        COMMAND ${BMP_CONVERT_APP} ${tmp_file}.png  -resize 20x10 -colors 64 BMP3:${icon_file_out}.bmp
-       if (WITH_REMOVE)
-         COMMAND ${CMAKE_COMMAND} -E remove -f ${tmp_file}_alpha.png
-         COMMAND ${CMAKE_COMMAND} -E remove -f ${tmp_file}_rgb.png
-         COMMAND ${CMAKE_COMMAND} -E remove -f ${tmp_file}.png
-       endif()
+       ${REMOVE_CMD}
        MAIN_DEPENDENCY ${icon_file}
        DEPENDS ${icon_file}
        WORKING_DIRECTORY ${PROJECTGROUP_SOURCE_DIR}

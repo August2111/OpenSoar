@@ -10,17 +10,12 @@ message(STATUS "*** PROJECTGROUP_BINARY_DIR = '${PROJECTGROUP_BINARY_DIR}'")
 
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_BINARY_DIR} NAME)
 set (PROJECT_NAME "XCSoar-${PROJECT_NAME}")
-set (PROJECT_NAME "XCSoar-August2111")
+# set (PROJECT_NAME "XCSoar-August2111")
 project(${PROJECT_NAME})
+
 set(TARGET_NAME XCSoarAug)
 
-#********************************************************************************
-set(AUGUST_SPECIAL=ON)
-add_compile_definitions(__AUGUST__=1)
-#    add_definitions(-DNDEBUG)  # ansonsten erhalte ich im VS im Debug-Mode eine Menge Assertions bezüglich der Bitmaps
-#********************************************************************************
 
-# August2111
 find_program(CMAKE_APP     NAMES cmake REQUIRED)
 get_filename_component(CMAKE_PROGRAM_PATH ${CMAKE_APP} DIRECTORY)
 get_filename_component(CMAKE_PROGRAM_PATH ${CMAKE_PROGRAM_PATH} DIRECTORY)
@@ -28,7 +23,6 @@ get_filename_component(USER_PROGRAM_PATH ${CMAKE_PROGRAM_PATH} DIRECTORY)
   message(STATUS "CMAKE_SYSTEM_PROGRAM_PATH - ${CMAKE_SYSTEM_PROGRAM_PATH}")
   message(STATUS "CMAKE_PROGRAM_PATH        - ${CMAKE_PROGRAM_PATH}")
   message(STATUS "USER_PROGRAM_PATH         - ${USER_PROGRAM_PATH}")
-# message(FATAL_ERROR "Stop: ")
 
 
 
