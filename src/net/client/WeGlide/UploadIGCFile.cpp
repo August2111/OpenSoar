@@ -90,6 +90,7 @@ SetJsonData() {
   return parser.Finish();
 }
 
+#if 0  // not used up to now
 static const StaticString<0x100>
 UploadErrorInterpreter(const HttpResponse &http)
 {
@@ -117,6 +118,7 @@ UploadErrorInterpreter(const HttpResponse &http)
   }
   return error_string;
 }
+#endif
 
 struct CoInstance {
   HttpResponse http;
