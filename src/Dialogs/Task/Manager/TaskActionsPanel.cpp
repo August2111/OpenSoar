@@ -123,7 +123,8 @@ inline void TaskActionsPanel::OnDownloadClicked() noexcept try {
 
 inline void TaskActionsPanel::OnUserWeGlideClicked() noexcept try {
   const auto task_file = WeGlide::DownloadTaskFile(
-      WeGlide::User(1752)); // zum Test: Thomas Melde...
+      {1752}); // zum Test: Thomas Melde...
+  //    WeGlide::User({1752})); // zum Test: Thomas Melde...
   // August2111:    if (WeGlide::DownloadTaskDialog()) {
   if (File::Exists(task_file))
     DirtyTaskListPanel();
