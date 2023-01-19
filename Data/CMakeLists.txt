@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.18)
 if (SHOW_SUBPROJECTS)
     message(STATUS "+++ Start CMake ${CMAKE_CURRENT_SOURCE_DIR}!")
 endif()
