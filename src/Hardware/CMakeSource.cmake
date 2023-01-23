@@ -5,6 +5,7 @@ set(_SOURCES
         Hardware/DisplayGlue.cpp
         Hardware/RotateDisplay.cpp
         Hardware/Vibrator.cpp
+        Hardware/PowerGlobal.cpp
 )
 
 set(SCRIPT_FILES
