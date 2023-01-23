@@ -121,6 +121,9 @@ if (CMAKE_TOOLCHAIN_FILE)
   # message(STATUS "CMAKE_C_COMPILER = '${CMAKE_C_COMPILER}'")
 endif()
 
+if(ANDROID OR KOBO OR SDL)
+    add_compile_definitions(HAVE_BATTERY)
+endif()
 
 # cleanup 19.04.20: set(ASIO_GROUPING ON)
 
