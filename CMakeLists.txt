@@ -13,12 +13,17 @@ message(STATUS "*** PROJECTGROUP_SOURCE_DIR = '${PROJECTGROUP_SOURCE_DIR}'")
 message(STATUS "*** PROJECTGROUP_BINARY_DIR = '${PROJECTGROUP_BINARY_DIR}'")
 
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_BINARY_DIR} NAME)
-set (PROJECT_NAME "XCSoar-${PROJECT_NAME}")
-# set (PROJECT_NAME "XCSoar-August2111")
+set (PROJECT_NAME "OpenSoar-${PROJECT_NAME}")
 project(${PROJECT_NAME})
 
-set(TARGET_NAME XCSoarAug)
+set(TARGET_NAME OpenSoar)
+set(PROGRAM_NAME ${TARGET_NAME})
+string(TOLOWER  ${PROGRAM_NAME} PROGRAM_NAME_LC)
 
+# add version string to OpenSoar:
+file(READ "VERSION.txt" OPENSOAR_VERSION)
+string(STRIP ${OPENSOAR_VERSION} OPENSOAR_VERSION)
+add_compile_definitions("OPENSOAR_VERSION=\"${OPENSOAR_VERSION}\"")
 
 find_program(CMAKE_APP     NAMES cmake REQUIRED)
 get_filename_component(CMAKE_PROGRAM_PATH ${CMAKE_APP} DIRECTORY)
@@ -30,7 +35,7 @@ get_filename_component(USER_PROGRAM_PATH ${CMAKE_PROGRAM_PATH} DIRECTORY)
 
 
 
-include(build/cmake/xcsoar.cmake)
+include(build/cmake/opensoar.cmake)
 get_filename_component(OUTPUT_FOLDER ${PROJECTGROUP_BINARY_DIR}/.. ABSOLUTE)
 set(OUTPUT ${OUTPUT_FOLDER})
 #  set(CMAKE_RC_COMPILER "D:/Programs/MinGW/mgw112/bin/windres.exe")
@@ -127,7 +132,7 @@ endif()
 
 # cleanup 19.04.20: set(ASIO_GROUPING ON)
 
-get_filename_component(TARGET_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME_WE)
+## get_filename_component(TARGET_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME_WE)
   
 message(STATUS "CMAKE_HOST_SYSTEM_NAME = ${CMAKE_HOST_SYSTEM_NAME} vs. CMAKE_SYSTEM_NAME = ${CMAKE_SYSTEM_NAME} ")
 
@@ -217,11 +222,6 @@ add_compile_definitions(NOMINMAX)
 # add_compile_definitions(_AUG=1)
 # nur einmal definieren!!! add_compile_definitions(BOOST_ASIO_SEPARATE_COMPILATION)
 
-# add version string to xcsoar:
-file(READ "VERSION.txt" XCSOAR_VERSION)
-string(STRIP ${XCSOAR_VERSION} XCSOAR_VERSION)
-add_compile_definitions("XCSOAR_VERSION=\"${XCSOAR_VERSION}\"")
-
 if(ENABLE_OPENGL)
     add_compile_definitions(ENABLE_OPENGL)
 if (0)
@@ -305,10 +305,14 @@ if (JASPER_OUTSIDE)  # 2021
     add_compile_definitions(JASPER_OUTSIDE)
 endif (JASPER_OUTSIDE)
 
-
 set(SOURCE_FILES )
 
 # message(FATAL_ERROR "Test-Stop!")
+if(WIN32)
+    set(BITMAP_EXTENSION  .bmp)
+else()
+    set(BITMAP_EXTENSION  .png)
+endif()
 
 
 # branch cmake    add_subdirectory(src/_Deprecated)
@@ -383,28 +387,16 @@ endif()
 if(NOT ZZIP_OUTSIDE)
     add_subdirectory(src/zzip)   # aug: new!!
 endif()
-  add_subdirectory(src)   # libXCSoar!
+    add_subdirectory(src)   # libOpenSoar!
 
-# # #   ### Translation Group
-# # #    # if (NOT UNIX)
-#xxx        set_source_files_properties(${PROJECTGROUP_SOURCE_DIR}/temp/data/memory_fields.c PROPERTIES LANGUAGE C)
-#xxx        list(APPEND SOURCE_FILES "${PROJECTGROUP_SOURCE_DIR}/temp/data/memory_fields.c")
-
-
-if(WIN32)
-    set(BITMAP_EXTENSION  .bmp)
-else()
-    set(BITMAP_EXTENSION  .png)
-endif()
-
-list(APPEND SOURCE_FILES "src/XCSoar.cpp")
+list(APPEND SOURCE_FILES "src/OpenSoar.cpp")
 list(APPEND SOURCE_FILES "src/Version.cpp")
 configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/Data/XCSoar.rc.in"
-    "${OUTPUT_FOLDER}/Data/XCSoar.rc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in"
+    "${OUTPUT_FOLDER}/Data/OpenSoar.rc"
 )
-list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/XCSoar.rc")
-list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/XCSoar.rc.in")
+list(APPEND SOURCE_FILES "${OUTPUT_FOLDER}/Data/OpenSoar.rc")
+list(APPEND SCRIPT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/Data/OpenSoar.rc.in")
 list(APPEND SOURCE_FILES "CMakeSource.cmake")
 
 if (MSVC)  # only starts with branch 'cmake-msvc-end'
@@ -418,7 +410,7 @@ endif()
 #==========================================================
 
 # preparing target_link_libraries!
-list(APPEND XCSOAR_LINK_LIBRARIES  libXCSoar     ${XCSOAR_SOURCE_LISTS})
+list(APPEND XCSOAR_LINK_LIBRARIES  libOpenSoar ${XCSOAR_SOURCE_LISTS})
 
 # TODO(aug): Cleaning up this code!!!
 
@@ -554,7 +546,7 @@ else()
   #  add_dependencies(${TARGET_NAME} ${3RDPARTY_TARGETS})
 endif()
 
-add_dependencies(${TARGET_NAME} util libXCSoar)
+add_dependencies(${TARGET_NAME} util libOpenSoar)
 
 # Test-Folder !!!!
 #=============================
@@ -567,7 +559,7 @@ add_dependencies(${TARGET_NAME} util libXCSoar)
 if (MSVC)
     message(STATUS "Configure:     ${PROJECTGROUP_BINARY_DIR}/${TARGET_NAME}.vcxproj.user")
     configure_file(
-        "${CMAKE_CURRENT_SOURCE_DIR}/ide/msvc/XCSoar.vcxproj.user.in"
+        "${CMAKE_CURRENT_SOURCE_DIR}/ide/msvc/OpenSoar.vcxproj.user.in"
         "${PROJECTGROUP_BINARY_DIR}/${TARGET_NAME}.vcxproj.user"
     )
 endif()

@@ -54,7 +54,7 @@ UIActions::CheckShutdown()
   if (force_shutdown)
     return true;
 
-  return ShowMessageBox(_("Quit program?"), _T("XCSoar"),
+  return ShowMessageBox(_("Quit program?"), _T("OpenSoar"),
                      MB_YESNO | MB_ICONQUESTION) == IDYES;
 
 }
