@@ -164,7 +164,10 @@ def create_opensoar(args):
     program_dir = 'D:/Programs'
     # not necessary ?! install_bindir = 'bin'
     # src_dir = start_dir  # changed 05.12.2022
-    start_dir = project_dir + '/OpenSoaring/OpenSoar'  # changed 05.12.2022
+    # start_dir = project_dir + '/OpenSoaring/OpenSoar'  # changed 05.12.2022
+    # start_dir = project_dir + '/XCSoar/XCSoar'  # changed 05.12.2022
+	# ATTENTION: this isn't finished yet!!!
+    start_dir = project_dir + '/OpenSoaring/OpenSoar/xcsoar'  # changed 26.01.2023
     src_dir = start_dir  # changed 05.12.2022
     ## binary_dir= start_dir + '/output'  # new from 02.02.2021, simular to OpenSoar upstream
     binary_dir= start_dir + '/_build'  # changed 05.12.2022
