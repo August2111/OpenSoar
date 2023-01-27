@@ -25,14 +25,14 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6568542"
-     inkscape:cx="89.095455"
+     inkscape:cx="173.6831"
      inkscape:cy="5.9220193"
      inkscape:document-units="px"
      inkscape:current-layer="layer4"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="991"
-     inkscape:window-x="-9"
+     inkscape:window-width="2400"
+     inkscape:window-height="1261"
+     inkscape:window-x="2391"
      inkscape:window-y="-9"
      inkscape:window-maximized="1"
      inkscape:showpageshadow="2"
@@ -78,8 +78,8 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial;fill:#008000;fill-opacity:1;stroke:none"
-       x="51.301228"
-       y="28.790943"
+       x="106.47736"
+       y="14.124277"
        id="versionno"
        transform="scale(0.99960475,1.0003954)"
        inkscape:export-filename="C:\Documents and Settings\Administrator\Desktop\loadhorz.png"
@@ -88,14 +88,14 @@
        inkscape:label="versionno"><tspan
          sodipodi:role="line"
          id="tspan9395-4-7-2"
-         x="51.301228"
-         y="28.790943"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#008000;fill-opacity:1">@PROGRAM_VERSION@</tspan></text>
+         x="106.47736"
+         y="14.124277"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.3333px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#008000;fill-opacity:1">@PROGRAM_VERSION@</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:12.0984px;line-height:0%;font-family:Arial;-inkscape-font-specification:Arial;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.0082"
-       x="1.966565"
-       y="42.483101"
+       x="2.4971049"
+       y="29.230089"
        id="versionno-9"
        transform="scale(0.99960475,1.0003954)"
        inkscape:export-filename="C:\Documents and Settings\Administrator\Desktop\loadhorz.png"
@@ -104,25 +104,8 @@
        inkscape:label="versionno"><tspan
          sodipodi:role="line"
          id="tspan9395-4-7-2-4"
-         x="1.966565"
-         y="42.483101"
+         x="2.4971049"
+         y="29.230089"
          style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.6667px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke-width:1.0082">- An experimental Fork of XCSoar</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:17.3333px;line-height:0%;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;white-space:pre;inline-size:45.797;fill:#008000;fill-opacity:1;stroke:none;stroke-width:1.0082"
-       x="2.6074345"
-       y="15.701586"
-       id="versionno-9-5"
-       transform="scale(0.99960475,1.0003954)"
-       inkscape:export-filename="C:\Documents and Settings\Administrator\Desktop\loadhorz.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"
-       inkscape:label="versionno"><tspan
-         x="2.6074345"
-         y="15.701586"
-         id="tspan1071"><tspan
-           dx="0 14.734998 11.908179 11.69659"
-           style="line-height:1.25"
-           id="tspan1069">Ooar</tspan></tspan></text>
   </g>
 </svg>
