@@ -51,7 +51,7 @@ class AnemoiDevice final : public AbstractDevice {
 
   static constexpr std::byte StartByte{'$'}; //!< Command start character.
 
-  Port &port;
+  [[maybe_unused]] Port &port;
   //! Expected length of the message just receiving.
   //  size_t expected_msg_length{};
   size_t expected_msg_length{};
