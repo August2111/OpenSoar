@@ -1,6 +1,10 @@
 include build/rsvg.mk
 include build/imagemagick.mk
 
+# TODO(August2111): what is with setting in main.mk?
+# PROGRAM_NAME = XCSoar
+PROGRAM_NAME = OpenSoar
+
 USE_WIN32_RESOURCES = $(call bool_and,$(HAVE_WIN32),$(call bool_not,$(ENABLE_SDL)))
 
 ifeq ($(USE_WIN32_RESOURCES),y)
@@ -224,7 +228,7 @@ $(OUT)/include/resource.h: src/Resources.hpp | $(OUT)/include/dirstamp
 
 ifeq ($(USE_WIN32_RESOURCES),y)
 
-RESOURCE_TEXT = Data/XCSoar.rc
+RESOURCE_TEXT = Data/$(PROGRAM_NAME).rc
 
 RESOURCE_BINARY = $(TARGET_OUTPUT_DIR)/$(notdir $(RESOURCE_TEXT:.rc=.rsc))
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))
@@ -235,7 +239,7 @@ $(RESOURCE_BINARY): $(RESOURCE_TEXT) $(OUT)/include/resource.h $(RESOURCE_FILES)
 
 else
 
-$(TARGET_OUTPUT_DIR)/resources.c: $(TARGET_OUTPUT_DIR)/XCSoar.rc $(OUT)/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl tools/BinToC.pm | $(TARGET_OUTPUT_DIR)/resources/dirstamp
+$(TARGET_OUTPUT_DIR)/resources.c: $(TARGET_OUTPUT_DIR)/$(PROGRAM_NAME).rc $(OUT)/include/resource.h $(RESOURCE_FILES) tools/LinkResources.pl tools/BinToC.pm | $(TARGET_OUTPUT_DIR)/resources/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(PERL) tools/LinkResources.pl $< $@
 
