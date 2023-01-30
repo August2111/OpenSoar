@@ -21,17 +21,23 @@ program_dir = None
 is_windows = False
 build_system = 'unbekannt'
 toolchain_file = None
+# src_dir = 'unbekannt'
 
 def gcc(toolchain, env):
   global cmake_generator
   global prev_batch
   global program_dir
   global toolchain_file
-  src_dir = 'D:/Projects/Opensoaring/OpenSoar'
+#  global src_dir
+  src_dir = os.getcwd()  
+#   src_dir = start_dir
+  # src_dir = 'D:/Projects/Opensoaring/OpenSoar'
   if sys.platform.startswith('win'):
       if toolchain == 'mingw' or toolchain.startswith('mgw'):
          toolchain_file = src_dir.replace('\\','/') + '/build/cmake/toolchains/MinGW.toolchain'
       # cmake_generator = '\"MinGW Makefiles\"'
+      print('src_dir = ',src_dir)
+      
       cmake_generator = 'MinGW Makefiles'
       return program_dir.replace('/', '\\') + '\\MinGW\\' + toolchain + '\\bin;' + env['PATH']
   else:
@@ -167,10 +173,11 @@ def create_opensoar(args):
     # start_dir = project_dir + '/OpenSoaring/OpenSoar'  # changed 05.12.2022
     # start_dir = project_dir + '/XCSoar/XCSoar'  # changed 05.12.2022
 	# ATTENTION: this isn't finished yet!!!
-    start_dir = project_dir + '/OpenSoaring/OpenSoar/xcsoar'  # changed 26.01.2023
+#    start_dir = project_dir + '/OpenSoaring/OpenSoar/xcsoar'  # changed 26.01.2023
+#    start_dir = project_dir + '/OpenSoaring/OpenSoar'  # changed back 28.01.2023
     src_dir = start_dir  # changed 05.12.2022
     ## binary_dir= start_dir + '/output'  # new from 02.02.2021, simular to OpenSoar upstream
-    binary_dir= start_dir + '/_build'  # changed 05.12.2022
+    # binary_dir= start_dir + '/_build'  # changed 05.12.2022
     if branch:
        binary_dir= project_dir + '/Binaries/OpenSoar/' + branch  # changed 10.01.2023
     else:
