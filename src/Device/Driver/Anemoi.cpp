@@ -51,7 +51,9 @@ class AnemoiDevice final : public AbstractDevice {
 
   static constexpr std::byte StartByte{'$'}; //!< Command start character.
 
-  [[maybe_unused]] Port &port;
+  // August2111: [[maybe_unused]] is with GCC not allowed (Clang only?):
+  // [[maybe_unused]] Port &port;
+  Port &port;
   //! Expected length of the message just receiving.
   //  size_t expected_msg_length{};
   size_t expected_msg_length{};
