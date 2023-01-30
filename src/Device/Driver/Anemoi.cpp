@@ -47,12 +47,12 @@ using std::string_view_literals::operator""sv;
  * Device driver for Anemoi Wind.
  * @see http://www..pdf
  */
+
+#define WITH_PORT 0
 class AnemoiDevice final : public AbstractDevice {
 
   static constexpr std::byte StartByte{'$'}; //!< Command start character.
 
-  // August2111: [[maybe_unused]] is with GCC not allowed (Clang only?):
-  // [[maybe_unused]] Port &port;
   Port &port;
   //! Expected length of the message just receiving.
   //  size_t expected_msg_length{};
@@ -97,6 +97,8 @@ private:
 
 public:
   AnemoiDevice(Port &_port) : port(_port) {}
+  
+  Port &GetPort() { return port; }
 
   /* virtual methods from class Device */
   virtual bool DataReceived(std::span<const std::byte> s,
