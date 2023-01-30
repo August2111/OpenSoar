@@ -97,10 +97,30 @@ FileMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     const UI::ScopeSuspendEventQueue suspend_event_queue{event_queue};
     Run("/usr/bin/download-igc.sh");
   });
-
-  AddButton("Download XCSoar to USB", [](){
+  
+AddButton("Update Maps", [](){
     static constexpr const char *argv[] = {
-      "/usr/bin/download-all.sh", nullptr
+      "/usr/bin/update-maps.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Update Maps", argv);
+  });
+  
+AddButton("Update or upload XCSoar files from USB", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/upload-xcsoar.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Update/Upload files", argv);
+  });
+
+  AddButton("System Backup: OpenVario and XCSoar settings to USB", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/backup-system.sh", nullptr
     };
 
     RunProcessDialog(UIGlobals::GetMainWindow(),
@@ -108,15 +128,26 @@ FileMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                      "Downloading files", argv);
   });
 
-  AddButton("Upload files from USB to XCSoar", [](){
+  AddButton("System Restore: OpenVario and XCSoar settings from USB", [](){
     static constexpr const char *argv[] = {
-      "/usr/bin/upload-xcsoar.sh", nullptr
+      "/usr/bin/restore-system.sh", nullptr
     };
 
     RunProcessDialog(UIGlobals::GetMainWindow(),
                      UIGlobals::GetDialogLook(),
                      "Uploading files", argv);
   });
+
+AddButton("XCSoar Restore: Only XCSoar settings from USB", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/restore-xcsoar.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "Uploading files", argv);
+  });
+  
 }
 
 class SystemMenuWidget final
@@ -227,16 +258,6 @@ SystemMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
                      "Update System", argv);
   });
 
-  AddButton("Update Maps", [](){
-    static constexpr const char *argv[] = {
-      "/usr/bin/update-maps.sh", nullptr
-    };
-
-    RunProcessDialog(UIGlobals::GetMainWindow(),
-                     UIGlobals::GetDialogLook(),
-                     "Update Maps", argv);
-  });
-
   AddButton("Calibrate Sensors", CalibrateSensors);
   AddButton("Calibrate Touch", [this](){
     const UI::ScopeDropMaster drop_master{display};
@@ -250,10 +271,14 @@ SystemMenuWidget::Prepare([[maybe_unused]] ContainerWindow &parent,
     Run("/usr/lib/openvario/libexec/system_settings.sh");
   });
 
-  AddButton("System Info", [this](){
-    const UI::ScopeDropMaster drop_master{display};
-    const UI::ScopeSuspendEventQueue suspend_event_queue{event_queue};
-    Run("/usr/lib/openvario/libexec/system_info.sh");
+  AddButton("System Info", [](){
+    static constexpr const char *argv[] = {
+      "/usr/bin/system-info.sh", nullptr
+    };
+
+    RunProcessDialog(UIGlobals::GetMainWindow(),
+                     UIGlobals::GetDialogLook(),
+                     "System Info", argv);
   });
 }
 
