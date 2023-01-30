@@ -39,3 +39,5 @@ build/local-config.mk
 
 */meson.build
 /CMake2Meson.cmd
+
+/.vscode
