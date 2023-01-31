@@ -50,10 +50,10 @@ using std::string_view_literals::operator""sv;
 
 #define WITH_PORT 0
 class AnemoiDevice final : public AbstractDevice {
+  // unused up to now: Port &port;
 
   static constexpr std::byte StartByte{'$'}; //!< Command start character.
 
-  Port &port;
   //! Expected length of the message just receiving.
   //  size_t expected_msg_length{};
   size_t expected_msg_length{};
@@ -96,10 +96,9 @@ private:
 
 
 public:
-  AnemoiDevice(Port &_port) : port(_port) {}
+  AnemoiDevice([[maybe_unused]] Port &_port) {}
+  // port is unused: AnemoiDevice(Port &_port) : port(_port) {}
   
-  Port &GetPort() { return port; }
-
   /* virtual methods from class Device */
   virtual bool DataReceived(std::span<const std::byte> s,
                             struct NMEAInfo &info) noexcept override;
