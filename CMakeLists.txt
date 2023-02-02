@@ -21,10 +21,12 @@ set(PROGRAM_NAME ${TARGET_NAME})
 set(PROGRAM_NAME_CC ${TARGET_NAME})              # CamelCase
 string(TOLOWER  ${PROGRAM_NAME} PROGRAM_NAME_LC) # lowercase
 
+### file(READ "VERSION.txt" PROGRAM_VERSION)
 # add version string to OpenSoar:
-file(READ "VERSION.txt" PROGRAM_VERSION)
-string(STRIP ${PROGRAM_VERSION} PROGRAM_VERSION)
+# string(STRIP ${PROGRAM_VERSION} PROGRAM_VERSION)
+set(PROGRAM_VERSION 7.28.03)
 add_compile_definitions("PROGRAM_VERSION=\"${PROGRAM_VERSION}\"")
+file(WRITE "VERSION.txt" ${PROGRAM_VERSION})
 
 find_program(CMAKE_APP     NAMES cmake REQUIRED)
 get_filename_component(CMAKE_PROGRAM_PATH ${CMAKE_APP} DIRECTORY)

@@ -1,3 +1,6 @@
+Version 7.28.03 - not yet released
+---------------
+
 Version 7.28.02, 2023/02/01
 ---------------
 * 1st release named 'OpenSoar'
