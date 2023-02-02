@@ -87,16 +87,21 @@ if(ON) # MSVC)  # mit minGW geht das nicht??
     endif(WIN32)
     
    message(STATUS "Image-App: '${BMP_CONVERT_APP}' ")
-    
+
     add_custom_command(OUTPUT ${_TEMP_OUTPUT}/title.svg
                COMMENT "Replace Strings!"
                COMMAND ${CMAKE_COMMAND} -E make_directory ${_TEMP_OUTPUT}
-               COMMAND ${PYTHON_APP} tools/python/replace.py ${_DATA_INPUT}/graphics/title.svg ${_TEMP_OUTPUT}/title.svg  "@PROGRAM_NAME@;${PROGRAM_NAME_CC}" "@PROGRAM_VERSION@;${PROGRAM_VERSION}"
-               DEPENDS ${_DATA_INPUT}/graphics/title.svg ${_TEMP_OUTPUT}/title.svg
+               COMMAND ${PYTHON_APP} tools/python/replace.py 
+                       ${_DATA_INPUT}/graphics/title.svg
+                       ${_TEMP_OUTPUT}/title.svg
+                       "@PROGRAM_NAME@;${PROGRAM_NAME_CC}"
+                       "@PROGRAM_VERSION@;${PROGRAM_VERSION}"
+               DEPENDS ${_DATA_INPUT}/graphics/title.svg
+                       ${_TEMP_OUTPUT}/title.svg
                        ${PROJECTGROUP_SOURCE_DIR}/VERSION.txt
                WORKING_DIRECTORY ${PROJECTGROUP_SOURCE_DIR}
         )
-    
+  
     if (_COMPLETE_INSTALL)
         set(GRAPHIC_BITMAPS
            ${_GRAPHICS_OUTPUT}/logo_160.bmp
