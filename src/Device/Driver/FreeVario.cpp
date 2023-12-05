@@ -83,15 +83,23 @@ FreeVarioDevice::POVParserAndForward(NMEAInputLine &line)
      
     if ('C' == command && bufferAsString == _T("STF")) {
       messageValid = true;
+#ifdef FREEVARIO_EVENT
+      // TODO(August2111): in the moment this output is not allowed
+      // with build-native it shows ' error: undefined reference to 
+      // 'InputEvents::eventXXX(char const*)', but I don't know why yet
+      // info.switch_state.flight_mode = SwitchState::FlightMode::CIRCLING;
       InputEvents::eventSendNMEAPort1(_T("POV,C,STF*4B"));
       InputEvents::eventSendNMEAPort2(_T("POV,C,STF*4B"));
       InputEvents::eventStatusMessage(_T("Speed to Fly Mode"));
+#endif
     }
     if ('C' == command && bufferAsString == _T("VAR")) {
       messageValid = true;
+#ifdef FREEVARIO_EVENT
       InputEvents::eventSendNMEAPort1(_T("POV,C,VAR*4F"));
       InputEvents::eventSendNMEAPort2(_T("POV,C,VAR*4F"));
       InputEvents::eventStatusMessage(_T("Vario Mode"));
+#endif
     }
   }
   return messageValid;
