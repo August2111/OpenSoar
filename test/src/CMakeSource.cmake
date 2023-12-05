@@ -226,6 +226,7 @@ set(TEST_LIST
     ${SRC_DIR}/TestPlanes.cpp
     ${SRC_DIR}/UploadFile.cpp
     ${SRC_DIR}/RunWeGlideClient.cpp
+    ${SRC_DIR}/RunWindArrowRenderer.cpp
 
     ${SRC_DIR}/TestDriver.cpp
 )
