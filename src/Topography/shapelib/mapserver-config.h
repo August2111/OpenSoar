@@ -9,7 +9,7 @@
 #define HAVE_STRCASESTR 1
 #define HAVE_STRDUP 1
 
-#if !defined(IS_OPENVARIO) && !defined(_WIN32)
+#if !(defined(__GLIBC__) || defined(IS_OPENVARIO) || defined(_WIN32))
 #define HAVE_STRLCAT 1
 #define HAVE_STRLCPY 1
 #endif
