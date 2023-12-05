@@ -424,6 +424,7 @@ jobs:
             g++ \
             g++-mingw-w64 \
             python3 \
+            libc-ares-dev \
             librsvg2-bin xsltproc \
             imagemagick gettext sox \
             cmake ninja-build
