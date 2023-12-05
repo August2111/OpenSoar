@@ -229,6 +229,7 @@ set(TEST_LIST
     ${SRC_DIR}/RunWindArrowRenderer.cpp
 
     ${SRC_DIR}/TestDriver.cpp
+    ${SRC_DIR}/TestAllocatedGrid.cpp
 )
 
 set(SCRIPT_FILES
