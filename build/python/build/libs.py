@@ -186,6 +186,9 @@ freetype = MesonProject(
     ],
 )
 
+# 'https://c-ares.haxx.se/download/c-ares-1.23.0.tar.gz', 'dd2710111e4eb6f236a448271228a7f5',
+# 'https://c-ares.haxx.se/download/c-ares-1.22.1.tar.gz', '63766915f9f54e012170aeeef08047f6',
+# 'https://c-ares.haxx.se/download/c-ares-1.19.1.tar.gz', '??',
 cares = CmakeProject(
     'https://c-ares.haxx.se/download/c-ares-1.18.1.tar.gz',
     '1a7d52a8a84a9fbffb1be9133c0f6e17217d91ea5a6fa61f6b4729cda78ebbcf',
