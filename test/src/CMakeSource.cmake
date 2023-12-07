@@ -231,6 +231,7 @@ set(TEST_LIST
 
     ${SRC_DIR}/TestDriver.cpp
     ${SRC_DIR}/TestAllocatedGrid.cpp
+    ${SRC_DIR}/TestAirspaceParser.cpp
 )
 
 set(SCRIPT_FILES
