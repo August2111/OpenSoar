@@ -89,7 +89,12 @@ SkysightAPI::GetMetric(const TCHAR *const id)
       metric_exists = true;
       break;
     }
+#ifdef NDEBUG
+  if (!metric_exists)
+    return nullptr;
+#else
   assert(metric_exists);
+#endif
 
   return &(*i);
 }
