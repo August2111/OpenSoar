@@ -1,4 +1,5 @@
-NETCDF = y
+ifneq ($(HAVE_WIN32),y)
+  NETCDF = y
 
 ifeq ($(TARGET),ANDROID)
   NETCDF_LDLIBS += -l:libnetcdf_c++.a -l:libnetcdf.a
@@ -9,3 +10,7 @@ $(eval $(call link-library,netcdfcpp,NETCDF))
   NETCDF_LDLIBS = -lnetcdf-cxx4 -lnetcdf
 endif
 LDLIBS += $(NETCDF_LDLIBS)
+
+else
+  NETCDF = n
+endif
