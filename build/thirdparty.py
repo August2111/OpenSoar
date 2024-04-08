@@ -45,6 +45,8 @@ if toolchain.is_windows:
         cares,
         curl,
         lua,
+        # netcdf,
+        # netcdfcxx,
     ]
 
     # Some libraries (such as CURL) want to use the min()/max() macros

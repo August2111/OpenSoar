@@ -193,7 +193,11 @@ SkysightAPI::FromUnixTime(uint64_t t)
 #else
   // Only use for skysight-provided dates. 
   // (We can rely on their epoch being consistent)
+#if defined(WIN_SKYSIGHT) || !defined(_WIN32)
   return BrokenDateTime(1970, 1, 1, 0, 0, 0) + (int)t;
+#else
+  return BrokenDateTime(1970, 1, 1, 0, 0, 0); // WRONG!!! TODO(August2111)
+#endif
 #endif
 }
 
