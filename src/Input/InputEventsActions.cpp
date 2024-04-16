@@ -664,9 +664,9 @@ void
 InputEvents::eventKeyPressed(const TCHAR *misc)
 {
 //  std::map<unsigned, const char> keys;
-  for (char *p = (char *)misc; *p != 0; p++) {
+    for (auto *p = misc; *p != 0; p++) {
       if (*p != ' ') {
-      char c[2] = {*p, 0};
+      TCHAR c[2] = {*p, 0};
       if (!strncmp(p, "LEFT", strlen("LEFT"))) {
         c[0] = KEY_LEFT;
         p += strlen("LEFT") ;
@@ -690,7 +690,7 @@ InputEvents::eventKeyPressed(const TCHAR *misc)
         p += strlen("RETURN") ;
       }
       ParseKeyCode(c);
-      }
+    }
   }
 }
 #endif
