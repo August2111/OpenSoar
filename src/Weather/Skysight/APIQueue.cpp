@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
-#if defined(WIN_SKYSIGHT) || !defined(_WIN32)
-
 #include "SkysightAPI.hpp"
 #include "APIQueue.hpp"
 #include "APIGlue.hpp"
@@ -12,6 +10,8 @@
 #include "ui/event/Timer.hpp"
 #include "time/BrokenDateTime.hpp"
 #include "LogFile.hpp"
+
+#include <string>
 #include <vector>
 
 SkysightAPIQueue::~SkysightAPIQueue() {
@@ -19,8 +19,10 @@ SkysightAPIQueue::~SkysightAPIQueue() {
   timer.Cancel();
 }
 
-void
-SkysightAPIQueue::AddRequest(std::unique_ptr<SkysightAsyncRequest> request,
+#if defined(WIN_SKYSIGHT) || !defined(_WIN32)
+// #if 1
+
+void SkysightAPIQueue::AddRequest(std::unique_ptr<SkysightAsyncRequest> request,
 			     bool append_end)
 {
   if (!append_end) {
@@ -33,13 +35,15 @@ SkysightAPIQueue::AddRequest(std::unique_ptr<SkysightAsyncRequest> request,
     Process();
 }
 
-void SkysightAPIQueue::AddDecodeJob(std::unique_ptr<CDFDecoder> &&job) {
+void 
+SkysightAPIQueue::AddDecodeJob(std::unique_ptr<CDFDecoder> &&job) {
   decode_queue.emplace_back(std::move(job));
   if(!is_busy)
     Process();
 }
 
-void SkysightAPIQueue::Process()
+void 
+SkysightAPIQueue::Process()
 {
   is_busy = true;
 
@@ -101,22 +105,7 @@ void SkysightAPIQueue::Process()
 }
 
 void
-SkysightAPIQueue::Clear(const tstring msg)
-{
-  LogFormat("SkysightAPIQueue::Clear %s", msg.c_str());
-  is_clearing = true;
-}
-
-void
-SkysightAPIQueue::SetCredentials(const tstring _email,
-				 const tstring _pass)
-{
-  password = _pass;
-  email = _email;
-}
-
-void
-SkysightAPIQueue::SetKey(const tstring _key,
+SkysightAPIQueue::SetKey(const std::string _key,
 			 const uint64_t _key_expiry_time)
 {
   key = _key;
@@ -146,4 +135,40 @@ SkysightAPIQueue::DoClearingQueue()
   is_clearing = false;
 }
 
+
+#else
+void SkysightAPIQueue::AddRequest(std::unique_ptr<SkysightAsyncRequest> request,
+			     bool append_end)
+{}
+
+
+void SkysightAPIQueue::Process()
+{}
+
+void
+SkysightAPIQueue::SetKey(const std::string _key,
+			 const uint64_t _key_expiry_time)
+{}
+
+void 
+SkysightAPIQueue::AddDecodeJob(std::unique_ptr<CDFDecoder> &&job)
+{}
+
 #endif
+
+void
+SkysightAPIQueue::SetCredentials(const std::string _email,
+				 const std::string _pass)
+{
+  password = _pass;
+  email = _email;
+}
+
+void
+SkysightAPIQueue::Clear(const std::string msg)
+{
+  LogFormat("SkysightAPIQueue::Clear %s", msg.c_str());
+  is_clearing = true;
+}
+
+
