@@ -47,6 +47,10 @@ if toolchain.is_windows:
         lua,
         # netcdf,
         # netcdfcxx,
+        sqlite3,
+        proj,
+        libtiff,
+        libgeotiff,
     ]
 
     # Some libraries (such as CURL) want to use the min()/max() macros
@@ -74,8 +78,8 @@ elif toolchain.is_darwin:
 elif toolchain.is_android:
     thirdparty_libs = [
         libfmt,
-        netcdf,
-        netcdfcxx,
+          netcdf,
+          netcdfcxx,
         libsodium,
         openssl,
         cares,
