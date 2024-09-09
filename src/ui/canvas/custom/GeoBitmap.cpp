@@ -12,8 +12,6 @@
 
 #include <stdexcept>
 
-#include <tchar.h>
-
 #if !defined(USE_GEOTIFF) && defined(__GNUC__)
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=noreturn"
 #endif
@@ -25,14 +23,14 @@ Bitmap::LoadGeoFile([[maybe_unused]] Path path)
   if (path.EndsWithIgnoreCase(".tif") ||
       path.EndsWithIgnoreCase(".tiff")) {
     auto result = LoadGeoTiff(path);
-    if (!Load(std::move(result.first)))
+    if (!LoadFile(path))
       throw std::runtime_error("Failed to use geo image file");
 
     assert(IsDefined());
 
     return result.second;
   }
-#endif
+#endif  // USE_GEOTIFF
 
   throw std::runtime_error("Unsupported geo image file");
 }
