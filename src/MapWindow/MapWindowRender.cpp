@@ -96,10 +96,8 @@ MapWindow::RenderTopographyLabels(Canvas &canvas) noexcept
 inline void
 MapWindow::RenderOverlays([[maybe_unused]] Canvas &canvas) noexcept
 {
-#ifdef ENABLE_OPENGL
   if (overlay)
     overlay->Draw(canvas, render_projection);
-#endif
 }
 
 inline void
