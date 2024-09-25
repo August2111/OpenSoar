@@ -45,8 +45,6 @@ CDFDecoder::GetStatus()
   return s;
 }
 
-// #endif  // defined(WIN_SKYSIGHT) || !defined(_WIN32)
-
 void
 CDFDecoder::MakeCallback(bool result)
 {
@@ -94,7 +92,6 @@ CDFDecoder::DecodeSuccess()
 
 bool CDFDecoder::Decode() {
 
-#if defined(WIN_SKYSIGHT) || !defined(_WIN32)
 #ifdef ANDROID
   NcFile data_file(url.c_str(), NcFile::FileMode::ReadOnly);
   if (!data_file.is_valid())
@@ -210,7 +207,7 @@ bool CDFDecoder::Decode() {
         row, 0,
         linebytes *
             sizeof(
-                unsigned char)); // ensures unused data points are transparent
+                unsigned char));  // ensures unused data points are transparent
     for (unsigned int x = 0; x < lon_size; x++) {
       index = ((unsigned int)y * lon_size) + x;
       rb = x * samplesperpixel;
@@ -247,7 +244,6 @@ bool CDFDecoder::Decode() {
   data_file.close();
   // August2111: why and how delete the url(path) File::Delete(url); // path);
   return (success) ? DecodeSuccess() : DecodeError();
-#endif // defined(WIN_SKYSIGHT) || !defined(_WIN32)
 
   return false;
 }
