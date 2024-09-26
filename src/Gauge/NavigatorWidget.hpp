@@ -47,7 +47,7 @@ private:
   void StopDragging();
 
 public:
-  bool OnGesture(const TCHAR *gesture);
+  bool OnGesture(const char *gesture);
   bool OnMouseDouble([[maybe_unused]] PixelPoint p) noexcept override;
   bool OnMouseDown(PixelPoint p) noexcept override;
   bool OnMouseUp([[maybe_unused]] PixelPoint p) noexcept override;

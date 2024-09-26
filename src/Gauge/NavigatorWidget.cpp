@@ -14,6 +14,8 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "UIGlobals.hpp"
 
+#include "ui/canvas/Canvas.hpp"
+
 NavigatorWindow::NavigatorWindow(const NavigatorLook &_look, const TaskLook &_look_task,
                                  const InfoBoxLook &_look_infobox, const bool _inverse) noexcept
   :look(_look), look_task(_look_task), look_infobox(_look_infobox),
@@ -106,37 +108,37 @@ NavigatorWindow::StopDragging()
 
 
 bool
-NavigatorWindow::OnGesture(const TCHAR *gesture) 
+NavigatorWindow::OnGesture(const char *gesture) 
 {
-  if (StringIsEqual(gesture, _T("U"))) {
+  if (StringIsEqual(gesture, "U")) {
     InputEvents::ShowMenu();
     return true;
   }
-  if (StringIsEqual(gesture, _T("D"))) {
+  if (StringIsEqual(gesture, "D")) {
     InputEvents::ShowMenu();
     return true;
   }
-  if (StringIsEqual(gesture, _T("L"))) {
+  if (StringIsEqual(gesture, "L")) {
     InputEvents::eventAdjustWaypoint("previouswrap");
     return true;
   }
-  if (StringIsEqual(gesture, _T("R"))) {
+  if (StringIsEqual(gesture, "R")) {
     InputEvents::eventAdjustWaypoint("nextwrap");
     return true;
   }
-  if (StringIsEqual(gesture, _T("UD"))) {
+  if (StringIsEqual(gesture, "UD")) {
     InputEvents::ShowMenu();
     return true;
   }
-  if (StringIsEqual(gesture, _T("DR"))) {
+  if (StringIsEqual(gesture, "DR")) {
     InputEvents::ShowMenu();
     return true;
   }
-  if (StringIsEqual(gesture, _T("RL"))) {
+  if (StringIsEqual(gesture, "RL")) {
     InputEvents::eventSetup("Target");
     return true;
   }
-  if (StringIsEqual(gesture, _T("LR"))) {
+  if (StringIsEqual(gesture, "LR")) {
     InputEvents::eventSetup("Alternates");
     return true;
   }
@@ -190,7 +192,7 @@ NavigatorWindow::OnMouseUp([[maybe_unused]] PixelPoint p) noexcept
   if (dragging) {
     StopDragging();
 
-    const TCHAR *gesture = gestures.Finish();
+    const char *gesture = gestures.Finish();
     if (gesture && OnGesture(gesture))
       return true;
 
