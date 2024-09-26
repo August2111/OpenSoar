@@ -19,6 +19,7 @@ set(_SOURCES
         Look/InfoBoxLook.cpp
         Look/Look.cpp
         Look/MapLook.cpp
+	    Look/NavigatorLook.cpp
         Look/NOAALook.cpp
         Look/OverlayLook.cpp
         Look/TaskLook.cpp
