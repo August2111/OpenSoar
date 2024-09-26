@@ -3,10 +3,14 @@
 
 #pragma once
 
-
 #include "Engine/Waypoint/Ptr.hpp"
 #include "Engine/Task/TaskType.hpp"
 #include "Look/InfoBoxLook.hpp"
+
+#ifdef _WIN32
+// in Windows DrawText is defined as DrawTextA
+# include "winuser.h"
+#endif
 
 struct PixelRect;
 struct PixelPoint;
@@ -38,7 +42,7 @@ DrawText(Canvas &canvas, TaskType tp, const Waypoint &wp_current, const PixelRec
          const NavigatorLook &look, const InfoBoxLook &iblook, bool inverse) noexcept;
 
 /**
-* Draw the progress of the current task with presntation of each taskpoint
+* Draw the progress of the current task with presentation of each taskpoint
 */
 void
 DrawProgressTask(const TaskSummary &summary, Canvas &canvas,

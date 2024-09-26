@@ -19,24 +19,24 @@
 #include "Look/NavigatorLook.hpp"
 #include "Look/WaypointLook.hpp"
 #include "Math/Angle.hpp"
-#include "NextArrowRenderer.hpp"
-#include "ProgressBarRenderer.hpp"
+#include "Renderer/NextArrowRenderer.hpp"
+#include "Renderer/ProgressBarRenderer.hpp"
 #include "Renderer/TextRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "UIGlobals.hpp"
-#include "UnitSymbolRenderer.hpp"
-#include "Waypoint/Waypoint.hpp"
-#include "WaypointIconRenderer.hpp"
-#include "WaypointRenderer.hpp"
-#include "WindArrowRenderer.hpp"
+#include "Renderer/UnitSymbolRenderer.hpp"
+#include "Renderer/WaypointIconRenderer.hpp"
+#include "Renderer/WaypointRenderer.hpp"
+#include "Renderer/WindArrowRenderer.hpp"
 #include "time/RoughTime.hpp"
 #include "time/Stamp.hpp"
 #include "ui/canvas/Canvas.hpp"
 #include "util/StaticString.hxx"
+#include "Waypoint/Waypoint.hpp"
 #include "BackendComponents.hpp"
 #include "DataComponents.hpp"
 
-// standard
+// standard includes
 #include <cmath>
 #include <iostream>
 #include <ostream>
@@ -101,7 +101,7 @@ NavigatorRenderer::DrawText(
     time_elapsed_s.Format("%s", time_elapsed_s_tmp.c_str());
   } else
     time_elapsed_s.Format("%s", "--:--");
-  // TCHAR time_elapsed_s[10];
+  // char time_elapsed_s[10];
   // const auto time_elapsed_s_tmp =
   //   FormatLocalTimeHHMM(time_elapsed, utc_offset1).c_str();
   // if (has_started)
@@ -116,7 +116,7 @@ NavigatorRenderer::DrawText(
     time_start_s.Format("%s", FormatLocalTimeHHMM(time_start, utc_offset1).c_str());
   else
     time_start_s.Format("%s", "--:--");
-  // TCHAR time_start_s[10];
+  // char time_start_s[10];
   // const auto time_start = calculated.ordered_task_stats.start.time;
   // if (has_started)
   //   snprintf(time_start_s, ARRAY_SIZE(time_start_s), _T("%s"),
@@ -127,14 +127,14 @@ NavigatorRenderer::DrawText(
   static StaticString<8> time_local_s;
   time_local_s.clear();
   if (basic.time_available) {
-    const BasicStringBuffer<TCHAR, 8> time =
+    const BasicStringBuffer<char, 8> time =
       FormatLocalTimeHHMM(basic.time, utc_offset1);
     time_local_s.AppendFormat("%s", time.c_str());
   } else {
     time_local_s.Format("%s", "--:--");
   }
 
-  // TCHAR time_local_s[10];
+  // char time_local_s[10];
   // snprintf(time_local_s, ARRAY_SIZE(time_local_s), _T("%s"),
   //          FormatLocalTimeHHMM(time, utc_offset1).c_str());
 
@@ -152,7 +152,7 @@ NavigatorRenderer::DrawText(
       "%s", FormatLocalTimeHHMM(time_planned, utc_no_offset).c_str());
   } else
     time_planned_s.Format("%s", "--:--");
-  // TCHAR time_planned_s[10];
+  // char time_planned_s[10];
   // const auto time_planned =
   //   TimeStamp{FloatDuration{calculated.ordered_task_stats.total.time_planned}};
   // if (has_started)
@@ -175,7 +175,7 @@ NavigatorRenderer::DrawText(
       "%s", FormatLocalTimeHHMM(arrival_planned, utc_offset1).c_str());
   } else
     arrival_planned_s.Format("%s", "--:--");
-  // TCHAR arrival_planned_s[10];
+  // char arrival_planned_s[10];
   // const auto arrival_planned = TimeStamp{
   //   FloatDuration{time_start.ToDuration() + time_planned.ToDuration()}};
   // if (has_started)
@@ -187,7 +187,7 @@ NavigatorRenderer::DrawText(
   // e_WP_Name
   static StaticString<50> waypoint_name_s;
   waypoint_name_s.Format("%s", wp_current.name.c_str());
-  // TCHAR waypoint_name_s[40];
+  // char waypoint_name_s[40];
   // snprintf(waypoint_name_s, ARRAY_SIZE(waypoint_name_s), _T("%s"), wp_current.name.c_str());
 
   // e_WP_Distance
@@ -209,7 +209,7 @@ NavigatorRenderer::DrawText(
 
 
 
-  // TCHAR waypoint_distance_s[20];
+  // char waypoint_distance_s[20];
   // auto precision_waypoint_distance{0};
   // const auto waypoint_distance{
   //   calculated.ordered_task_stats.current_leg.vector_remaining.distance};
@@ -232,7 +232,7 @@ NavigatorRenderer::DrawText(
   }
   FormatAltitude(waypoint_altitude_diff_s.data(), waypoint_altitude_diff,
                  Units::GetUserAltitudeUnit(), false);
-  // TCHAR waypoint_altitude_diff_s[20];
+  // char waypoint_altitude_diff_s[20];
   // FormatAltitude(
   //   waypoint_altitude_diff_s,
   //   calculated.ordered_task_stats.current_leg.solution_remaining.GetRequiredAltitude(),
@@ -246,7 +246,7 @@ NavigatorRenderer::DrawText(
   } else {
     waypoint_average_speed_s.Format("%s", "---");
   }
-  // TCHAR waypoint_average_speed_s[20];
+  // char waypoint_average_speed_s[20];
   // FormatUserSpeed(calculated.task_stats.total.travelled.GetSpeed(),
   //                 waypoint_average_speed_s, true, 0);
   // if (!has_started) {
@@ -263,7 +263,7 @@ NavigatorRenderer::DrawText(
     waypoint_GR = std::round(calculated.task_stats.current_leg.gradient);
   }
   waypoint_GR_s.Format("%d", waypoint_GR);
-  // TCHAR waypoint_GR_s[20];
+  // char waypoint_GR_s[20];
   // const int waypoint_GR =
   //   std::round(calculated.ordered_task_stats.current_leg.gradient);
   // _stprintf(waypoint_GR_s, _T("%d:1"), waypoint_GR);
@@ -271,18 +271,18 @@ NavigatorRenderer::DrawText(
   // e_Speed_GPS
   static StaticString<20> current_speed_s;
   FormatUserSpeed(basic.ground_speed, current_speed_s.data(), false, 0);
-  // TCHAR current_speed_s[20];
+  // char current_speed_s[20];
   // FormatUserSpeed(basic.ground_speed, current_speed_s, true, 0);
 
   // e_HeightGPS
   static StaticString<20> current_altitude_s;
   FormatUserAltitude(basic.gps_altitude, current_altitude_s.data(), false);
-  // TCHAR current_altitude_s[20];
+  // char current_altitude_s[20];
   // FormatUserAltitude(basic.gps_altitude, current_altitude_s, true);
 
   // e_WP_BearingDiff
   static StaticString<20> waypoint_direction_s;
-  // TCHAR waypoint_direction_s[20];
+  // char waypoint_direction_s[20];
   Angle bearing_diff{};
 
   if (!basic.track_available)
@@ -323,7 +323,7 @@ NavigatorRenderer::DrawText(
     "%s   %s  %s", waypoint_distance_s.c_str(),
     waypoint_altitude_diff_s.c_str(), waypoint_GR_s.c_str());
 
-  // TCHAR informations_next_waypoint1_s[100];
+  // char informations_next_waypoint1_s[100];
   // if (canvas.GetWidth() < canvas.GetHeight() * 4)
   //   _stprintf(informations_next_waypoint1_s, _T("%s  %s"), waypoint_distance_s,
   //             waypoint_altitude_diff_s);
@@ -334,7 +334,7 @@ NavigatorRenderer::DrawText(
   static StaticString<20> times_local_elapsed_s;
   times_local_elapsed_s.Format(
     "%s (%s)", time_local_s.c_str(), time_elapsed_s.c_str());
-  // TCHAR times_local_elapsed_s[20];
+  // char times_local_elapsed_s[20];
   // snprintf(times_local_elapsed_s, ARRAY_SIZE(times_local_elapsed_s),
   //          _T("%s (%s)"), time_local_s, time_elapsed_s);
 
@@ -344,7 +344,7 @@ NavigatorRenderer::DrawText(
       "%s (%s)", arrival_planned_s.c_str(), time_planned_s.c_str());
   else
     times_arrival_planned_s.Format("%s", arrival_planned_s.c_str());
-  // TCHAR times_arrival_planned_s[50];
+  // char times_arrival_planned_s[50];
   // if (canvas.GetWidth() > canvas.GetHeight() * 5)
   //   _stprintf(times_arrival_planned_s, _T("%s (%s)"), arrival_planned_s,
   //             time_planned_s);

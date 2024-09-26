@@ -171,8 +171,8 @@ GaugesConfigPanel::Prepare(ContainerWindow &parent,
       "This widget is set under the settings menu: Look / Pages / Top Area\n"
       "Warning: an unsuitable height of the navigator widget could lead to a bad presentation of its included flight informations (e.g. name of waypoint, times, ...).\n"
       "to be setted accordingly to the size of the screen device.\n"),
-    _T("%u %%"), _T("%u"), 1, 40, 1,
-    (unsigned)ui_settings.navigator.navigator_height); //settings.min_frequency
+    "%u %%", "%u", 1, 40, 1,
+    (unsigned)ui_settings.navigator.navigator_height);
   SetExpertRow(NavigatorWidgetHeight);
 }
 

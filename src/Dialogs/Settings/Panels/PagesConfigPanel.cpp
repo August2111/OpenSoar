@@ -408,7 +408,7 @@ PageListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc,
     break;
 
   case PageLayout::Top::NAVIGATOR:
-    buffer.AppendFormat(_T(", %s"), _("Navigator"));
+    buffer.AppendFormat(", %s", _("Navigator"));
     break;
 
   case PageLayout::Top::MAX:

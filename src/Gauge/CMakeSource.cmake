@@ -13,6 +13,8 @@ set(_SOURCES
         Gauge/ThermalAssistantWindow.cpp
         Gauge/TrafficSettings.cpp
         Gauge/VarioSettings.cpp
+        Gauge/NavigatorWidget.cpp
+        Gauge/NavigatorSettings.cpp
 )
 
 set(SCRIPT_FILES
