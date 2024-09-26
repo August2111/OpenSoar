@@ -104,6 +104,8 @@ Clip(const GeoQuadrilateral &_geo, const GeoBounds &_bounds) noexcept
   return clipped;
 }
 
+#ifdef ENABLE_OPENGL
+// only used in OpenGL case
 [[gnu::pure]]
 static DoublePoint2D
 MapInQuadrilateral(const GeoQuadrilateral &q, const GeoPoint p) noexcept
@@ -112,6 +114,7 @@ MapInQuadrilateral(const GeoQuadrilateral &q, const GeoPoint p) noexcept
                             GeoTo2D(q.bottom_right), GeoTo2D(q.bottom_left),
                             GeoTo2D(p));
 }
+#endif
 
 bool
 MapOverlayBitmap::IsInside(GeoPoint p) const noexcept
@@ -177,7 +180,6 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
 
 #else  // ENABLE_OPENGL
-  double test[8];
   auto ChartWest = simple_bounds.GetWest().Native();
   auto ChartNorth = simple_bounds.GetNorth().Native();
   auto ChartWidth = simple_bounds.GetWidth().Native();
