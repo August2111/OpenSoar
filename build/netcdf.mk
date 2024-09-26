@@ -6,8 +6,8 @@ ifeq ($(TARGET),ANDROID)
 else
 $(eval $(call pkg-config-library,NETCDF,netcdf-cxx4))
 $(eval $(call link-library,netcdfcpp,NETCDF))
-# NETCDF_LDLIBS = -lnetcdf_c++4 -lnetcdf
-  NETCDF_LDLIBS = -lnetcdf-cxx4 -lnetcdf
+  NETCDF_LDLIBS = -lnetcdf_c++4 -lnetcdf
+#  NETCDF_LDLIBS = -lnetcdf-cxx4 -lnetcdf
 endif
 LDLIBS += $(NETCDF_LDLIBS)
 
