@@ -10,7 +10,7 @@ install-mo: mo
 	done
 
 install-bin: all
-	@$(NQ)echo "  INSTALL   Passiert hier irgend etwas????"
+	@$(NQ)echo "  INSTALL   (August2111) Passiert hier irgend etwas????"
 	install -d -m 0755 $(prefix)/bin
 	install -m 0755 $(TARGET_BIN_DIR)/$(PROGRAM_NAME) $(prefix)/bin
 
