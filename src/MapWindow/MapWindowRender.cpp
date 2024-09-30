@@ -71,7 +71,7 @@ MapWindow::RenderRasp(Canvas &canvas) noexcept
 }
 
 inline void
-MapWindow::RenderSkysight(__attribute__((unused)) Canvas &canvas) noexcept
+MapWindow::RenderSkysight([[maybe_unused]] Canvas &canvas) noexcept
 {
   if (skysight == nullptr)
     return;
