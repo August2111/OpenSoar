@@ -6,9 +6,6 @@
 #include "net/http/Features.hpp"
 
 #ifdef HAVE_HTTP
-# define HAVE_NOAA
-# define HAVE_PCMET
-# if !defined(_WIN32) || defined (__MSVC__)
-#   define HAVE_SKYSIGHT
-# endif
+#define HAVE_NOAA
+#define HAVE_PCMET
 #endif
