@@ -50,14 +50,17 @@ GeoTo2D(GeoPoint p) noexcept
   return {p.longitude.Native(), p.latitude.Native()};
 }
 
+#ifdef ENABLE_OPENGL
 /**
  * Inverse of GeoTo2D().
+ * - Only used with OpenGL yet
  */
 static constexpr GeoPoint
 GeoFrom2D(DoublePoint2D p) noexcept
 {
   return {Angle::Native(p.x), Angle::Native(p.y)};
 }
+#endif  // ENABLE_OPENGL
 
 /**
  * Convert a #GeoBounds instance to a boost::geometry box.
