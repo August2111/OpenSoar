@@ -9,6 +9,8 @@ install-mo: mo
 		install -m 0644 $(OUT)/po/$$i.mo $(prefix)/share/locale/$$i/LC_MESSAGES/$(PROGRAM_NAME_LC).mo; \
 	done
 
+VALI_XCS_EXE = $(TARGET_BIN_DIR)/vali-xcs
+
 install-bin: all
 	install -d -m 0755 $(prefix)/bin
 	install -m 0755 $(TARGET_BIN_DIR)/$(PROGRAM_NAME) $(TARGET_BIN_DIR)/vali-xcs $(prefix)/bin
