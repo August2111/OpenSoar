@@ -123,7 +123,7 @@ GdiLoadImage(UncompressedImage &&uncompressed)
   file.close();
 #endif
 
-  Gdiplus::Bitmap bitmap(&bmi, (void *)uncompressed.GetData());
+  Gdiplus::Bitmap bitmap( &bmi, const_cast<void *> (uncompressed.GetData()));
 
 #ifdef GDI_WITH_TESTSAVE
   bitmap.Save(UTF8ToWide(path.WithSuffix(".png").c_str()).c_str(),
