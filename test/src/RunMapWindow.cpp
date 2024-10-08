@@ -29,11 +29,23 @@
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "thread/Debug.hpp"
 
+
+#if 1  // def TEST_CHECK
 void
 DeviceBlackboard::SetStartupLocation([[maybe_unused]] const GeoPoint &loc,
                                      [[maybe_unused]] const double alt) noexcept
 {
 }
+
+GlueMapWindow *
+UIGlobals::GetMap()
+{
+  return nullptr;
+//  assert(CommonInterface::main_window != nullptr);
+
+//  return CommonInterface::main_window->GetMap();
+}
+
 
 #ifndef NDEBUG
 
@@ -43,6 +55,7 @@ InDrawThread()
   return InMainThread();
 }
 
+#endif
 #endif
 
 static Waypoints way_points;
