@@ -300,7 +300,7 @@ set(TEST_LIST
 )
 
 set(GUI_TEST_LIST
-    ${SRC_DIR}/RunMapWindow.cpp
+    # not valid yet with cmake: ${SRC_DIR}/RunMapWindow.cpp
     ${SRC_DIR}/RunWindArrowRenderer.cpp
     ${SRC_DIR}/DebugDisplay.cpp
 )
