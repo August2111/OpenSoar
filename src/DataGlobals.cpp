@@ -6,7 +6,9 @@
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "Weather/Rasp/RaspStore.hpp"
-#include "Weather/Skysight/Skysight.hpp"
+#ifdef HAVE_SKYSIGHT
+# include "Weather/Skysight/Skysight.hpp"
+#endif
 #include "UIGlobals.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Computer/GlideComputer.hpp"
@@ -65,6 +67,7 @@ DataGlobals::GetRasp() noexcept
     : nullptr;
 }
 
+#ifdef HAVE_SKYSIGHT
 std::shared_ptr<Skysight>
 DataGlobals::GetSkysight()
 {
@@ -73,6 +76,7 @@ DataGlobals::GetSkysight()
     ? map->GetSkysight()
     : nullptr;
 }
+#endif
 
 void
 DataGlobals::SetRasp(std::shared_ptr<RaspStore> rasp) noexcept
@@ -100,6 +104,7 @@ DataGlobals::UpdateHome(bool reset) noexcept
                          CommonInterface::GetComputerSettings().team_code);
 }
 
+#ifdef HAVE_SKYSIGHT
 void
 DataGlobals::SetSkysight(std::shared_ptr<Skysight> skysight)
 {
@@ -107,3 +112,4 @@ DataGlobals::SetSkysight(std::shared_ptr<Skysight> skysight)
   if (map != nullptr)
     map->SetSkysight(std::move(skysight));
 }
+#endif
