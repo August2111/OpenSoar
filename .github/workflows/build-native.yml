@@ -100,6 +100,7 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
+            sys: linux
             target: UNIX
             target_bin: opensoar_${{ needs.release.outputs.version }}_amd64
             target_bin_path: ''
@@ -108,6 +109,7 @@ jobs:
             target_upload: true
             target_container: debian:bookworm-slim
           - os: ubuntu-22.04
+            sys: kobo
             target: KOBO
             target_bin: KoboRoot
             target_bin_path: ''
@@ -116,6 +118,7 @@ jobs:
             target_upload: true
             target_container: debian:bookworm-slim
           - os: ubuntu-22.04
+            sys: android
             target: ANDROID
             target_bin: OpenSoar
             target_bin_path: bin
@@ -125,6 +128,7 @@ jobs:
             ndk: r26d
             target_container: debian:bookworm-slim
           - os: ubuntu-22.04
+            sys: windows
             target: WIN64
             target_bin: OpenSoar
             target_bin_path: bin
@@ -133,6 +137,7 @@ jobs:
             target_upload: true
             target_container: debian:bookworm-slim
           - os: ubuntu-22.04
+            sys: windows
             target: PC
             target_bin: OpenSoar
             target_bin_path: bin
@@ -141,6 +146,7 @@ jobs:
             target_upload: true
             target_container: debian:bookworm-slim
           - os: macos-12
+            sys: apple
             target: OSX64
             target_bin: OpenSoar
             target_bin_path: bin
@@ -149,6 +155,7 @@ jobs:
             target_upload: false
             target_container: ''
           - os: macos-14
+            sys: apple
             target: MACOS
             target_bin: OpenSoar
             target_bin_path: bin
@@ -157,6 +164,7 @@ jobs:
             target_upload: false
             target_container: ''
           - os: macos-14
+            sys: apple
             target: IOS64
             target_bin: OpenSoar
             target_bin_path: bin
@@ -206,26 +214,16 @@ jobs:
           if [ ${{ matrix.os }} = 'ubuntu-22.04' ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE
             ./ide/provisioning/install-debian-packages.sh BASE
+            ./ide/provisioning/install-debian-packages.sh LINUX
             if [ ${{ matrix.target }} = 'UNIX' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
               ./ide/provisioning/install-debian-packages.sh LIBINPUT_GBM
               ./ide/provisioning/install-debian-packages.sh DEBIAN
-            fi
-            if [ ${{ matrix.target }} = 'KOBO' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
+            elif [ ${{ matrix.target }} = 'KOBO' ]; then
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh KOBO
-            fi
-            if [ ${{ matrix.target }} = 'WIN64' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
+            elif [ ${{ matrix.sys }} = 'windows' ]; then
               ./ide/provisioning/install-debian-packages.sh WIN
-            fi
-            if [ ${{ matrix.target }} = 'PC' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
-              ./ide/provisioning/install-debian-packages.sh WIN
-            fi
-            if [ ${{ matrix.target }} = 'ANDROID' ]; then
-              ./ide/provisioning/install-debian-packages.sh LINUX
+            elif [ ${{ matrix.target }} = 'ANDROID' ]; then
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh LLVM
               ./ide/provisioning/install-debian-packages.sh ANDROID
@@ -233,18 +231,9 @@ jobs:
               ./ide/provisioning/install-android-tools.sh SDK
             fi
             ./ide/provisioning/install-debian-packages.sh CLEAN
-          elif [ ${{ matrix.os }} = 'macos-12' ] ; then
+          elif [ ${{ matrix.sys }} = 'apple' ] ; then
             ./ide/provisioning/install-darwin-packages.sh BASE
-            if [ ${{ matrix.target }} = 'OSX64' ]; then
-              ./ide/provisioning/install-darwin-packages.sh OSX64
-            fi
-          elif [ ${{ matrix.os }} = 'macos-14' ] ; then
-            ./ide/provisioning/install-darwin-packages.sh BASE
-            if [ ${{ matrix.target }} = 'MACOS' ]; then
-              ./ide/provisioning/install-darwin-packages.sh MACOS
-            elif [ ${{ matrix.target }} = 'IOS64' ]; then
-              ./ide/provisioning/install-darwin-packages.sh IOS
-            fi
+            ./ide/provisioning/install-darwin-packages.sh ${{ matrix.target }}
           fi
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
 
@@ -261,6 +250,8 @@ jobs:
       - name: Compile OpenSoar - PR
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
+          echo "matrix.target           = ${{ matrix.target }}"
+          echo "secrets.REPOSITORY_HOST = ${{ secrets.REPOSITORY_HOST }}"
           if [ ${{ matrix.target }} = 'ANDROID' ]; then
             echo "make TARGET=ANDROIDFAT..."
             make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
@@ -343,7 +334,8 @@ jobs:
           asset_content_type: application/zip
 
       - name: Deploy to Download server - testing
-        if: ${{ github.repository == 'OpenSoaring/OpenSoar' && github.ref == 'refs/heads/master' }}
+        # if: ${{ github.repository == 'OpenSoaring/OpenSoar' && github.ref == 'refs/heads/master' }}
+        if: ${{ github.repository == 'XCSoar/XCSoar' && github.ref == 'refs/heads/master' }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
@@ -355,7 +347,8 @@ jobs:
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/testing/${{ matrix.target }}
 
       - name: Deploy to Download server - release
-        if: ${{ github.repository == 'OpenSoaring/OpenSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
+        # if: ${{ github.repository == 'OpenSoaring/OpenSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
+        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
