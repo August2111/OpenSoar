@@ -757,7 +757,7 @@ DEBUG_PROGRAM_NAMES += \
 	RunExternalWind \
 	RunTask \
 	LoadImage ViewImage \
-	RunCanvas \
+	RunCanvas RunMapWindow \
 	RunListControl \
 	RunTextEntry RunNumberEntry RunDateEntry RunTimeEntry RunAngleEntry \
 	RunGeoPointEntry \
