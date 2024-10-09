@@ -11,9 +11,7 @@ install-mo: mo
 
 install-bin: all
 	install -d -m 0755 $(prefix)/bin
-	install -m 0755 $(TARGET_BIN_DIR)/$(PROGRAM_NAME) $(prefix)/bin
-
-#	install -m 0755 $(TARGET_BIN_DIR)/$(PROGRAM_NAME) $(TARGET_BIN_DIR)/vali-xcs $(prefix)/bin
+	install -m 0755 $(TARGET_BIN_DIR)/$(PROGRAM_NAME) $(TARGET_BIN_DIR)/vali-xcs $(prefix)/bin
 
 install-manual: manual
 	install -d -m 0755 $(prefix)/share/doc/$(PROGRAM_NAME)
