@@ -234,6 +234,9 @@ jobs:
           elif [ ${{ matrix.sys }} = 'apple' ] ; then
             ./ide/provisioning/install-darwin-packages.sh BASE
             ./ide/provisioning/install-darwin-packages.sh ${{ matrix.target }}
+          else
+            ./ide/provisioning/install-debian-packages.sh CLEAN
+            
           fi
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
 
