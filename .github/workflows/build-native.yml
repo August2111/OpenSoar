@@ -275,7 +275,7 @@ jobs:
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           elif [ ${{ startsWith(matrix.os, 'macos-') }} ]; then  # OSX, IOS, MACOS
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
-          elif [ ${{ matrix.target }} = "UNIX" ]; then
+          elif [ ${{ matrix.target }} = "XX-UNIX" ]; then
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
             cd output/UNIX/DPKG
