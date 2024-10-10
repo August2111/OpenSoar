@@ -134,7 +134,7 @@ jobs:
             target_final: OpenSoar
             target_ext: .exe
             target_upload: true
-            upload_artifact: false
+            upload_artifact: true
             target_container: debian:bookworm-slim
           - os: ubuntu-22.04
             target: PC
@@ -384,12 +384,12 @@ jobs:
     needs: build
     steps:
       - id: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: fetch artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: OpenSoar-${{ env.TARGET }}-artifact
-          path: ${{ github.workspace }}/output/${{ env.TARGET }}
+          path: ${{ github.workspace }}/output/${{ env.TARGET }}/bin
       - name: OpenSoar run checks on ${{ env.TARGET }}
         run: make check-no-build
         working-directory: ${{ github.workspace }}
