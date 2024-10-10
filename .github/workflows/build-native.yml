@@ -176,7 +176,8 @@ jobs:
     steps:
       - name: Install checkout dependencies
         run: |
-          if [ "${{ matrix.os }}" = 'ubuntu-22.04' ]; then
+          # if [ "${{ matrix.os }}" = 'ubuntu-22.04' ]; then
+          if [ ${{ startsWith(matrix.os, 'ubuntu-') }} ]; then
             apt-get update
             apt-get install -y --no-install-recommends git \
             ca-certificates rsync openssh-client
@@ -211,7 +212,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [ ${{ matrix.os }} = 'ubuntu-22.04' ]; then
+          if [ ${{ startsWith(matrix.os, 'ubuntu-') }} ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE
             ./ide/provisioning/install-debian-packages.sh BASE
             ./ide/provisioning/install-debian-packages.sh LINUX
