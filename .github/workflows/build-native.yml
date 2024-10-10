@@ -100,7 +100,6 @@ jobs:
       matrix:
         include:
           - os: ubuntu-22.04
-            sys: linux
             target: UNIX
             target_bin: opensoar_${{ needs.release.outputs.version }}_amd64
             target_bin_path: ''
@@ -110,7 +109,6 @@ jobs:
             upload_artifact: false
             target_container: debian:bookworm-slim
           - os: ubuntu-22.04
-            sys: kobo
             target: KOBO
             target_bin: KoboRoot
             target_bin_path: ''
@@ -120,7 +118,6 @@ jobs:
             upload_artifact: false
             target_container: debian:bookworm-slim
           - os: ubuntu-22.04
-            sys: android
             target: ANDROID
             target_bin: OpenSoar
             target_bin_path: bin
@@ -131,7 +128,6 @@ jobs:
             ndk: r26d
             target_container: debian:bookworm-slim
           - os: ubuntu-22.04
-            sys: windows
             target: WIN64
             target_bin: OpenSoar
             target_bin_path: bin
@@ -141,7 +137,6 @@ jobs:
             upload_artifact: false
             target_container: debian:bookworm-slim
           - os: ubuntu-22.04
-            sys: windows
             target: PC
             target_bin: OpenSoar
             target_bin_path: bin
@@ -151,7 +146,6 @@ jobs:
             upload_artifact: false
             target_container: debian:bookworm-slim
           - os: macos-12
-            sys: apple
             target: OSX64
             target_bin: OpenSoar
             target_bin_path: bin
@@ -161,7 +155,6 @@ jobs:
             upload_artifact: true
             target_container: ''
           - os: macos-14
-            sys: apple
             target: MACOS
             target_bin: OpenSoar
             target_bin_path: bin
@@ -171,7 +164,6 @@ jobs:
             upload_artifact: false
             target_container: ''
           - os: macos-14
-            sys: apple
             target: IOS64
             target_bin: OpenSoar
             target_bin_path: bin
@@ -219,23 +211,19 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [ ${{ matrix.os }} = 'ubuntu-22.04' ]; then
+          if [ ${{ matrix.os == 'ubuntu-22.04' }} ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE
             ./ide/provisioning/install-debian-packages.sh BASE
             ./ide/provisioning/install-debian-packages.sh LINUX
-            if [ ${{ matrix.target }} = 'UNIX' ]; then
+            if [ ${{ matrix.target == 'UNIX' }} ]; then
               ./ide/provisioning/install-debian-packages.sh LIBINPUT_GBM
               ./ide/provisioning/install-debian-packages.sh DEBIAN
-            elif [ ${{ matrix.target }} = 'KOBO' ]; then
+            elif [ ${{ matrix.target == 'KOBO' }} ]; then
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh KOBO
             elif [ ${{ matrix.target == 'Win64' || matrix.target == 'PC' }} ]; then
               ./ide/provisioning/install-debian-packages.sh WIN
-            # elif [ ${{ matrix.target == 'Win64' || matrix.target == 'PC' }} ]; then
-            #   ./ide/provisioning/install-debian-packages.sh WIN
-            # elif [ matrix.target == 'PC' }} ]; then
-            #   ./ide/provisioning/install-debian-packages.sh WIN
-            elif [ ${{ matrix.target }} = 'ANDROID' ]; then
+            elif [ ${{ matrix.target == 'ANDROID'}} ]; then
               ./ide/provisioning/install-debian-packages.sh ARM
               ./ide/provisioning/install-debian-packages.sh LLVM
               ./ide/provisioning/install-debian-packages.sh ANDROID
@@ -264,27 +252,20 @@ jobs:
         run: |
           echo "matrix.target           = ${{ matrix.target }}"
           echo "secrets.REPOSITORY_HOST = ${{ secrets.REPOSITORY_HOST }}"
-          if [ ${{ matrix.target }} = 'ANDROID' ]; then
+          if [ ${{ matrix.target == 'ANDROID' }} ]; then
             echo "make TARGET=ANDROIDFAT..."
             make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
             output/ANDROID/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}
             mv output/ANDROID/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
             output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          elif [ ${{ matrix.target }} = "WIN64" ]; then
+          elif [ ${{ matrix.target == 'WIN64' || matrix.target == 'PC' }} ]; then
             echo "make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything"
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "PC" ]; then
-            echo "make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything"
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "KOBO" ]; then
+          elif [ ${{ matrix.target  == 'KOBO' }} ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          elif [ ${{ matrix.target }} = "OSX64" ]; then
+          elif [ ${{ startsWith(matrix.os, 'macos-') }} ]; then  # OSX, IOS, MACOS
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
-          elif [ ${{ matrix.target }} = "MACOS" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
-          elif [ ${{ matrix.target }} = "IOS64" ]; then
-            gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
-          elif [ ${{ matrix.target }} = "UNIX" ]; then
+          elif [ ${{ matrix.target == 'UNIX' }} ]; then
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
             cd output/UNIX/DPKG
@@ -301,7 +282,7 @@ jobs:
       - name: Compile OpenSoar - Release
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
-          if [ ${{ matrix.target }} = 'ANDROID' ]; then
+          if [ ${{ matrix.target  == 'ANDROID' }} ]; then
             if [ -n "${{ secrets.OPENSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] && [ -n "${{ secrets.OPENSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
               ANDROID_KEYSTORE_PASS=${{ secrets.OPENSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
               make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
@@ -311,15 +292,13 @@ jobs:
               make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
               output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
             fi
-          elif [ ${{ matrix.target }} = "WIN64" ]; then
+          elif [ ${{ matrix.target  == 'WIN64' || matrix.target  == 'PC' }} ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "PC" ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-          elif [ ${{ matrix.target }} = "KOBO" ]; then
+          elif [ ${{ matrix.target == 'KOBO'  }} ]; then
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/${{ matrix.target }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
-          elif [ ${{ matrix.target }} = "OSX64" ]; then
+          elif [ ${{ matrix.target  == 'OSX64' }} ]; then
             gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
-          elif [ ${{ matrix.target }} = "UNIX" ]; then
+          elif [ ${{ matrix.target == 'UNIX' }} ]; then
             mkdir -p output/UNIX/DPKG
             rsync -apt . output/UNIX/DPKG --exclude=output/UNIX/DPKG
             cd output/UNIX/DPKG
@@ -329,7 +308,7 @@ jobs:
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
-        if: ${{ matrix.upload_artifact == true }}
+        if: ${{ matrix.upload_artifact == true || startsWith(github.ref, 'refs/tags/v')}}
         with:
           name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
           path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
@@ -337,7 +316,7 @@ jobs:
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
-        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true && needs.release.outputs.upload_url != '' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == 'true' && needs.release.outputs.upload_url != '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -361,7 +340,7 @@ jobs:
 
       - name: Deploy to Download server - release
         # if: ${{ github.repository == 'OpenSoaring/OpenSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
-        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
+        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == 'true' }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
@@ -371,3 +350,23 @@ jobs:
           REMOTE_USER: ${{ secrets.REPOSITORY_SSH_USER }}
           TARGET: ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
+
+  test-windows:
+    runs-on: windows-latest
+
+    env:
+      TARGET: WIN64
+
+    needs: build
+    steps:
+      - id: checkout
+        uses: actions/checkout@v3
+      - name: fetch artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: opensoar-${{ env.TARGET }}-artifact
+          path: ${{ github.workspace }}/output/${{ env.TARGET }}
+      - name: OpenSoar run checks on ${{ env.TARGET }}
+        run: make check-no-build
+        working-directory: ${{ github.workspace }}
+
