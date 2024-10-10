@@ -215,7 +215,13 @@ jobs:
             ./ide/provisioning/install-debian-packages.sh UPDATE
             ./ide/provisioning/install-debian-packages.sh BASE
             ./ide/provisioning/install-debian-packages.sh LINUX
-            if [ ${{ matrix.target }} = 'UNIX' ]; then
+            if [ ${{ matrix.target }} = 'ANDROID' ]; then
+              ./ide/provisioning/install-debian-packages.sh ARM
+              ./ide/provisioning/install-debian-packages.sh LLVM
+              ./ide/provisioning/install-debian-packages.sh ANDROID
+              ./ide/provisioning/install-android-tools.sh NDK
+              ./ide/provisioning/install-android-tools.sh SDK
+            elif [ ${{ matrix.target }} = 'UNIX' ]; then
               ./ide/provisioning/install-debian-packages.sh LIBINPUT_GBM
               ./ide/provisioning/install-debian-packages.sh DEBIAN
             elif [ ${{ matrix.target }} = 'KOBO' ]; then
@@ -223,12 +229,6 @@ jobs:
               ./ide/provisioning/install-debian-packages.sh KOBO
             elif [ ${{ matrix.target == 'Win64' || matrix.target == 'PC' }} ]; then
               ./ide/provisioning/install-debian-packages.sh WIN
-            elif [ ${{ matrix.target }} = 'ANDROID' ]; then
-              ./ide/provisioning/install-debian-packages.sh ARM
-              ./ide/provisioning/install-debian-packages.sh LLVM
-              ./ide/provisioning/install-debian-packages.sh ANDROID
-              ./ide/provisioning/install-android-tools.sh NDK
-              ./ide/provisioning/install-android-tools.sh SDK
             fi
             ./ide/provisioning/install-debian-packages.sh CLEAN
           elif [ ${{ startsWith(matrix.os, 'macos-') }} ] ; then
