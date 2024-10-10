@@ -211,7 +211,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          if [ ${{ matrix.os == 'ubuntu-22.04' }} ]; then
+          if [ ${{ matrix.os }}  = 'ubuntu-22.04' ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE
             ./ide/provisioning/install-debian-packages.sh BASE
             ./ide/provisioning/install-debian-packages.sh LINUX
@@ -316,7 +316,7 @@ jobs:
       - name: Upload Release Asset
         id: upload-release-asset
         uses: actions/upload-release-asset@v1
-        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == 'true' && needs.release.outputs.upload_url != '' }}
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true && needs.release.outputs.upload_url != '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -340,7 +340,7 @@ jobs:
 
       - name: Deploy to Download server - release
         # if: ${{ github.repository == 'OpenSoaring/OpenSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
-        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == 'true' }}
+        if: ${{ github.repository == 'XCSoar/XCSoar' && startsWith(github.ref, 'refs/tags/v') && matrix.target_upload == true }}
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.REPOSITORY_SSH_KEY }}
