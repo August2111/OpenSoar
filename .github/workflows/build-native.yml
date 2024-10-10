@@ -176,11 +176,10 @@ jobs:
     steps:
       - name: Install checkout dependencies
         run: |
-          # if [ "${{ matrix.os }}" = 'ubuntu-22.04' ]; then
           if [ ${{ startsWith(matrix.os, 'ubuntu-') }} ]; then
             apt-get update
             apt-get install -y --no-install-recommends git \
-            ca-certificates rsync openssh-client
+                ca-certificates rsync openssh-client
           fi
 
       - name: Set vars for release
