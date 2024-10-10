@@ -281,7 +281,7 @@ jobs:
           elif [ ${{ startsWith(matrix.os, 'macos-') }} ]; then  # OSX, IOS, MACOS
             if [ startsWith(${{ matrix.os }}, 'macos-12') ]; then
               echo "MACOS-12"
-            if [ ${{ matrix.os }} = 'macos-12' || ${{ matrix.os }} = 'macos-13' ]; then
+            elif [ ${{ matrix.os }} = 'macos-12' || ${{ matrix.os }} = 'macos-13' ]; then
               echo "MACOS-14 (1)"
             else
               echo "MACOS-14 (2)!!!"
