@@ -266,8 +266,10 @@ jobs:
           #   echo "make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything"
           #   make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "WIN64" ]; then
-            echo "make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything"
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+            # echo "make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything"
+            # make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
+            echo "make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=n USE_CCACHE=y V=2 everything"
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=n USE_CCACHE=y V=2 everything
           elif [ ${{ matrix.target }} = "PC" ]; then
             echo "make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything"
             make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
