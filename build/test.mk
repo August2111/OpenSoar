@@ -1744,15 +1744,16 @@ RUN_MAP_WINDOW_SOURCES += \
 endif
 
 ifeq ($(HAVE_SKYSIGHT),y)
-	RUN_MAP_WINDOW_SOURCES += \
-		$(SRC)/Weather/Skysight/Skysight.cpp \
-		$(SRC)/Weather/Skysight/CDFDecoder.cpp \
-		$(SRC)/Weather/Skysight/APIQueue.cpp \
-		$(SRC)/Weather/Skysight/SkysightAPI.cpp \
-		# $(SRC)/Weather/Skysight/Request.cpp \
-		$(SRC)/Weather/Skysight/SkysightRegions.cpp \
-		\
-		$(SRC)/Weather/Skysight/SkysightRenderer.cpp
+    TARGET_CPPFLAGS += -DXCSOAR_TESTING
+####	RUN_MAP_WINDOW_SOURCES += \
+####		$(SRC)/Weather/Skysight/Skysight.cpp \
+####		$(SRC)/Weather/Skysight/CDFDecoder.cpp \
+####		$(SRC)/Weather/Skysight/APIQueue.cpp \
+####		$(SRC)/Weather/Skysight/SkysightAPI.cpp \
+####		# $(SRC)/Weather/Skysight/Request.cpp \
+####		$(SRC)/Weather/Skysight/SkysightRegions.cpp \
+####		\
+####		$(SRC)/Weather/Skysight/SkysightRenderer.cpp
 endif
 
 
