@@ -36,8 +36,6 @@ on:
 env:
   DEBUG: y
   BOOST: boost_1_85_0
-  TEST: ${{ secrets.TEST }}
-  WIN64_BINPATH: output/WIN64/bin
 
 jobs:
   release:
@@ -101,97 +99,105 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          ## - os: ubuntu-22.04
-          ##   target: ANDROID
-          ##   target_bin: OpenSoar
-          ##   target_bin_path: bin
-          ##   target_final: OpenSoar
-          ##   target_ext: .apk
-          ##   target_upload: true
-          ##   upload_artifact: false
-          ##   ndk: r26d
-          ##   target_container: debian:bookworm-slim
-          ## 
-          ## - os: ubuntu-24.04
-          ##   target: ANDROID
-          ##   target_bin: OpenSoar
-          ##   target_bin_path: bin
-          ##   target_final: OpenSoar
-          ##   target_ext: .apk
-          ##   target_upload: true
-          ##   upload_artifact: true
-          ##   ndk: r26d
-          ##   target_container: debian:bookworm-slim
-# --------## ----------------------------------------------
-          ## - os: ubuntu-22.04
-          ##   target: UNIX
-          ##   target_bin: OpenSoar_${{ needs.release.outputs.version }}_amd64
-          ##   target_bin_path: ''
-          ##   target_final: OpenSoar_
-          ##   target_ext: .deb
-          ##   target_upload: true
-          ##   upload_artifact: false
-          ##   target_container: debian:bookworm-slim
-          ## 
-          ## - os: ubuntu-22.04
-          ##   target: KOBO
-          ##   target_bin: KoboRoot
-          ##   target_bin_path: ''
-          ##   target_final: KoboRoot
-          ##   target_ext: .tgz
-          ##   target_upload: true
-          ##   upload_artifact: false
-          ##   target_container: debian:bookworm-slim
-          ## 
+          - os: ubuntu-22.04
+            target: ANDROIDAARCH64
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: .apk
+            target_test: true
+            target_upload: true
+            upload_artifact: false
+            ndk: r26d
+            target_container: debian:bookworm-slim
+          
+          - os: ubuntu-24.04
+            target: ANDROID
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: .apk
+            target_test: false
+            target_upload: true
+            upload_artifact: true
+            ndk: r26d
+            target_container: debian:bookworm-slim
+# ------------------------------------------------------
+          - os: ubuntu-24.04
+            target: UNIX
+            target_bin: OpenSoar_${{ needs.release.outputs.version }}_amd64
+            target_bin_path: ''
+            target_final: OpenSoar_
+            target_ext: .deb
+            target_test: true
+            target_upload: true
+            upload_artifact: false
+            target_container: debian:bookworm-slim
+          
+          - os: ubuntu-24.04
+            target: KOBO
+            target_bin: KoboRoot
+            target_bin_path: ''
+            target_final: KoboRoot
+            target_ext: .tgz
+            target_upload: true
+            upload_artifact: false
+            target_container: debian:bookworm-slim
+          
           - os: ubuntu-24.04
             target: WIN64
             target_bin: OpenSoar
             target_bin_path: bin
             target_final: OpenSoar
             target_ext: .exe
+            target_test: true
             target_upload: true
             upload_artifact: true
             target_container: debian:bookworm-slim
-          ## 
-          ## - os: ubuntu-22.04
-          ##   target: PC
-          ##   target_bin: OpenSoar
-          ##   target_bin_path: bin
-          ##   target_final: OpenSoar
-          ##   target_ext: .exe
-          ##   target_upload: true
-          ##   upload_artifact: false
-          ##   target_container: debian:bookworm-slim
-          ## 
-          ## - os: macos-12
-          ##   target: OSX64
-          ##   target_bin: OpenSoar
-          ##   target_bin_path: bin
-          ##   target_final: OpenSoar
-          ##   target_ext: ''
-          ##   target_upload: false
-          ##   upload_artifact: true
-          ##   target_container: ''
-          ## 
-          ## - os: macos-14
-          ##   target: MACOS
-          ##   target_bin: OpenSoar
-          ##   target_bin_path: bin
-          ##   target_final: OpenSoar
-          ##   target_ext: ''
-          ##   target_upload: false
-          ##   upload_artifact: false
-          ##   target_container: ''
-          ## 
-          ## - os: macos-14
-          ##   target: IOS64
-          ##   target_bin: OpenSoar
-          ##   target_bin_path: bin
-          ##   target_final: OpenSoar
-          ##   target_ext: ''
-          ##   target_upload: false
-          ##   upload_artifact: false
-          ##   target_container: ''
+          
+          - os: ubuntu-24.04
+            target: PC
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: .exe
+            target_test: true
+            target_upload: true
+            upload_artifact: false
+            target_container: debian:bookworm-slim
+          
+          - os: macos-12
+            target: OSX64
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: ''
+            target_test: false
+            target_upload: false
+            upload_artifact: true
+            target_container: ''
+          
+          - os: macos-14
+            target: MACOS
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: ''
+            target_test: true
+            target_upload: false
+            upload_artifact: false
+            target_container: ''
+          
+          - os: macos-14
+            target: IOS64
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: ''
+            target_test: false
+            target_upload: false
+            upload_artifact: false
+            target_container: ''
 
     steps:
       - name: Install checkout dependencies
@@ -252,7 +258,7 @@ jobs:
           if [ ${{ startsWith(matrix.os, 'ubuntu-') }} = true ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE BASE LINUX
             case ${{ matrix.target }} in
-              ANDROID)
+              ANDROID | ANDROIDFAT | ANDROIDAARCH64)
                 ./ide/provisioning/install-debian-packages.sh ARM LLVM ANDROID
                 ./ide/provisioning/install-android-tools.sh NDK SDK
                 ;;
@@ -275,7 +281,7 @@ jobs:
 
       - name: Prepare signing key
         shell: bash
-        if: ${{ matrix.target == 'ANDROID' && startsWith(github.ref, 'refs/tags/v') }}
+        if: ${{ startsWith(matrix.target, 'ANDROID') && startsWith(github.ref, 'refs/tags/v') }}
         run: |
           echo "Prepare signing key: ${{ matrix.target }}"
           # please use secrets.XCSOAR_UPLOAD_KEY... for secrets.OPENSOAR_UPLOAD_KEY to be
@@ -292,42 +298,15 @@ jobs:
         run: |
           echo "Compile OpenSoar - PR: ${{ matrix.target }}"
             case ${{ matrix.target }} in
-              ANDROID)
-                echo "make TARGET=Android-FAT..."
-                make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2
-                output/ANDROID/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}
+              ANDROID | ANDROIDFAT | ANDROIDAARCH64)
+                echo "make TARGET= ${{ matrix.target }}..."
+                make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 output/ANDROID/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }}
                 mv output/ANDROID/bin/${{ matrix.target_bin }}-debug${{ matrix.target_ext }} \
                 output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
                 ;;
               WIN64 | WIN32 | PC)
                 echo "!!!!! make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything"
                 make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything
-                # echo "=============================="
-                # ls .
-                echo "=============================="
-                ls output/${{ matrix.target }}/bin    # ${{ github.workspace }}
-                echo "=============================="
-                echo "mkdir -p output/${{ matrix.target }}/Test"
-                mkdir -p output/${{ matrix.target }}/Test
-                if [ -d "output/${{ matrix.target }}/Test" ]; then
-                  rsync -apt output/${{ matrix.target }}/bin output/${{ matrix.target }}/Test ##--exclude=output/UNIX/DPKG
-                fi
-                
-                if [ -f '${{ github.workspace }}/output/${{ matrix.target }}/bin/OpenSoar.exe' ]; then
-                  echo "OpenSoar.exe exist"
-                else
-                  echo "OpenSoar.exe NOT exist: ${{ github.workspace }}/output/${{ matrix.target }}/bin/OpenSoar.exe'"
-                fi
-                if [ -f 'output/${{ matrix.target }}/bin/OpenSoar.exe' ]; then
-                  echo "OpenSoar.exe exist"
-                else
-                  echo "OpenSoar.exe NOT exist: 'output/${{ matrix.target }}/bin/OpenSoar.exe'"
-                fi
-                if [ -f 'output/${{ matrix.target }}/bin/TestAngle.exe' ]; then
-                  echo "TestAngle.exe exist"
-                else
-                  echo "TestAngle.exe NOT exist: 'output/${{ matrix.target }}/bin/TestAngle.exe'"
-                fi
                 ;;
               KOBO)
                 echo "make TARGET = Kobo..."
@@ -341,8 +320,11 @@ jobs:
                 DEB_BUILD_OPTIONS=ccache,noopt dpkg-buildpackage --jobs-force=$(nproc) --no-sign
                 ;;
               OSX64 | IOS64 | MACOS)
-                echo "make MacOS-Target =  ${{ matrix.os }}"
-                gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 OPTIMIZE="-O0"
+                if [ ${{ matrix.target_test }} == 'true' ]; then 
+                  gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2  OPTIMIZE="-O0" everything
+                else
+                  gmake -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2  OPTIMIZE="-O0"
+                fi
                 ;;
             esac
 
@@ -364,14 +346,14 @@ jobs:
           # please use secrets.XCSOAR_UPLOAD_KEY... for secrets.OPENSOAR_UPLOAD_KEY to be
           # compatible with repo XCSoar/XCSoar
             case ${{ matrix.target }} in
-              ANDROID)
+              ANDROID | ANDROIDFAT | ANDROIDAARCH64))
                 if [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }}" ] && [ -n "${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}" ]; then
                   ANDROID_KEYSTORE_PASS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_PASSWORD }} \
-                  make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+                  make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
                   output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }} \
                   ANDROID_KEYSTORE=~/.android/signing-key.jks ANDROID_KEY_ALIAS=${{ secrets.XCSOAR_UPLOAD_KEY_JKS_KEY_ALIAS }}
                 else
-                  make -j$(nproc) TARGET=ANDROIDFAT DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
+                  make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 \
                   output/ANDROID/bin/${{ matrix.target_bin }}${{ matrix.target_ext }}
                 fi
                 ;;
@@ -405,10 +387,10 @@ jobs:
 
       - name: Upload Test artifact
         uses: actions/upload-artifact@v4
-        if: ${{ (matrix.upload_artifact || startsWith(github.ref, 'refs/tags/v'))}}
+        if: ${{ matrix.target_test }}
+        ## if: ${{ matrix.target_test || startsWith(github.ref, 'refs/tags/v')}}
         with:
           name: Test-${{ env.git_hash }}${{ matrix.target }}
-          # path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           path: |
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*${{ matrix.target_ext }}
@@ -453,11 +435,16 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
         include:
           - os: windows-latest
             target: WIN64
+          - os: windows-latest
+            target: PC
+          - os: ubuntu-
+            target: UNIX
+          - os: macos-14
+            target: MACOS
 
     needs: build
     steps:
