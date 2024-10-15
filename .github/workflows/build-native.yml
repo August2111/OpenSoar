@@ -280,7 +280,7 @@ jobs:
             . ./OpenSoar.config
             VERSION=$PROGRAM_VERSION
             if [ -z ${{ env.git_hash }} ]; then
-              echo "git_hash=(git)" >> $GITHUB_ENV
+              echo "git_hash='.git.'" >> $GITHUB_ENV
             fi
           fi
           echo "env.git_hash = '${{ env.git_hash }}'"
