@@ -57,7 +57,6 @@ jobs:
         run: |
           TAG=$(echo "${{ github.ref }}" | cut -f3 -d '/')
           echo "TAG=$TAG" >> $GITHUB_ENV
-          echo "::set-output name=TAG::$TAG"
           echo 'CHANGELOGENTRY<<EOF' >> $GITHUB_ENV
           ./tools/changelog.sh "$TAG" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
@@ -74,10 +73,11 @@ jobs:
       - name: get OpenSoar Version
         id: get_version
         run: |
-          VERSION=$(cat VERSION.txt)
+          include OpenSoar.config
+          VERSION=$PROGRAM_VERSION
+          # VERSION=$(cat VERSION.txt)
           echo "$VERSION"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=VERSION::${VERSION}"
 
       - name: Create release
         id: create_release
