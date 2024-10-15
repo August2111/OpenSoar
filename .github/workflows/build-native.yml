@@ -139,7 +139,7 @@ jobs:
           - os: ubuntu-24.04
             target: KOBO
             target_bin: KoboRoot
-            target_bin_path: ''
+            target_bin_path: 'bin'
             target_final: KoboRoot
             target_ext: .tgz
             target_upload: true
@@ -266,6 +266,7 @@ jobs:
                 ./ide/provisioning/install-android-tools.sh NDK SDK
                 ;;
               WIN64 | WIN32 | PC)
+                echo "git_hash=123456" >> $GITHUB_ENV
                 ./ide/provisioning/install-debian-packages.sh WIN
                 ;;
               UNIX)
