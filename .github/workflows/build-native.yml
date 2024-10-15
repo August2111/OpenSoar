@@ -94,6 +94,8 @@ jobs:
           echo "$VERSION"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "GITHUB_SHA = $GITHUB_SHA"
+          GITHUB_HASH=$(git rev-parse --short $GITHUB_SHA)
+          echo "GITHUB_HASH=$GITHUB_HASH"
           echo "GITHUB_HASH = $(git rev-parse --short $GITHUB_SHA)"
           echo "PRERELEASE = $PRERELEASE"
           echo "GITHUB_ENV = $GITHUB_ENV"
