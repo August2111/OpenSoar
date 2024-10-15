@@ -264,10 +264,13 @@ jobs:
         # if: 
         run: |
           echo "Install dependencies: ${{ matrix.target }}"
+          echo "CurrDir = $(pwd)"
           git config --global --add safe.directory $GITHUB_WORKSPACE # ${{ github.workspace }}
           echo "GITHUB_WORKING: ${{ matrix.target }}"
           echo "github.workspace = ${{ github.workspace }}"
           echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
+          cd $GITHUB_WORKSPACE
+          dir
           if [ -z ${{ env.git_hash }} ]; then
             echo "git_hash=(git)" >> $GITHUB_ENV
           fi
