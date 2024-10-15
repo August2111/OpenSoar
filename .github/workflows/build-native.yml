@@ -269,8 +269,10 @@ jobs:
           echo "GITHUB_WORKING: ${{ matrix.target }}"
           echo "github.workspace = ${{ github.workspace }}"
           echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
-          cd $GITHUB_WORKSPACE
+          ## on MacOS not working cd $GITHUB_WORKSPACE
           dir
+          include OpenSoar.config
+          VERSION=$PROGRAM_VERSION
           if [ -z ${{ env.git_hash }} ]; then
             echo "git_hash=(git)" >> $GITHUB_ENV
           fi
