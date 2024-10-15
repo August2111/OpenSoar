@@ -57,7 +57,6 @@ jobs:
         run: |
           TAG=$(echo "${{ github.ref }}" | cut -f3 -d '/')
           echo "TAG=$TAG" >> $GITHUB_ENV
-          echo "::set-output name=TAG::$TAG"
           echo 'CHANGELOGENTRY<<EOF' >> $GITHUB_ENV
           ./tools/changelog.sh "$TAG" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
@@ -71,18 +70,11 @@ jobs:
           esac
         id: changelogentry
 
-      - name: get OpenSoar Version
-        id: get_version
-        run: |
-          VERSION=$(cat VERSION.txt)
-          echo "$VERSION"
-          echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "::set-output name=VERSION::${VERSION}"
-
       - name: Create release
         id: create_release
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: ncipollo/release-action@v1
+        uses: actions/create-release@v1.1.4
+        # uses: ncipollo/release-action@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -90,6 +82,33 @@ jobs:
           name: Version ${{ github.ref_name }}
           body: ${{ env.CHANGELOGENTRY }}
           prerelease: ${{ env.PRERELEASE }}
+
+      - name: Get OpenSoar Version
+        id: get_version
+        run: |
+          echo "Get OpenSoar Version"
+          echo "CurrDir = $(pwd)"
+          # include OpenSoar.config
+          # VERSION=$PROGRAM_VERSION
+          VERSION=7.43.22.1
+          # VERSION=$(cat VERSION.txt)
+          echo "$VERSION"
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "GITHUB_SHA = $GITHUB_SHA"
+          GITHUB_HASH=$(git rev-parse --short $GITHUB_SHA)
+          echo "GITHUB_HASH = $GITHUB_HASH"
+          echo "GITHUB_HASH = $(git rev-parse --short $GITHUB_SHA)"
+          echo "PRERELEASE = $PRERELEASE"
+          echo "GITHUB_ENV = $GITHUB_ENV"
+          echo "PRERELEASE = ${{ env.PRERELEASE }}"
+          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+          echo "git_hash=$GITHUB_HASH" >> $GITHUB_ENV
+          echo "git_hash = ${{ env.git_hash }}"
+          echo "git_hash = $git_hash"
+          if [ -z ${{ env.git_hash }} ]; then
+            echo "git_hash=$(git rev-parse --short --verify HEAD )" >> $GITHUB_ENV
+            echo "env.git_hash = '${{ env.git_hash }}'"
+          fi 
 
   build:
     runs-on: ${{ matrix.os }}
@@ -122,11 +141,11 @@ jobs:
             upload_artifact: true
             ndk: r26d
             target_container: debian:bookworm-slim
-# ------------------------------------------------------
+            # ------------------------------------------------------
           - os: ubuntu-24.04
             target: UNIX
             target_bin: OpenSoar_${{ needs.release.outputs.version }}_amd64
-            target_bin_path: ''
+            target_bin_path: 'bin'
             target_final: OpenSoar_
             target_ext: .deb
             target_test: true
@@ -134,15 +153,15 @@ jobs:
             upload_artifact: false
             target_container: debian:bookworm-slim
           
-          - os: ubuntu-24.04
-            target: KOBO
-            target_bin: KoboRoot
-            target_bin_path: ''
-            target_final: KoboRoot
-            target_ext: .tgz
-            target_upload: true
-            upload_artifact: false
-            target_container: debian:bookworm-slim
+          #### needs long time.. - os: ubuntu-24.04
+          #### needs long time..   target: KOBO
+          #### needs long time..   target_bin: KoboRoot
+          #### needs long time..   target_bin_path: 'bin'
+          #### needs long time..   target_final: KoboRoot
+          #### needs long time..   target_ext: .tgz
+          #### needs long time..   target_upload: true
+          #### needs long time..   upload_artifact: false
+          #### needs long time..   target_container: debian:bookworm-slim
           
           - os: ubuntu-24.04
             target: WIN64
@@ -200,6 +219,27 @@ jobs:
             target_container: ''
 
     steps:
+      - name: Check Git Variables
+        run: |
+          echo "(No) Check Git variables"
+          COMMIT=$(echo $GITHUB_SHA | head -c 7)
+          echo "GIT_COMMIT=$COMMIT" >> $GITHUB_ENV
+          ### echo "CurrDir = $(pwd)"
+          ### echo "GITHUB_ENV = $GITHUB_ENV"
+          ### echo "cat $GITHUB_ENV"
+          ### echo "github.workspace = ${{ github.workspace }}"
+          ### echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
+          ### echo "GITHUB_HASH = $GITHUB_HASH"
+          ### if [ -z '${{ env.git_hash }}' ]; then
+          ###   echo "git_hash isn't set!!!"
+          ###   git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          ###   echo 'git_hash = $(git rev-parse --short "$GITHUB_SHA")' >> $GITHUB_ENV
+          ###   echo "git_hash = ${{ env.git_hash }}"
+          ### else
+          ###   echo "git_hash = ${{ env.git_hash }}"
+          ###   echo "git_hash = $git_hash"
+          ### fi
+        
       - name: Install checkout dependencies
         if: ${{ startsWith(matrix.os, 'ubuntu-') }}
         run: |
@@ -255,6 +295,29 @@ jobs:
         # if: 
         run: |
           echo "Install dependencies: ${{ matrix.target }}"
+          echo "CurrDir = $(pwd)"
+          git config --global --add safe.directory $GITHUB_WORKSPACE # ${{ github.workspace }}
+          echo "GITHUB_WORKING: ${{ matrix.target }}"
+          echo "github.workspace = ${{ github.workspace }}"
+          echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
+          echo "GITHUB_SHA       = $GITHUB_SHA"
+          echo "GITHUB_HASH      = $GITHUB_HASH"
+          echo "GIT_COMMIT       = $GIT_COMMIT"
+          ### git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          ### echo 'git_hash = $(git rev-parse --short "$GITHUB_SHA")' >> $GITHUB_ENV
+          ### # echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+          ### echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
+          ### if [ ${{ startsWith(matrix.os, 'ubuntu-') }} ]; then
+          ###   dir
+          ###   #source OpenSoar.config
+          ###   . ./OpenSoar.config
+          ###   VERSION=$PROGRAM_VERSION
+          ###   if [ -z ${{ env.git_hash }} ]; then
+          ###     echo "git_hash='.git.'" >> $GITHUB_ENV
+          ###   fi
+          ### fi
+          ### echo "env.git_hash = '${{ env.git_hash }}'"
+
           if [ ${{ startsWith(matrix.os, 'ubuntu-') }} = true ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE BASE LINUX
             case ${{ matrix.target }} in
@@ -263,6 +326,7 @@ jobs:
                 ./ide/provisioning/install-android-tools.sh NDK SDK
                 ;;
               WIN64 | WIN32 | PC)
+                # echo "git_hash=$(shell git rev-parse --short --verify HEAD )" >> $GITHUB_ENV
                 ./ide/provisioning/install-debian-packages.sh WIN
                 ;;
               UNIX)
@@ -277,7 +341,6 @@ jobs:
             ./ide/provisioning/install-darwin-packages.sh BASE
             ./ide/provisioning/install-darwin-packages.sh ${{ matrix.target }}            
           fi
-          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
 
       - name: Prepare signing key
         shell: bash
@@ -329,7 +392,7 @@ jobs:
             esac
 
       - name: Compile OpenSoar - Sanitizer Check
-        if: ${{ matrix.target == 'UNIX' && !startsWith(github.ref, 'refs/tags/v') }}
+        if: ${{ matrix.target == 'UNIX' && !startsWith(github.ref, 'refs/tags/v') && github.ref == 'refs/heads/master' }}
         run: |
           echo "Unix - Sanitizer Check"
           # if [ ${{ matrix.target }} = "UNIX" ]; then
@@ -379,7 +442,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ (matrix.upload_artifact || startsWith(github.ref, 'refs/tags/v'))}}
         with:
-          name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
+          name: ${{ matrix.target_final }}-${{ env.GIT_COMMIT }}-${{ matrix.target }}${{ matrix.target_ext }}
           # path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           path: |
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
@@ -390,10 +453,13 @@ jobs:
         if: ${{ matrix.target_test }}
         ## if: ${{ matrix.target_test || startsWith(github.ref, 'refs/tags/v')}}
         with:
-          name: Test-${{ env.git_hash }}${{ matrix.target }}
+          name: Test-${{ env.GIT_COMMIT }}-${{ matrix.target }}
           path: |
-            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
-            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*${{ matrix.target_ext }}
+            test/README
+            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*
+            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*
+            # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
+            # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*${{ matrix.target_ext }}
           retention-days: 1
 
       - name: Upload Release Asset
@@ -437,27 +503,55 @@ jobs:
     strategy:
       matrix:
         include:
+          - os: ubuntu-latest
+            target: UNIX
+          ## - os: macos-14
+          ##   target: MACOS
           - os: windows-latest
             target: WIN64
           - os: windows-latest
             target: PC
-          - os: ubuntu-
-            target: UNIX
-          - os: macos-14
-            target: MACOS
 
     needs: build
     steps:
       - id: checkout
         uses: actions/checkout@v4
+      - name: Set Git Variables
+        if: ${{ ! startsWith(matrix.os, 'windows-') }}
+        run: |
+          echo "Set Git Variables"
+          COMMIT=$(echo $GITHUB_SHA | head -c 7)
+          echo "GIT_COMMIT=$COMMIT" >> $GITHUB_ENV
+      - name: Set Git Variables (Windows)
+        if: ${{ startsWith(matrix.os, 'windows-') }}
+        run: |
+          echo "Set Git Variables (Windows)"
+          $COMMIT = $env:GITHUB_SHA.substring(0,7)
+          echo "GIT_COMMIT=$COMMIT" >> $env:GITHUB_ENV
+          echo "========================"
       - name: Fetch Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: Test-${{ env.git_hash }}${{ matrix.target }}
-          path: ${{ github.workspace }}/output/${{ matrix.target }}/bin
-      - name: OpenSoar run checks on ${{ matrix.target }}
+          name: Test-${{ env.GIT_COMMIT }}-${{ matrix.target }}
+          path: ${{ github.workspace }}
+          # path: ${{ github.workspace }}/output/${{ matrix.target }}/bin
+      - name: Run Test Programs on ${{ matrix.target }}
         run: |
+          echo "Run Test Programs on ${{ matrix.target }}"
+          echo "CurrDir = $(pwd)"
+          ls -l  .
+          ls -l  output
+          ls -l  output/${{ matrix.target }}
+          ls -l  output/${{ matrix.target }}/bin
+          #### chmod +x ./ide/github/build.sh
+          #### ./ide/github/build.sh
+          ######## geht nicht: if [ ${{ matrix.os }} = 'windows-latest' ]; then
+          ######## geht nicht:   echo "Windows-OS +++++++"
+          ######## geht nicht: else
+          ######## geht nicht:   echo "Non Windows-OS ---"
+          ######## geht nicht: fi
+          chmod +x ./output/${{ matrix.target }}/bin/*
+          ls -l  output/${{ matrix.target }}/bin
           echo "run tests on Target '${{ matrix.target }}'"
           make check-no-build TARGET=${{ matrix.target }}
         working-directory: ${{ github.workspace }}
-
