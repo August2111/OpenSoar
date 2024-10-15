@@ -18,6 +18,10 @@
 # include <timezoneapi.h>
 #endif
 
+#ifdef DEBUG_CONSOLE_OUTPUT
+# include <iostream>
+#endif
+
 static const BrokenDateTime ToBrokenDateTime(const struct tm &tm) noexcept {
   BrokenDateTime dt;
 
@@ -70,5 +74,10 @@ BrokenDateTime::NowLocal() noexcept
 BrokenDateTime
 BrokenDateTime::FromUnixTime(const int64_t t) noexcept
 {
+#ifdef DEBUG_CONSOLE_OUTPUT
+  std::cout << __func__ << ": " << t << std::endl;
+  std::cout << __func__ << ": " << std::chrono::system_clock::from_time_t(t) << std::endl;
+  std::cout << __func__ << ": " << GmTime(std::chrono::system_clock::from_time_t(t)).tm_year << std::endl;
+#endif
   return ToBrokenDateTime(GmTime(std::chrono::system_clock::from_time_t(t)));
 }
