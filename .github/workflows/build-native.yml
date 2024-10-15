@@ -55,6 +55,13 @@ jobs:
       - name: Parse changelog
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
+          git config --global --add safe.directory $GITHUB_WORKSPACE # ${{ github.workspace }}
+          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+          echo "env.git_hash = '${{ env.git_hash }}'"
+          if [ -z ${{ env.git_hash }} ]; then
+            echo "git_hash=$(git rev-parse --short --verify HEAD )" >> $GITHUB_ENV
+            echo "env.git_hash = '${{ env.git_hash }}'"
+          fi 
           TAG=$(echo "${{ github.ref }}" | cut -f3 -d '/')
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo 'CHANGELOGENTRY<<EOF' >> $GITHUB_ENV
@@ -260,18 +267,10 @@ jobs:
           echo "GITHUB_WORKING: ${{ matrix.target }}"
           echo "github.workspace = ${{ github.workspace }}"
           echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
-          git config --global --add safe.directory /__w/OpenSoar/OpenSoar
-          # git config --global --add safe.directory ${{ github.workspace }}
-          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
-          echo "env.git_hash = '${{ env.git_hash }}'"
-          if [ -z ${{ env.git_hash }} ]; then
-            echo "git_hash=$(git rev-parse --short --verify HEAD )" >> $GITHUB_ENV
-            echo "env.git_hash = '${{ env.git_hash }}'"
-          fi 
           if [ -z ${{ env.git_hash }} ]; then
             echo "git_hash=(git)" >> $GITHUB_ENV
-            echo "env.git_hash = '${{ env.git_hash }}'"
           fi
+          echo "env.git_hash = '${{ env.git_hash }}'"
 
           if [ ${{ startsWith(matrix.os, 'ubuntu-') }} = true ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE BASE LINUX
