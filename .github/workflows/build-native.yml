@@ -255,6 +255,7 @@ jobs:
         # if: 
         run: |
           echo "Install dependencies: ${{ matrix.target }}"
+          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
           if [ ${{ startsWith(matrix.os, 'ubuntu-') }} = true ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE BASE LINUX
             case ${{ matrix.target }} in
@@ -277,7 +278,6 @@ jobs:
             ./ide/provisioning/install-darwin-packages.sh BASE
             ./ide/provisioning/install-darwin-packages.sh ${{ matrix.target }}            
           fi
-          echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
 
       - name: Prepare signing key
         shell: bash
@@ -379,7 +379,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ (matrix.upload_artifact || startsWith(github.ref, 'refs/tags/v'))}}
         with:
-          name: ${{ matrix.target_final }}-${{ env.git_hash }}${{ matrix.target }}${{ matrix.target_ext }}
+          name: ${{ matrix.target_final }}-${{ env.git_hash }}-${{ matrix.target }}${{ matrix.target_ext }}
           # path: output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           path: |
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
@@ -390,10 +390,12 @@ jobs:
         if: ${{ matrix.target_test }}
         ## if: ${{ matrix.target_test || startsWith(github.ref, 'refs/tags/v')}}
         with:
-          name: Test-${{ env.git_hash }}${{ matrix.target }}
+          name: Test-${{ env.git_hash }}-${{ matrix.target }}
           path: |
-            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
-            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*${{ matrix.target_ext }}
+            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*
+            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*
+            # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
+            # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*${{ matrix.target_ext }}
           retention-days: 1
 
       - name: Upload Release Asset
@@ -453,7 +455,7 @@ jobs:
       - name: Fetch Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: Test-${{ env.git_hash }}${{ matrix.target }}
+          name: Test-${{ env.git_hash }}-${{ matrix.target }}
           path: ${{ github.workspace }}/output/${{ matrix.target }}/bin
       - name: OpenSoar run checks on ${{ matrix.target }}
         run: |
