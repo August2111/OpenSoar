@@ -92,7 +92,7 @@ jobs:
           # VERSION=$(cat VERSION.txt)
           echo "$VERSION"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          
+          echo "GITHUB_SHA = $GITHUB_SHA"
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
           echo "env.git_hash = '${{ env.git_hash }}'"
           if [ -z ${{ env.git_hash }} ]; then
@@ -269,7 +269,7 @@ jobs:
           echo "GITHUB_WORKING: ${{ matrix.target }}"
           echo "github.workspace = ${{ github.workspace }}"
           echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
-          echo "GITHUB_SHA = $GITHUB_SHA""
+          echo "GITHUB_SHA = $GITHUB_SHA"
           git_hash=$(git rev-parse --short "$GITHUB_SHA")
           echo 'git_hash = $(git rev-parse --short "$GITHUB_SHA")' >> $GITHUB_ENV
           # echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
