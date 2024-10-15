@@ -36,6 +36,7 @@ on:
 env:
   DEBUG: y
   BOOST: boost_1_85_0
+  git_hash: 8888
 
 jobs:
   release:
