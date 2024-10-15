@@ -258,6 +258,7 @@ jobs:
         run: |
           echo "Install dependencies: ${{ matrix.target }}"
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+          echo "git_hash=$(shell git rev-parse --short --verify HEAD )" >> $GITHUB_ENV
           if [ ${{ startsWith(matrix.os, 'ubuntu-') }} = true ]; then
             ./ide/provisioning/install-debian-packages.sh UPDATE BASE LINUX
             case ${{ matrix.target }} in
@@ -266,7 +267,10 @@ jobs:
                 ./ide/provisioning/install-android-tools.sh NDK SDK
                 ;;
               WIN64 | WIN32 | PC)
-                echo "git_hash=123456" >> $GITHUB_ENV
+                echo "git_hash=$(shell git rev-parse --short --verify HEAD )" >> $GITHUB_ENV
+                ## if [ -n ${{ env.git_hash }} ]; then
+                ##   echo "git_hash=123456" >> $GITHUB_ENV
+                ## fi
                 ./ide/provisioning/install-debian-packages.sh WIN
                 ;;
               UNIX)
