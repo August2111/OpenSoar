@@ -222,8 +222,10 @@ jobs:
         run: |
           echo "Check git variables"
           echo "CurrDir = $(pwd)"
+          echo "GITHUB_ENV = $GITHUB_ENV"
           echo "github.workspace = ${{ github.workspace }}"
           echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
+          echo "GITHUB_HASH = $GITHUB_HASH"
           if [ -z '${{ env.git_hash }}' ]; then
             echo "git_hash isn't set!!!"
             git_hash=$(git rev-parse --short "$GITHUB_SHA")
