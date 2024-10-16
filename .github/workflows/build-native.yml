@@ -102,8 +102,8 @@ jobs:
           echo "PRERELEASE = ${{ env.PRERELEASE }}"
           echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
           echo "git_hash=$GITHUB_HASH" >> $GITHUB_ENV
-          echo "env.git_hash = ${{ env.git_hash }}"
-          echo "env.git_hash = $env.git_hash"
+          echo "git_hash = ${{ env.git_hash }}"
+          echo "git_hash = $git_hash"
           if [ -z ${{ env.git_hash }} ]; then
             echo "git_hash=$(git rev-parse --short --verify HEAD )" >> $GITHUB_ENV
             echo "env.git_hash = '${{ env.git_hash }}'"
@@ -221,13 +221,17 @@ jobs:
       - name: Check Git Variables
         run: |
           echo "Check git variables"
-          if [ -z ${{ env.git_hash }} ]; then
-            echo "env.git_hash isn't set!!!"
+          echo "CurrDir = $(pwd)"
+          echo "github.workspace = ${{ github.workspace }}"
+          echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
+          if [ -z '${{ env.git_hash }}' ]; then
+            echo "git_hash isn't set!!!"
             git_hash=$(git rev-parse --short "$GITHUB_SHA")
             echo 'git_hash = $(git rev-parse --short "$GITHUB_SHA")' >> $GITHUB_ENV
+            echo "git_hash = ${{ env.git_hash }}"
           else
-            echo "env.git_hash = ${{ env.git_hash }}"
-            echo "env.git_hash = $env.git_hash"
+            echo "git_hash = ${{ env.git_hash }}"
+            echo "git_hash = $git_hash"
           fi
         
       - name: Install checkout dependencies
