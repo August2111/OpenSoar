@@ -230,13 +230,14 @@ jobs:
         # if: ${{ startsWith(matrix.os, 'ubuntu-') }}
         run: |
           echo "Git Clone "
-          git clone August2111/OpenSoar
+          git clone https://github.com/August2111/OpenSoar
           git reset --hard $GITHUB_SHA
 
       - name: Check Git Variables
         run: |
           echo "Check git variables"
           echo "CurrDir = $(pwd)"
+          echo "GITHUB_REPO = $GITHUB_REPOSITORY"
           echo "GITHUB_SHA = $GITHUB_SHA"
           GIT_HASH=$(git rev-parse --short $GITHUB_SHA)
           echo "GIT_HASH = $GIT_HASH"
