@@ -14,7 +14,7 @@ on:
       - '.readthedocs.yaml'
     branches:
       - master
-      - dev-branch
+    #  - dev-branch
     tags:
       - 'v*'
 
@@ -31,7 +31,7 @@ on:
       - '.readthedocs.yaml'
     branches:
       - master
-      - dev-branch
+      # - dev-branch
 
 env:
   DEBUG: y

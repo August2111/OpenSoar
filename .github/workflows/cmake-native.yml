@@ -12,8 +12,8 @@ on:
       - '.github/workflows/build-container.yml'
       - '.github/workflows/build-unix.yml'
     branches:
-      - master
-      - dev-branch
+      - cmake-master
+      # - dev-branch
 
   pull_request:
     paths-ignore:
@@ -26,8 +26,8 @@ on:
       - '.github/workflows/build-container.yml'
       - '.github/workflows/build-unix.yml'
     branches:
-      - master
-      - dev-branch
+      - cmake-master
+      # - dev-branch
 
 env:
   DEBUG: y
