@@ -227,10 +227,11 @@ jobs:
             ca-certificates rsync openssh-client
 
       - name: Git clone 
-        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
+        # if: ${{ startsWith(matrix.os, 'ubuntu-') }}
         run: |
           echo "Git Clone "
-          git clone $GITHUB_SHA
+          git clone August2111/OpenSoar
+          git reset --hard $GITHUB_SHA
 
       - name: Check Git Variables
         run: |
