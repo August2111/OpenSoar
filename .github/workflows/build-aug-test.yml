@@ -258,7 +258,8 @@ jobs:
           echo "--------------------"
           echo "GITHUB_REPO = $GITHUB_REPOSITORY"
           echo "GITHUB_SHA = $GITHUB_SHA"
-          GIT_HASH=$(echo ${GITHUB_SHA:0:10})
+          # Bad substitution: GIT_HASH=$(echo ${GITHUB_SHA:0:7} )
+          GIT_HASH=$(echo $GITHUB_SHA | head -c 7)
           echo "GIT_HASH = $GIT_HASH"
 
           ### echo "GIT_HASH = $GIT_SHA"
