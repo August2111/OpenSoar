@@ -15,27 +15,3 @@ echo "GITHUB_SHA = $GITHUB_SHA"
 GIT_HASH=$(echo $GITHUB_SHA | head -c 7)
 echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
 echo "GIT_HASH = $GIT_HASH"
-
-          ### echo "GIT_HASH = $GIT_SHA"
-          ### GIT_HASH=${GITHUB_SHA}
-          ### echo "GIT_HASH = $GIT_HASH"
-          ### echo "Test:= ${{ github.workspace }}"
-          ### echo $GITHUB_SHA | head -c 10
-          ### echo .
-          ### GIT_HASH=$($GITHUB_SHA | head -c 10)
-          ### echo "GIT_HASH = $GIT_HASH"
-          ### GIT_HASH=$(echo $GITHUB_SHA | head -c 10)
-          ### echo "GIT_HASH = $GIT_HASH"
-          ### # echo Test:= $GITHUB_SHA | head -c 10
-          ### # GIT_HASH=$(echo  ${{ github.GITHUB_SHA }} | head -c 10)
-          ### echo "GIT_HASH = $GIT_HASH"
-          ### ###  echo "GIT_HASH = $GIT_HASH"
-          ### ###  ### if [ -z '${{ env.git_hash }}' ]; then
-          ### ###  ###   echo "git_hash isn't set!!!"
-          ### ###  ###   git_hash=$(git rev-parse --short "$GITHUB_SHA")
-          ### ###  ###   echo 'git_hash = $(git rev-parse --short "$GITHUB_SHA")' >> $GITHUB_ENV
-          ### ###  ###   echo "git_hash = ${{ env.git_hash }}"
-          ### ###  ### else
-          ### ###  ###   echo "git_hash = ${{ env.git_hash }}"
-          ### ###  ###   echo "git_hash = $git_hash"
-          ### ###  ### fi
