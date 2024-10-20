@@ -312,6 +312,7 @@ jobs:
         run: |
           echo "Check Test Variables"
           echo "GIT_HASH = $GIT_HASH"
+          echo "GIT_HASH(3) = ${{ env.GIT_HASH }} "
 
   test:
     runs-on: ${{ matrix.os }}
