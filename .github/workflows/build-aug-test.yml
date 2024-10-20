@@ -253,9 +253,9 @@ jobs:
       - name: Check Git Variables
         run: |
           echo "Check Git Variables"
-          chmod +x ./ide/github/build.sh
           echo "CurrDir = $(pwd)"
           ls -l .
+          chmod +x ./ide/github/build.sh
           ./ide/github/build.sh
           ####    echo "Check git variables"
           ####    echo "CurrDir = $(pwd)"
