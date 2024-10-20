@@ -261,8 +261,8 @@ jobs:
           echo "GIT_HASH = $GIT_SHA"
           GIT_HASH=${GITHUB_SHA}
           echo "GIT_HASH = $GIT_HASH"
-          echo "Test:= ${{ github.workspace:0:7 }}"
-          GIT_HASH=${github.GITHUB_SHA:0:7 }
+          echo "Test:= ${{ github.workspace }}"
+          GIT_HASH=$(${github.GITHUB_SHA:0:7})
           echo "GIT_HASH = $GIT_HASH"
           ###  echo "GIT_HASH = $GIT_HASH"
           ###  ### if [ -z '${{ env.git_hash }}' ]; then
