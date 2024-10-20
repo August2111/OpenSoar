@@ -261,6 +261,9 @@ jobs:
           chmod +x ./ide/github/build.sh
           ./ide/github/build.sh
           # echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
+          echo "GIT_HASH(2) = $GIT_HASH"
+          GIT_HASH=$(echo $GITHUB_SHA | head -c 7)
+          echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
           echo "GIT_HASH = $GIT_HASH"
         working-directory: ${{ github.workspace }}
           ####    echo "Check git variables"

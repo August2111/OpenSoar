@@ -14,6 +14,5 @@ echo "GITHUB_SHA = $GITHUB_SHA"
 # Bad substitution: GIT_HASH=$(echo ${GITHUB_SHA:0:7} )
 
 GIT_HASH=$(echo $GITHUB_SHA | head -c 7)
-GIT_HASH=1234567
 echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
 echo "GIT_HASH = $GIT_HASH"
