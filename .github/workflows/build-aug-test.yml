@@ -90,6 +90,8 @@ jobs:
         id: get_version
         run: |
           echo "Get OpenSoar Version"
+          echo "CurrDir = $(pwd)"
+          ls -l .
           chmod +x ./ide/github/build.sh
           ./ide/github/build.sh
           ####    # include OpenSoar.config
@@ -252,6 +254,8 @@ jobs:
         run: |
           echo "Check Git Variables"
           chmod +x ./ide/github/build.sh
+          echo "CurrDir = $(pwd)"
+          ls -l .
           ./ide/github/build.sh
           ####    echo "Check git variables"
           ####    echo "CurrDir = $(pwd)"
@@ -321,6 +325,8 @@ jobs:
       - name: OpenSoar run checks on ${{ matrix.target }}
         run: |
           echo "OpenSoar run checks on ${{ matrix.target }}"
+          echo "CurrDir = $(pwd)"
+          ls -l .
           chmod +x ./ide/github/build.sh
           ./ide/github/build.sh
           # echo "run tests on Target '${{ matrix.target }}'"
