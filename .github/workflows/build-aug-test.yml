@@ -259,7 +259,7 @@ jobs:
         run: |
           echo "Check Git Variables"
           echo "CurrDir = $(pwd)"
-          # ls -l .
+          ls -l .git/
           chmod +x ./ide/github/build.sh
           ./ide/github/build.sh
           echo "GIT_HASH = $GIT_HASH"
