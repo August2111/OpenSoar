@@ -266,10 +266,10 @@ jobs:
           echo .
           GIT_HASH=$($GITHUB_SHA | head -c 10)
           echo "GIT_HASH = $GIT_HASH"
-          GIT_HASH=$($github.GITHUB_SHA | head -c 10)
+          GIT_HASH=$(echo $GITHUB_SHA | head -c 10)
           echo "GIT_HASH = $GIT_HASH"
           # echo Test:= $GITHUB_SHA | head -c 10
-          # GIT_HASH=$(${{ github.GITHUB_SHA }} | head -c 10)
+          # GIT_HASH=$(echo  ${{ github.GITHUB_SHA }} | head -c 10)
           echo "GIT_HASH = $GIT_HASH"
           ###  echo "GIT_HASH = $GIT_HASH"
           ###  ### if [ -z '${{ env.git_hash }}' ]; then
