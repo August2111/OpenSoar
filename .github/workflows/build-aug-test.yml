@@ -37,7 +37,8 @@ env:
   DEBUG: y
   BOOST: boost_1_85_0
   GIT_SHA: GITHUB_SHA
-  GIT_HASH: $(git rev-parse --short $GITHUB_SHA)
+  GIT_HASH: $(GITHUB_SHA:0:7)
+  ### GIT_HASH: $(git rev-parse --short $GITHUB_SHA)
 
 jobs:
   release:
