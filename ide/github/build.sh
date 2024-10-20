@@ -1,6 +1,6 @@
 echo "Check git variables"
 echo "CurrDir = $(pwd)"
-echo "github.workspace = ${{ github.workspace }}"
+# echo "github.workspace = ${{ github.workspace }}"
 echo "GITHUB_WORKSPACE = $GITHUB_WORKSPACE"
 echo "GITHUB_ENV = $GITHUB_ENV"
 echo "--------------------"
