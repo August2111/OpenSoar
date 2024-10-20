@@ -265,6 +265,7 @@ jobs:
           GIT_HASH=$(echo $GITHUB_SHA | head -c 7)
           echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
           echo "GIT_HASH = $GIT_HASH"
+          echo "GIT_HASH(3) = ${{ env.GIT_HASH }} "
         working-directory: ${{ github.workspace }}
           ####    echo "Check git variables"
           ####    echo "CurrDir = $(pwd)"

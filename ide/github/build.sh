@@ -16,3 +16,4 @@ echo "GITHUB_SHA = $GITHUB_SHA"
 GIT_HASH=$(echo $GITHUB_SHA | head -c 7)
 echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
 echo "GIT_HASH = $GIT_HASH"
+export GIT_HASH=$GIT_HASH
