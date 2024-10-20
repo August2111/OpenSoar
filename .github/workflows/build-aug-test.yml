@@ -308,6 +308,10 @@ jobs:
           ### ###  ###   echo "git_hash = $git_hash"
           ### ###  ### fi
         
+      - name: Check Test Variables
+        run: |
+          echo "Check Test Variables"
+          echo "GIT_HASH = $GIT_HASH"
 
   test:
     runs-on: ${{ matrix.os }}
