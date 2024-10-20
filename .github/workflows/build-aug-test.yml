@@ -247,7 +247,7 @@ jobs:
         # if: ${{ startsWith(matrix.os, 'ubuntu-') }}
         run: |
           echo "Git Clone "
-          git clone $GITHUB_REPOSITORY
+          git clone https://github.com/$GITHUB_REPOSITORY
           git reset --hard $GITHUB_SHA
 
       - name: Check Git Variables
