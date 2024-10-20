@@ -259,9 +259,10 @@ jobs:
         run: |
           echo "Check Git Variables"
           echo "CurrDir = $(pwd)"
-          ls -l .
-          chmod +x ./ide/github/build.sh
+          # ls -l .
+          # chmod +x ./ide/github/build.sh
           ./ide/github/build.sh
+          echo "GIT_HASH = $GIT_HASH"
         working-directory: ${{ github.workspace }}
           ####    echo "Check git variables"
           ####    echo "CurrDir = $(pwd)"
