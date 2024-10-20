@@ -257,6 +257,7 @@ jobs:
           ls -l .
           chmod +x ./ide/github/build.sh
           ./ide/github/build.sh
+        working-directory: ${{ github.workspace }}
           ####    echo "Check git variables"
           ####    echo "CurrDir = $(pwd)"
           ####    echo "github.workspace = ${{ github.workspace }}"
