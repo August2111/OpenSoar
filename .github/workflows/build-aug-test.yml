@@ -235,13 +235,13 @@ jobs:
             target_container: ''
 
     steps:
-      #### - name: Install checkout dependencies
-      ####   if: ${{ startsWith(matrix.os, 'ubuntu-') }}
-      ####   run: |
-      ####     echo "Install checkout dependencies: ${{ matrix.target }} "
-      ####     apt-get update
-      ####     apt-get install -y --no-install-recommends git \
-      ####       ca-certificates rsync openssh-client
+      - name: Install checkout dependencies
+        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
+        run: |
+          echo "Install checkout dependencies: ${{ matrix.target }} "
+          apt-get update
+          apt-get install -y --no-install-recommends git \
+            ca-certificates rsync openssh-client
 
       ### - name: Git clone 
       ###   # if: ${{ startsWith(matrix.os, 'ubuntu-') }}
