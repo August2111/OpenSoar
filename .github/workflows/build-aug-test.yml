@@ -325,10 +325,13 @@ jobs:
           set COMMIT=12345678
           echo "env.BOOST = ${{ env.BOOST }} "
           echo "env.DEBUG = ${{ env.DEBUG }} "
+          set BOOST=${{ env.BOOST }}
           echo "BOOST = ${{ env.BOOST }} "
           echo "BOOST = %env.BOOST% "
           echo "BOOST = %BOOST% "
           echo "BOOST = \%env.BOOST\% "
+          echo "BOOST = ${{ BOOST }} "
+          echo "BOOST = $BOOST "
           echo "1"
           echo "2"
           echo "3"
