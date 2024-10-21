@@ -36,7 +36,7 @@ on:
 env:
   DEBUG: y
   BOOST: boost_1_85_0
-  # GIT_HASH: ${GITHUB_SHA:0:7}
+  # GIT_COMMIT: ${GITHUB_SHA:0:7}
 
 jobs:
   release:
@@ -99,16 +99,16 @@ jobs:
           ####    echo "$VERSION"
           ####    echo "VERSION=${VERSION}" >> $GITHUB_ENV
           ####    echo "GITHUB_SHA = $GITHUB_SHA"
-          ####    echo "GIT_HASH = $GIT_HASH"
-          ####    GIT_HASH=$(git rev-parse --short $GITHUB_SHA)
-          ####    echo "GIT_HASH = $GIT_HASH"
-          ####    GIT_HASH=${GITHUB_SHA:0:7}
-          ####    echo "GIT_HASH = $GIT_HASH"
+          ####    echo "GIT_COMMIT = $GIT_COMMIT"
+          ####    GIT_COMMIT=$(git rev-parse --short $GITHUB_SHA)
+          ####    echo "GIT_COMMIT = $GIT_COMMIT"
+          ####    GIT_COMMIT=${GITHUB_SHA:0:7}
+          ####    echo "GIT_COMMIT = $GIT_COMMIT"
           ####    echo "PRERELEASE = $PRERELEASE"
           ####    echo "GITHUB_ENV = $GITHUB_ENV"
           ####    echo "PRERELEASE = ${{ env.PRERELEASE }}"
           ####    echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
-          ####    echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
+          ####    echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
           ####    echo "git_hash = ${{ env.git_hash }}"
           ####    echo "git_hash = $git_hash"
           ####    if [ -z ${{ env.git_hash }} ]; then
@@ -124,160 +124,153 @@ jobs:
           ####    cat OpenSoar.config
           ####    echo "--------------------"
 
-  ###build:
-  ###  runs-on: ${{ matrix.os }}
-  ###  needs: release
-  ###  container: ${{ matrix.target_container }}
-  ###  strategy:
-  ###    fail-fast: false
-  ###    matrix:
-  ###      include:
-  ###        - os: ubuntu-22.04
-  ###          target: ANDROIDAARCH64
-  ###          target_bin: OpenSoar
-  ###          target_bin_path: bin
-  ###          target_final: OpenSoar
-  ###          target_ext: .apk
-  ###          target_test: true
-  ###          target_upload: true
-  ###          upload_artifact: false
-  ###          ndk: r26d
-  ###          target_container: debian:bookworm-slim
-  ###        
-  ###        - os: ubuntu-24.04
-  ###          target: ANDROID
-  ###          target_bin: OpenSoar
-  ###          target_bin_path: bin
-  ###          target_final: OpenSoar
-  ###          target_ext: .apk
-  ###          target_test: false
-  ###          target_upload: true
-  ###          upload_artifact: true
-  ###          ndk: r26d
-  ###          target_container: debian:bookworm-slim
-# ###------------------------------------------------------
-  ###        - os: ubuntu-24.04
-  ###          target: UNIX
-  ###          target_bin: OpenSoar_${{ needs.release.outputs.version }}_amd64
-  ###          target_bin_path: ''
-  ###          target_final: OpenSoar_
-  ###          target_ext: .deb
-  ###          target_test: true
-  ###          target_upload: true
-  ###          upload_artifact: false
-  ###          target_container: debian:bookworm-slim
-  ###        
-  ###        - os: ubuntu-24.04
-  ###          target: KOBO
-  ###          target_bin: KoboRoot
-  ###          target_bin_path: 'bin'
-  ###          target_final: KoboRoot
-  ###          target_ext: .tgz
-  ###          target_upload: true
-  ###          upload_artifact: false
-  ###          target_container: debian:bookworm-slim
-  ###        
-  ###        - os: ubuntu-24.04
-  ###          target: WIN64
-  ###          target_bin: OpenSoar
-  ###          target_bin_path: bin
-  ###          target_final: OpenSoar
-  ###          target_ext: .exe
-  ###          target_test: true
-  ###          target_upload: true
-  ###          upload_artifact: true
-  ###          target_container: debian:bookworm-slim
-  ###        
-  ###        - os: ubuntu-24.04
-  ###          target: PC
-  ###          target_bin: OpenSoar
-  ###          target_bin_path: bin
-  ###          target_final: OpenSoar
-  ###          target_ext: .exe
-  ###          target_test: true
-  ###          target_upload: true
-  ###          upload_artifact: false
-  ###          target_container: debian:bookworm-slim
-  ###        
-  ###        - os: macos-12
-  ###          target: OSX64
-  ###          target_bin: OpenSoar
-  ###          target_bin_path: bin
-  ###          target_final: OpenSoar
-  ###          target_ext: ''
-  ###          target_test: false
-  ###          target_upload: false
-  ###          upload_artifact: true
-  ###          target_container: ''
-  ###        
-  ###        - os: macos-14
-  ###          target: MACOS
-  ###          target_bin: OpenSoar
-  ###          target_bin_path: bin
-  ###          target_final: OpenSoar
-  ###          target_ext: ''
-  ###          target_test: true
-  ###          target_upload: false
-  ###          upload_artifact: false
-  ###          target_container: ''
-  ###        
-  ###        - os: macos-14
-  ###          target: IOS64
-  ###          target_bin: OpenSoar
-  ###          target_bin_path: bin
-  ###          target_final: OpenSoar
-  ###          target_ext: ''
-  ###          target_test: false
-  ###          target_upload: false
-  ###          upload_artifact: false
-  ###          target_container: ''
-  ###
-  ###  steps:
-  ###    - name: Install checkout dependencies
-  ###      if: ${{ startsWith(matrix.os, 'ubuntu-') }}
-  ###      run: |
-  ###        echo "Install checkout dependencies: ${{ matrix.target }} "
-  ###        apt-get update
-  ###        apt-get install -y --no-install-recommends git \
-  ###          ca-certificates rsync openssh-client
-  ###
-  ###    ### - name: Git clone 
-  ###    ###   # if: ${{ startsWith(matrix.os, 'ubuntu-') }}
-  ###    ###   run: |
-  ###    ###     echo "Git Clone "
-  ###    ###     git clone https://github.com/$GITHUB_REPOSITORY
-  ###    ###     git reset --hard $GITHUB_SHA
-  ###    - name: Checkout code
-  ###      uses: actions/checkout@v4
-  ###      with:
-  ###        submodules: true
-  ###
-  ###    - name: Check Git Variables
-  ###      run: |
-  ###        echo "Check Git Variables"
-  ###        GIT_HASH=$(echo $GITHUB_SHA | head -c 7)
-  ###        echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
-  ###      
-  ###    - name: Check Test Variables
-  ###      run: |
-  ###        echo "Check Test Variables"
-  ###        echo "GIT_HASH     = $GIT_HASH"
-  ###        echo "env.GIT_HASH = ${{ env.GIT_HASH }} "
-  ###
-  ###    - name: Upload Test artifact
-  ###      uses: actions/upload-artifact@v4
-  ###      if: ${{ matrix.target_test }}
-  ###      ## if: ${{ matrix.target_test || startsWith(github.ref, 'refs/tags/v')}}
-  ###      with:
-  ###        name: Test-${{ env.GIT_HASH }}-${{ matrix.target }}
-  ###        path: |
-  ###          ide/github/*
-  ###          ### output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*
-  ###          ### output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*
-  ###          
-  ###          # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
-  ###          # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*${{ matrix.target_ext }}
-  ###        retention-days: 1
+  build:
+    runs-on: ${{ matrix.os }}
+    needs: release
+    container: ${{ matrix.target_container }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            target: ANDROIDAARCH64
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: .apk
+            target_test: true
+            target_upload: true
+            upload_artifact: false
+            ndk: r26d
+            target_container: debian:bookworm-slim
+          
+          - os: ubuntu-24.04
+            target: ANDROID
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: .apk
+            target_test: false
+            target_upload: true
+            upload_artifact: true
+            ndk: r26d
+            target_container: debian:bookworm-slim
+            #  -----------------------------------------------------
+          - os: ubuntu-24.04
+            target: UNIX
+            target_bin: OpenSoar_${{ needs.release.outputs.version }}_amd64
+            target_bin_path: ''
+            target_final: OpenSoar_
+            target_ext: .deb
+            target_test: true
+            target_upload: true
+            upload_artifact: false
+            target_container: debian:bookworm-slim
+          
+          - os: ubuntu-24.04
+            target: KOBO
+            target_bin: KoboRoot
+            target_bin_path: 'bin'
+            target_final: KoboRoot
+            target_ext: .tgz
+            target_upload: true
+            upload_artifact: false
+            target_container: debian:bookworm-slim
+          
+          - os: ubuntu-24.04
+            target: WIN64
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: .exe
+            target_test: true
+            target_upload: true
+            upload_artifact: true
+            target_container: debian:bookworm-slim
+          
+          - os: ubuntu-24.04
+            target: PC
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: .exe
+            target_test: true
+            target_upload: true
+            upload_artifact: false
+            target_container: debian:bookworm-slim
+          
+          - os: macos-12
+            target: OSX64
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: ''
+            target_test: false
+            target_upload: false
+            upload_artifact: true
+            target_container: ''
+          
+          - os: macos-14
+            target: MACOS
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: ''
+            target_test: true
+            target_upload: false
+            upload_artifact: false
+            target_container: ''
+          
+          - os: macos-14
+            target: IOS64
+            target_bin: OpenSoar
+            target_bin_path: bin
+            target_final: OpenSoar
+            target_ext: ''
+            target_test: false
+            target_upload: false
+            upload_artifact: false
+            target_container: ''
+   
+    steps:
+      - name: Install checkout dependencies
+        if: ${{ startsWith(matrix.os, 'ubuntu-') }}
+        run: |
+          echo "Install checkout dependencies: ${{ matrix.target }} "
+          apt-get update
+          apt-get install -y --no-install-recommends git \
+            ca-certificates rsync openssh-client
+   
+   - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+   
+      - name: Check Git Variables
+        run: |
+          echo "Check Git Variables"
+          GIT_COMMIT=$(echo $GITHUB_SHA | head -c 7)
+          echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
+        
+      - name: Check Test Variables
+        run: |
+          echo "Check Test Variables"
+          echo "GIT_COMMIT     = $GIT_COMMIT"
+          echo "env.GIT_COMMIT = ${{ env.GIT_COMMIT }} "
+   
+      - name: Upload Test artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ matrix.target_test }}
+        ## if: ${{ matrix.target_test || startsWith(github.ref, 'refs/tags/v')}}
+        with:
+          name: Test-${{ env.GIT_COMMIT }}-${{ matrix.target }}
+          path: |
+            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*
+            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*
+            
+            # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
+            # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*${{ matrix.target_ext }}
+          retention-days: 1
 
   test:
     runs-on: ${{ matrix.os }}
@@ -295,109 +288,63 @@ jobs:
 
     needs: release
     steps:
-      ### - name: Install Dependencies
-      ###   if: ${{ ! startsWith(matrix.os, 'macos-') }}
-      ###   run: |
-      ###     echo "Install Dependencies: ${{ matrix.target }} "
-      ###     apt-get update
-      ###     apt-get install -y --no-install-recommends git \
-      ###       ca-certificates rsync openssh-client
+      - name: Install Dependencies
+        if: ${{ ! startsWith(matrix.os, 'macos-') }}
+        run: |
+          echo "Install Dependencies: ${{ matrix.target }} "
+          apt-get update
+          apt-get install -y --no-install-recommends git \
+            ca-certificates rsync openssh-client
       - id: checkout
         uses: actions/checkout@v4
       - name: Set Git Variables
-        # if: ${{ ! startsWith(matrix.os, 'windows-') }}
+        if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Set Git Variables"
-          if [ ${{ ! startsWith(matrix.os, 'windows-') }} ]; then
-            echo "Non Windows---"
-          else
-            echo "Windows ++++++"
-          fi
-          if [ ${{ startsWith(matrix.os, 'windows-') }} ]; then
-            echo "Windows ++++++"
-          fi
           echo "BOOST = ${{ env.BOOST }} "
           echo "DEBUG = ${{ env.DEBUG }} "
           set GIT_COMMIT=12345678
           echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
-          echo "GIT_HASH=$(echo ${{ env.GITHUB_SHA }} | head -c 7)" >> $GITHUB_ENV
+          echo "GIT_COMMIT=$(echo ${{ env.GITHUB_SHA }} | head -c 7)" >> $GITHUB_ENV
           # echo "GIT_COMMIT=12345678" >> $GITHUB_ENV
-          # echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
+          # echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
       - name: Set Git Variables (Windows)
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Set Git Variables (Windows)"
-          # dir
-          # dir ide\github
-          set COMMIT=12345678
-          echo "env.BOOST = ${{ env.BOOST }} "
-          echo "env.DEBUG = ${{ env.DEBUG }} "
-          echo "BOOST = ${{ env.BOOST }} "
-          echo "BOOST = %env.BOOST% "
-          echo "BOOST = %BOOST% "
-          echo "BOOST = \%env.BOOST\% "
-          echo "1"
-          echo "2"
-          echo "3"
-          echo "XXX=$env:GITHUB_SHA" >>  $env:GITHUB_ENV
-          set XXX=$env.GITHUB_SHA
-          $YYY = $env:GITHUB_SHA
-          echo "YYY = $YYY"
-          $YYY = $env:GITHUB_SHA.substring(0,7)
           $COMMIT = $env:GITHUB_SHA.substring(0,7)
-          echo "YYY = $YYY"
-          echo "XXX = %XXX%"
-          echo "XXX = %XXX:~0,3%"
-          echo "XXX = $XXX"
-          echo "XXX=$env:XXX"
-          echo "GIT_COMMIT=$YYY" >> $env:GITHUB_ENV
-          # echo "GIT_HASH=$env:GITHUB_SHA" >> $env:GITHUB_ENV
-          echo "GIT_HASH=$COMMIT" >> $env:GITHUB_ENV
-          echo "type env:GITHUB_ENV = $env:GITHUB_ENV"
+          echo "GIT_COMMIT=$COMMIT" >> $env:GITHUB_ENV
           echo "========================"
-          type $env:GITHUB_ENV
-          echo "type ide\github\build.sh"
-          echo "========================"
-          type ide\github\build.sh
-          echo "========================"
-          type ide\github\test-build.py
-          
-          chmod +x ./ide/github/test-build.py
-          echo "Run 'test-build.py' ========"
-          ./ide/github/test-build.py
-          
-          echo "env:TEST_ENV = $env:TEST_ENV"
       - name: Check Test Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Check Test Variables"
-          ## echo "GIT_HASH     = $GIT_HASH"
-          echo "env.GIT_HASH = ${{ env.GIT_HASH }} "
+          echo "env.GIT_COMMIT = ${{ env.GIT_COMMIT }} "
           echo "GIT_COMMIT   = $GIT_COMMIT"
           echo "env.GIT_COMMIT = ${{ env.GIT_COMMIT }} "
       - name: Check Test Variables (Windows)
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Check Test Variables (Windows)"
-          echo "env:GIT_HASH = $env:GIT_HASH "
-          set GIT_HASH="Irgendwas"
+          echo "env:GIT_COMMIT = $env:GIT_COMMIT "
+          set GIT_COMMIT="Irgendwas"
           set GIT_COMMIT="87654321"
-          echo "GIT_HASH     = %GIT_HASH%"
+          echo "GIT_COMMIT     = %GIT_COMMIT%"
           echo "GIT_COMMIT   = %GIT_COMMIT%"
           echo "env:GITHUB_SHA = $env:GITHUB_SHA "
           echo "env:GIT_COMMIT = $env:GIT_COMMIT "
-      ### - name: Fetch Artifacts
-      ###   uses: actions/download-artifact@v4
-      ###   with:
-      ###     name: Test-${{ env.GIT_HASH }}-${{ matrix.target }}
-      ###     path: ${{ github.workspace }}/output/${{ matrix.target }}/bin
-      ### - name: OpenSoar run checks on ${{ matrix.target }}
-      ###   run: |
-      ###     echo "OpenSoar run checks on ${{ matrix.target }}"
-      ###     echo "CurrDir = $(pwd)"
-      ###     ls -l .
-      ###     #### chmod +x ./ide/github/build.sh
-      ###     #### ./ide/github/build.sh
-      ###     # echo "run tests on Target '${{ matrix.target }}'"
-      ###     # make check-no-build TARGET=${{ matrix.target }}
-      ###   working-directory: ${{ github.workspace }}
+      - name: Fetch Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: Test-${{ env.GIT_COMMIT }}-${{ matrix.target }}
+          path: ${{ github.workspace }}/output/${{ matrix.target }}/bin
+      - name: OpenSoar run checks on ${{ matrix.target }}
+        run: |
+          echo "OpenSoar run checks on ${{ matrix.target }}"
+          echo "CurrDir = $(pwd)"
+          # ls -l .
+          #### chmod +x ./ide/github/build.sh
+          #### ./ide/github/build.sh
+          echo "run tests on Target '${{ matrix.target }}'"
+          make check-no-build TARGET=${{ matrix.target }}
+        working-directory: ${{ github.workspace }}
