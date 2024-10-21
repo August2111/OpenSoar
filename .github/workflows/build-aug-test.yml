@@ -305,6 +305,7 @@ jobs:
       - id: checkout
         uses: actions/checkout@v4
       - name: Check Git Variables
+        if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Check Git Variables"
           GIT_COMMIT=12345678
@@ -312,6 +313,14 @@ jobs:
           echo "GIT_HASH=$(echo $GITHUB_SHA | head -c 7)" >> $GITHUB_ENV
           echo "GIT_COMMIT=12345678" >> $GITHUB_ENV
           # echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
+      - name: Check Git Variables (Windows)
+        if: ${{ startsWith(matrix.os, 'windows-') }}
+        run: |
+          echo "Check Git Variables (Windows)"
+          set GIT_COMMIT=12345678
+          echo "set GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
+          echo "set GIT_HASH=$(echo $GITHUB_SHA | head -c 7)" >> $GITHUB_ENV
+          echo "set GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
       - name: Check Test Variables
         run: |
           echo "Check Test Variables"
