@@ -284,14 +284,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows-latest
-            target: WIN64
-          - os: windows-latest
-            target: PC
           - os: ubuntu-
             target: UNIX
           - os: macos-14
             target: MACOS
+          - os: windows-latest
+            target: WIN64
+          - os: windows-latest
+            target: PC
 
     needs: build
     steps:
@@ -311,7 +311,7 @@ jobs:
           GIT_COMMIT=12345678
           echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
           echo "GIT_HASH=$(echo $GITHUB_SHA | head -c 7)" >> $GITHUB_ENV
-          echo "GIT_COMMIT=12345678" >> $GITHUB_ENV
+          # echo "GIT_COMMIT=12345678" >> $GITHUB_ENV
           # echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
       - name: Check Git Variables (Windows)
         if: ${{ startsWith(matrix.os, 'windows-') }}
@@ -319,9 +319,9 @@ jobs:
           echo "Check Git Variables (Windows)"
           type $GITHUB_ENV
           set GIT_COMMIT=12345678
-          echo "set GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
-          echo "set GIT_HASH=$(echo $GITHUB_SHA | head -c 7)" >> $GITHUB_ENV
-          echo "set GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
+          echo "set GIT_COMMIT=%GIT_COMMIT%" >> $GITHUB_ENV
+          echo "GIT_HASH=%var:~0,7%" >> $GITHUB_ENV
+          # echo "set GIT_HASH=%GIT_HASH%" >> $GITHUB_ENV
       - name: Check Test Variables
         run: |
           echo "Check Test Variables"
