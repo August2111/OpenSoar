@@ -320,8 +320,8 @@ jobs:
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Set Git Variables (Windows)"
-          REM dir
-          REM dir ide\github
+          # dir
+          # dir ide\github
           set COMMIT=12345678
           echo "env.BOOST = ${{ env.BOOST }} "
           echo "env.DEBUG = ${{ env.DEBUG }} "
