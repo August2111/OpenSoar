@@ -308,6 +308,7 @@ jobs:
         run: |
           echo "Check Git Variables"
           echo "GIT_HASH=$(echo $GITHUB_SHA | head -c 7)" >> $GITHUB_ENV
+          echo "GIT_COMMIT=12345678" >> $GITHUB_ENV
           # echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
         
       - name: Fetch Artifacts
