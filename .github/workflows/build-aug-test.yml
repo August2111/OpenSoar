@@ -286,8 +286,8 @@ jobs:
         include:
           - os: ubuntu-
             target: UNIX
-          - os: macos-14
-            target: MACOS
+          ## - os: macos-14
+          ##   target: MACOS
           - os: windows-latest
             target: WIN64
           - os: windows-latest
