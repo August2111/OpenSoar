@@ -334,6 +334,10 @@ jobs:
           echo "3"
           echo "XXX=$env:GITHUB_SHA" >>  $env:GITHUB_ENV
           set XXX=$env.GITHUB_SHA
+          $YYY = $env:GITHUB_SHA
+          echo "YYY = $YYY"
+          $YYY = $env:GITHUB_SHA.substring(0,7)
+          echo "YYY = $YYY"
           echo "XXX = %XXX%"
           echo "XXX = %XXX:~0,3%"
           echo "XXX = $XXX"
