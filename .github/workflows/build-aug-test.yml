@@ -284,10 +284,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-
+          # - os: ubuntu-24.04
+          - os: ubuntu-latest
             target: UNIX
-          ## - os: macos-14
-          ##   target: MACOS
+          - os: macos-14
+            target: MACOS
           - os: windows-latest
             target: WIN64
           - os: windows-latest
