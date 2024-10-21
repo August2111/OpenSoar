@@ -308,12 +308,12 @@ jobs:
         # if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Set Git Variables"
-          if ${{ ! startsWith(matrix.os, 'windows-') }}; then
+          if (${{ ! startsWith(matrix.os, 'windows-') }}); then
             echo "Non Windows---"
           # else
           #   echo "Windows ++++++"
           fi
-          if ${{ startsWith(matrix.os, 'windows-') }}; then
+          if (${{ startsWith(matrix.os, 'windows-') }}); then
             echo "Windows ++++++"
           fi
           echo "BOOST = ${{ env.BOOST }} "
