@@ -335,7 +335,7 @@ jobs:
           echo "BOOST = $(echo ${{ env.BOOST }}:0:5) "
           echo "BOOST = ${{ env.BOOST }}:0:5 "
           set XXX=${{ env.GITHUB_SHA }}
-          echo XXX=${{ env.GITHUB_SHA }} >>  ${{ env:GITHUB_ENV }}
+          echo XXX=${{ env.GITHUB_SHA }} >>  $env:GITHUB_ENV
           echo "XXX = %XXX%"
           echo "XXX = %XXX:~0,3%"
           echo "XXX=${{ env.XXX }}"
