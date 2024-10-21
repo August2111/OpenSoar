@@ -36,7 +36,6 @@ on:
 env:
   DEBUG: y
   BOOST: boost_1_85_0
-  # GIT_COMMIT: ${GITHUB_SHA:0:7}
 
 jobs:
   release:
@@ -286,7 +285,7 @@ jobs:
           - os: windows-latest
             target: PC
 
-    needs: release
+    needs: build
     steps:
       - name: Install Dependencies
         if: ${{ ! startsWith(matrix.os, 'macos-') }}
