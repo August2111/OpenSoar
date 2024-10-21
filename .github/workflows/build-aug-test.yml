@@ -337,13 +337,15 @@ jobs:
           $YYY = $env:GITHUB_SHA
           echo "YYY = $YYY"
           $YYY = $env:GITHUB_SHA.substring(0,7)
+          $COMMIT = $env:GITHUB_SHA.substring(0,7)
           echo "YYY = $YYY"
           echo "XXX = %XXX%"
           echo "XXX = %XXX:~0,3%"
           echo "XXX = $XXX"
           echo "XXX=$env:XXX"
-          echo "GIT_COMMIT=$COMMIT" >> $env:GITHUB_ENV
-          echo "GIT_HASH=$env:GITHUB_SHA" >> $env:GITHUB_ENV
+          echo "GIT_COMMIT=$YYY" >> $env:GITHUB_ENV
+          # echo "GIT_HASH=$env:GITHUB_SHA" >> $env:GITHUB_ENV
+          echo "GIT_HASH=$COMMIT" >> $env:GITHUB_ENV
           echo "type env:GITHUB_ENV = $env:GITHUB_ENV"
           echo "========================"
           type $env:GITHUB_ENV
