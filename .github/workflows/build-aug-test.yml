@@ -292,10 +292,6 @@ jobs:
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Set Git Variables"
-          ### 06 echo "BOOST = ${{ env.BOOST }} "
-          ### 06 echo "DEBUG = ${{ env.DEBUG }} "
-          ### 06 set GIT_COMMIT=12345678
-          ### 06 echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
           echo "GIT_COMMIT=$(echo ${{ env.GITHUB_SHA }} | head -c 7)" >> $GITHUB_ENV
           # echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
       - name: Set Git Variables (Windows)
@@ -305,24 +301,6 @@ jobs:
           $COMMIT = $env:GITHUB_SHA.substring(0,7)
           echo "GIT_COMMIT=$COMMIT" >> $env:GITHUB_ENV
           echo "========================"
-      ### 06- name: Check Test Variables
-      ### 06  if: ${{ ! startsWith(matrix.os, 'windows-') }}
-      ### 06  run: |
-      ### 06    echo "Check Test Variables"
-      ### 06    echo "env.GIT_COMMIT = ${{ env.GIT_COMMIT }} "
-      ### 06    echo "GIT_COMMIT   = $GIT_COMMIT"
-      ### 06    echo "env.GIT_COMMIT = ${{ env.GIT_COMMIT }} "
-      ### 06- name: Check Test Variables (Windows)
-      ### 06  if: ${{ startsWith(matrix.os, 'windows-') }}
-      ### 06  run: |
-      ### 06    echo "Check Test Variables (Windows)"
-      ### 06    echo "env:GIT_COMMIT = $env:GIT_COMMIT "
-      ### 06    set GIT_COMMIT="Irgendwas"
-      ### 06    set GIT_COMMIT="87654321"
-      ### 06    echo "GIT_COMMIT     = %GIT_COMMIT%"
-      ### 06    echo "GIT_COMMIT   = %GIT_COMMIT%"
-      ### 06    echo "env:GITHUB_SHA = $env:GITHUB_SHA "
-      ### 06    echo "env:GIT_COMMIT = $env:GIT_COMMIT "
       - name: Fetch Artifacts
         uses: actions/download-artifact@v4
         with:
