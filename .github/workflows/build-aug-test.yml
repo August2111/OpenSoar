@@ -320,8 +320,8 @@ jobs:
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Set Git Variables (Windows)"
-          dir
-          dir ide\github
+          REM dir
+          REM dir ide\github
           set COMMIT=12345678
           echo "env.BOOST = ${{ env.BOOST }} "
           echo "env.DEBUG = ${{ env.DEBUG }} "
@@ -334,10 +334,11 @@ jobs:
           echo "3"
           echo "BOOST = $(echo ${{ env.BOOST }}:0:5) "
           echo "BOOST = ${{ env.BOOST }}:0:5 "
-          set XXX=${{ env.GITHUB_SHA }}
-          echo XXX=${{ env.GITHUB_SHA }} >>  $env:GITHUB_ENV
+          echo "XXX=$env.GITHUB_SHA" >>  $env:GITHUB_ENV
+          set XXX=$env.GITHUB_SHA
           echo "XXX = %XXX%"
           echo "XXX = %XXX:~0,3%"
+          echo "XXX = $XXX"
           echo "XXX=${{ env.XXX }}"
           echo "GIT_COMMIT=${{ env.COMMIT }}" >> $env:GITHUB_ENV
           echo "GIT_HASH=$env:GITHUB_SHA" >> $env:GITHUB_ENV
