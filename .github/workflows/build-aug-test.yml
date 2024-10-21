@@ -240,7 +240,7 @@ jobs:
           apt-get install -y --no-install-recommends git \
             ca-certificates rsync openssh-client
    
-      - name: Checkout code
+   - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: true
@@ -287,25 +287,24 @@ jobs:
 
     needs: build
     steps:
-      - name: Install Dependencies
-        if: ${{ ! startsWith(matrix.os, 'macos-') }}
-        run: |
-          echo "Install Dependencies: ${{ matrix.target }} "
-          apt-get update
-          apt-get install -y --no-install-recommends git \
-            ca-certificates rsync openssh-client
+      #### 06 - name: Install Dependencies
+      #### 06   if: ${{ ! startsWith(matrix.os, 'macos-') }}
+      #### 06   run: |
+      #### 06     echo "Install Dependencies: ${{ matrix.target }} "
+      #### 06     apt-get update
+      #### 06     apt-get install -y --no-install-recommends git \
+      #### 06       ca-certificates rsync openssh-client
       - id: checkout
         uses: actions/checkout@v4
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Set Git Variables"
-          echo "BOOST = ${{ env.BOOST }} "
-          echo "DEBUG = ${{ env.DEBUG }} "
-          set GIT_COMMIT=12345678
-          echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
+          ### 06 echo "BOOST = ${{ env.BOOST }} "
+          ### 06 echo "DEBUG = ${{ env.DEBUG }} "
+          ### 06 set GIT_COMMIT=12345678
+          ### 06 echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
           echo "GIT_COMMIT=$(echo ${{ env.GITHUB_SHA }} | head -c 7)" >> $GITHUB_ENV
-          # echo "GIT_COMMIT=12345678" >> $GITHUB_ENV
           # echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
       - name: Set Git Variables (Windows)
         if: ${{ startsWith(matrix.os, 'windows-') }}
@@ -314,24 +313,24 @@ jobs:
           $COMMIT = $env:GITHUB_SHA.substring(0,7)
           echo "GIT_COMMIT=$COMMIT" >> $env:GITHUB_ENV
           echo "========================"
-      - name: Check Test Variables
-        if: ${{ ! startsWith(matrix.os, 'windows-') }}
-        run: |
-          echo "Check Test Variables"
-          echo "env.GIT_COMMIT = ${{ env.GIT_COMMIT }} "
-          echo "GIT_COMMIT   = $GIT_COMMIT"
-          echo "env.GIT_COMMIT = ${{ env.GIT_COMMIT }} "
-      - name: Check Test Variables (Windows)
-        if: ${{ startsWith(matrix.os, 'windows-') }}
-        run: |
-          echo "Check Test Variables (Windows)"
-          echo "env:GIT_COMMIT = $env:GIT_COMMIT "
-          set GIT_COMMIT="Irgendwas"
-          set GIT_COMMIT="87654321"
-          echo "GIT_COMMIT     = %GIT_COMMIT%"
-          echo "GIT_COMMIT   = %GIT_COMMIT%"
-          echo "env:GITHUB_SHA = $env:GITHUB_SHA "
-          echo "env:GIT_COMMIT = $env:GIT_COMMIT "
+      ### 06- name: Check Test Variables
+      ### 06  if: ${{ ! startsWith(matrix.os, 'windows-') }}
+      ### 06  run: |
+      ### 06    echo "Check Test Variables"
+      ### 06    echo "env.GIT_COMMIT = ${{ env.GIT_COMMIT }} "
+      ### 06    echo "GIT_COMMIT   = $GIT_COMMIT"
+      ### 06    echo "env.GIT_COMMIT = ${{ env.GIT_COMMIT }} "
+      ### 06- name: Check Test Variables (Windows)
+      ### 06  if: ${{ startsWith(matrix.os, 'windows-') }}
+      ### 06  run: |
+      ### 06    echo "Check Test Variables (Windows)"
+      ### 06    echo "env:GIT_COMMIT = $env:GIT_COMMIT "
+      ### 06    set GIT_COMMIT="Irgendwas"
+      ### 06    set GIT_COMMIT="87654321"
+      ### 06    echo "GIT_COMMIT     = %GIT_COMMIT%"
+      ### 06    echo "GIT_COMMIT   = %GIT_COMMIT%"
+      ### 06    echo "env:GITHUB_SHA = $env:GITHUB_SHA "
+      ### 06    echo "env:GIT_COMMIT = $env:GIT_COMMIT "
       - name: Fetch Artifacts
         uses: actions/download-artifact@v4
         with:
