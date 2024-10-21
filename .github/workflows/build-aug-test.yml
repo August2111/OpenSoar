@@ -307,7 +307,6 @@ jobs:
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
-          echo "Set Git Variables"
           GIT_COMMIT=12345678
           echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
           echo "GIT_HASH=$(echo $GITHUB_SHA | head -c 7)" >> $GITHUB_ENV
@@ -317,9 +316,11 @@ jobs:
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Set Git Variables (Windows)"
+          dir
+          dir ide\github\build
           echo "GIT_COMMIT=12345678" >> $env:GITHUB_ENV
           echo "GIT_HASH=$env:GITHUB_SHA" >> $env:GITHUB_ENV
-          echo "env:GITHUB_ENV = $env:GITHUB_ENV=
+          echo "env:GITHUB_ENV = $env:GITHUB_ENV"
           type $env:GITHUB_ENV
           echo "type ide\github\build.sh"
           type ide\github\build.sh
