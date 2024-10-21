@@ -332,15 +332,15 @@ jobs:
           echo "1"
           echo "2"
           echo "3"
-          echo "BOOST = $(echo ${{ env.BOOST }}:0:5) "
-          echo "BOOST = ${{ env.BOOST }}:0:5 "
-          echo "XXX=$env.GITHUB_SHA" >>  $env:GITHUB_ENV
+          echo "BOOST = $(echo ${{ env:BOOST }}:0:5) "
+          echo "BOOST = ${{ env:BOOST }}:0:5 "
+          echo "XXX=$env:GITHUB_SHA" >>  $env:GITHUB_ENV
           set XXX=$env.GITHUB_SHA
           echo "XXX = %XXX%"
           echo "XXX = %XXX:~0,3%"
           echo "XXX = $XXX"
-          echo "XXX=${{ env.XXX }}"
-          echo "GIT_COMMIT=${{ env.COMMIT }}" >> $env:GITHUB_ENV
+          echo "XXX=${{ env:XXX }}"
+          echo "GIT_COMMIT=${{ env:COMMIT }}" >> $env:GITHUB_ENV
           echo "GIT_HASH=$env:GITHUB_SHA" >> $env:GITHUB_ENV
           echo "type env:GITHUB_ENV = $env:GITHUB_ENV"
           echo "========================"
