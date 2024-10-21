@@ -266,7 +266,6 @@ jobs:
           path: |
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*
-            
             # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
             # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*${{ matrix.target_ext }}
           retention-days: 1
@@ -287,13 +286,6 @@ jobs:
 
     needs: build
     steps:
-      #### 06 - name: Install Dependencies
-      #### 06   if: ${{ ! startsWith(matrix.os, 'macos-') }}
-      #### 06   run: |
-      #### 06     echo "Install Dependencies: ${{ matrix.target }} "
-      #### 06     apt-get update
-      #### 06     apt-get install -y --no-install-recommends git \
-      #### 06       ca-certificates rsync openssh-client
       - id: checkout
         uses: actions/checkout@v4
       - name: Set Git Variables
