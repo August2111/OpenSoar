@@ -295,6 +295,14 @@ jobs:
 
     needs: build
     steps:
+      - name: Install Dependencies
+        if: ${{ ! startsWith(matrix.os, 'macos-') }}
+        run: |
+          echo "Install Dependencies: ${{ matrix.target }} "
+          apt-get update
+          apt-get install -y --no-install-recommends git \
+            ca-certificates rsync openssh-client
+
       - id: checkout
         uses: actions/checkout@v4
       - name: Check Git Variables
