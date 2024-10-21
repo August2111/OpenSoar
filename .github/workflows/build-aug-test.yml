@@ -304,24 +304,24 @@ jobs:
       ###       ca-certificates rsync openssh-client
       - id: checkout
         uses: actions/checkout@v4
-      - name: Check Git Variables
+      - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
-          echo "Check Git Variables"
+          echo "Set Git Variables"
           GIT_COMMIT=12345678
           echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
           echo "GIT_HASH=$(echo $GITHUB_SHA | head -c 7)" >> $GITHUB_ENV
           # echo "GIT_COMMIT=12345678" >> $GITHUB_ENV
           # echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
-      - name: Check Git Variables (Windows)
+      - name: Set Git Variables (Windows)
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
-          echo "Check Git Variables (Windows)"
-          type ${{ env.GITHUB_ENV }}
+          echo "Set Git Variables (Windows)"
+          type $env:GITHUB_ENV
           set GIT_COMMIT=12345678
-          echo "set GIT_COMMIT=%GIT_COMMIT%" >> ${{ env.GITHUB_ENV }}
-          echo "GIT_HASH=%var:~0,7%" >> ${{ env.GITHUB_ENV }}
-          # echo "set GIT_HASH=%GIT_HASH%" >> ${{ env.GITHUB_ENV }}
+          echo "set GIT_COMMIT=%GIT_COMMIT%" >> $env:GITHUB_ENV
+          echo "GIT_HASH=%var:~0,7%" >> $env:GITHUB_ENV
+          # echo "set GIT_HASH=%GIT_HASH%" >> $env:GITHUB_ENV
       - name: Check Test Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
@@ -334,10 +334,10 @@ jobs:
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Check Test Variables (Windows)"
-          echo "env.GIT_HASH = ${{ env.GIT_HASH }} "
+          echo "env:GIT_HASH = env:GIT_HASH "
           echo "GIT_HASH     = %GIT_HASH% "
           echo "GIT_COMMIT   = %GIT_COMMIT%"
-          echo "env.GIT_COMMIT = ${{ env.GIT_COMMIT }} "
+          echo "env:GIT_COMMIT = env:GIT_COMMIT "
       - name: Fetch Artifacts
         uses: actions/download-artifact@v4
         with:
