@@ -308,8 +308,11 @@ jobs:
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
-          echo "env.BOOST = ${{ env.BOOST }} "
-          echo "env.DEBUG = ${{ env.DEBUG }} "
+          echo "BOOST = ${{ env.BOOST }} "
+          echo "BOOST = %env.BOOST% "
+          echo "BOOST = %BOOST% "
+          echo "BOOST = \%env.BOOST\% "
+          echo "DEBUG = ${{ env.DEBUG }} "
           set GIT_COMMIT=12345678
           echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
           echo "GIT_HASH=$(echo ${{ env.GITHUB_SHA }} | head -c 7)" >> $GITHUB_ENV
