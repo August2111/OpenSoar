@@ -337,7 +337,7 @@ jobs:
           echo "XXX = %XXX%"
           echo "XXX = %XXX:~0,3%"
           echo "XXX = $XXX"
-          echo "XXX=${{ env:XXX }}"
+          echo "XXX=$env:XXX"
           echo "GIT_COMMIT=$COMMIT" >> $env:GITHUB_ENV
           echo "GIT_HASH=$env:GITHUB_SHA" >> $env:GITHUB_ENV
           echo "type env:GITHUB_ENV = $env:GITHUB_ENV"
