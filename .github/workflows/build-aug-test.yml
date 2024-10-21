@@ -259,8 +259,11 @@ jobs:
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Set Git Variables"
-          echo "GIT_COMMIT=$(echo ${{ env.GITHUB_SHA }} | head -c 7)" >> $GITHUB_ENV
-          # echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
+          ### echo "GIT_COMMIT=$(echo ${{ env.GITHUB_SHA }} | head -c 7)" >> $GITHUB_ENV
+          ### # echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
+          ### echo "Check Git Variables"
+          GIT_COMMIT=$(echo $GITHUB_SHA | head -c 7)
+          echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
       - name: Set Git Variables (Windows)
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
