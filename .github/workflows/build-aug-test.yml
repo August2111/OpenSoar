@@ -317,6 +317,7 @@ jobs:
         if: ${{ startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Check Git Variables (Windows)"
+          type $GITHUB_ENV
           set GIT_COMMIT=12345678
           echo "set GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
           echo "set GIT_HASH=$(echo $GITHUB_SHA | head -c 7)" >> $GITHUB_ENV
