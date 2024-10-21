@@ -325,6 +325,10 @@ jobs:
           echo "type ide\github\build.sh"
           type ide\github\build.sh
           type ide\github\test-build.py
+          
+          chmod +x ./ide/github/test-build.py
+          echo "Run 'test-build.py' ========"
+          ./ide/github/test-build.py
       - name: Check Test Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
