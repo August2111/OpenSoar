@@ -230,10 +230,11 @@ jobs:
         with:
           name: Test-${{ env.GIT_COMMIT }}-${{ matrix.target }}
           path: |
+            test/README
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*
-            # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
-            # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*${{ matrix.target_ext }}
+            ### output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
+            ### output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*${{ matrix.target_ext }}
           retention-days: 1
 
   test:
