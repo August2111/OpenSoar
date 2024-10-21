@@ -310,10 +310,6 @@ jobs:
         run: |
           echo "BOOST = ${{ env.BOOST }} "
           echo "DEBUG = ${{ env.DEBUG }} "
-          echo "BOOST = ${{ env.BOOST }} "
-          echo "BOOST = %env.BOOST% "
-          echo "BOOST = %BOOST% "
-          echo "BOOST = \%env.BOOST\% "
           set GIT_COMMIT=12345678
           echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
           echo "GIT_HASH=$(echo ${{ env.GITHUB_SHA }} | head -c 7)" >> $GITHUB_ENV
@@ -328,6 +324,10 @@ jobs:
           set COMMIT=12345678
           echo "env.BOOST = ${{ env.BOOST }} "
           echo "env.DEBUG = ${{ env.DEBUG }} "
+          echo "BOOST = ${{ env.BOOST }} "
+          echo "BOOST = %env.BOOST% "
+          echo "BOOST = %BOOST% "
+          echo "BOOST = \%env.BOOST\% "
           echo "GIT_COMMIT=${{ env.COMMIT }}" >> $env:GITHUB_ENV
           echo "GIT_HASH=$env:GITHUB_SHA" >> $env:GITHUB_ENV
           echo "type env:GITHUB_ENV = $env:GITHUB_ENV"
