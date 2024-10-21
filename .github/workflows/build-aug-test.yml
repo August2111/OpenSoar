@@ -269,7 +269,7 @@ jobs:
         if: ${{ matrix.target_test }}
         ## if: ${{ matrix.target_test || startsWith(github.ref, 'refs/tags/v')}}
         with:
-          name: Test-$GIT_HASH-${{ matrix.target }}
+          name: Test-${{ env.GIT_HASH }}-${{ matrix.target }}
           path: |
             ide/github/*
             ### output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*
@@ -314,7 +314,7 @@ jobs:
       - name: Fetch Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: Test-$GIT_HASH-${{ matrix.target }}
+          name: Test-${{ env.GIT_HASH }}-${{ matrix.target }}
           path: ${{ github.workspace }}/output/${{ matrix.target }}/bin
       - name: OpenSoar run checks on ${{ matrix.target }}
         run: |
