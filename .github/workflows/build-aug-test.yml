@@ -308,14 +308,14 @@ jobs:
         # if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
           echo "Set Git Variables"
-          if ${{ ! startsWith(matrix.os, 'windows-') }}
+          if ${{ ! startsWith(matrix.os, 'windows-') }}; then
             echo "Non Windows---"
           # else
           #   echo "Windows ++++++"
-          endif
-          if ${{ startsWith(matrix.os, 'windows-') }}
+          fi
+          if ${{ startsWith(matrix.os, 'windows-') }}; then
             echo "Windows ++++++"
-          endif
+          fi
           echo "BOOST = ${{ env.BOOST }} "
           echo "DEBUG = ${{ env.DEBUG }} "
           set GIT_COMMIT=12345678
