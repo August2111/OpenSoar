@@ -328,6 +328,9 @@ jobs:
           echo "BOOST = %env.BOOST% "
           echo "BOOST = %BOOST% "
           echo "BOOST = \%env.BOOST\% "
+          set XXX=${{ env.GITHUB_SHA }}
+          echo "XXX = %XXX%"
+          echo "XXX = %XXX:~0,3%"
           echo "GIT_COMMIT=${{ env.COMMIT }}" >> $env:GITHUB_ENV
           echo "GIT_HASH=$env:GITHUB_SHA" >> $env:GITHUB_ENV
           echo "type env:GITHUB_ENV = $env:GITHUB_ENV"
@@ -363,18 +366,18 @@ jobs:
           echo "GIT_COMMIT   = %GIT_COMMIT%"
           echo "env:GITHUB_SHA = $env:GITHUB_SHA "
           echo "env:GIT_COMMIT = $env:GIT_COMMIT "
-      - name: Fetch Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: Test-${{ env.GIT_HASH }}-${{ matrix.target }}
-          path: ${{ github.workspace }}/output/${{ matrix.target }}/bin
-      - name: OpenSoar run checks on ${{ matrix.target }}
-        run: |
-          echo "OpenSoar run checks on ${{ matrix.target }}"
-          echo "CurrDir = $(pwd)"
-          ls -l .
-          #### chmod +x ./ide/github/build.sh
-          #### ./ide/github/build.sh
-          # echo "run tests on Target '${{ matrix.target }}'"
-          # make check-no-build TARGET=${{ matrix.target }}
-        working-directory: ${{ github.workspace }}
+      ### - name: Fetch Artifacts
+      ###   uses: actions/download-artifact@v4
+      ###   with:
+      ###     name: Test-${{ env.GIT_HASH }}-${{ matrix.target }}
+      ###     path: ${{ github.workspace }}/output/${{ matrix.target }}/bin
+      ### - name: OpenSoar run checks on ${{ matrix.target }}
+      ###   run: |
+      ###     echo "OpenSoar run checks on ${{ matrix.target }}"
+      ###     echo "CurrDir = $(pwd)"
+      ###     ls -l .
+      ###     #### chmod +x ./ide/github/build.sh
+      ###     #### ./ide/github/build.sh
+      ###     # echo "run tests on Target '${{ matrix.target }}'"
+      ###     # make check-no-build TARGET=${{ matrix.target }}
+      ###   working-directory: ${{ github.workspace }}
