@@ -124,7 +124,7 @@ jobs:
           - os: ubuntu-24.04
             target: UNIX
             target_bin: OpenSoar_${{ needs.release.outputs.version }}_amd64
-            target_bin_path: ''
+            target_bin_path: 'bin'
             target_final: OpenSoar_
             target_ext: .deb
             target_test: true
