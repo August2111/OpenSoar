@@ -284,7 +284,6 @@ jobs:
     strategy:
       matrix:
         include:
-          # - os: ubuntu-24.04
           - os: ubuntu-latest
             target: UNIX
           - os: macos-14
@@ -294,7 +293,6 @@ jobs:
           - os: windows-latest
             target: PC
 
-    # needs: build
     needs: release
     steps:
       ### - name: Install Dependencies
@@ -312,7 +310,10 @@ jobs:
           echo "Set Git Variables"
           if ${{ ! startsWith(matrix.os, 'windows-') }}
             echo "Non Windows---"
-          else
+          # else
+          #   echo "Windows ++++++"
+          endif
+          if ${{ startsWith(matrix.os, 'windows-') }}
             echo "Windows ++++++"
           endif
           echo "BOOST = ${{ env.BOOST }} "
