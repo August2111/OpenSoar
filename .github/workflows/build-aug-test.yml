@@ -307,8 +307,14 @@ jobs:
       - id: checkout
         uses: actions/checkout@v4
       - name: Set Git Variables
-        if: ${{ ! startsWith(matrix.os, 'windows-') }}
+        # if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
+          echo "Set Git Variables"
+          if ${{ ! startsWith(matrix.os, 'windows-') }}
+            echo "Non Windows---"
+          else
+            echo "Windows ++++++"
+          endif
           echo "BOOST = ${{ env.BOOST }} "
           echo "DEBUG = ${{ env.DEBUG }} "
           set GIT_COMMIT=12345678
