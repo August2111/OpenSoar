@@ -295,21 +295,20 @@ jobs:
 
     needs: build
     steps:
-      - name: Install Dependencies
-        if: ${{ ! startsWith(matrix.os, 'macos-') }}
-        run: |
-          echo "Install Dependencies: ${{ matrix.target }} "
-          apt-get update
-          apt-get install -y --no-install-recommends git \
-            ca-certificates rsync openssh-client
-
+      ### - name: Install Dependencies
+      ###   if: ${{ ! startsWith(matrix.os, 'macos-') }}
+      ###   run: |
+      ###     echo "Install Dependencies: ${{ matrix.target }} "
+      ###     apt-get update
+      ###     apt-get install -y --no-install-recommends git \
+      ###       ca-certificates rsync openssh-client
       - id: checkout
         uses: actions/checkout@v4
       - name: Check Git Variables
         run: |
           echo "Check Git Variables"
-          GIT_HASH=$(echo $GITHUB_SHA | head -c 7)
-          echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
+          echo "GIT_HASH=$(echo $GITHUB_SHA | head -c 7)" >> $GITHUB_ENV
+          # echo "GIT_HASH=$GIT_HASH" >> $GITHUB_ENV
         
       - name: Fetch Artifacts
         uses: actions/download-artifact@v4
