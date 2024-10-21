@@ -329,6 +329,8 @@ jobs:
           chmod +x ./ide/github/test-build.py
           echo "Run 'test-build.py' ========"
           ./ide/github/test-build.py
+          
+          echo "env:TEST_ENV = $env:TEST_ENV"
       - name: Check Test Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
