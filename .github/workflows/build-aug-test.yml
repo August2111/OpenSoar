@@ -329,7 +329,7 @@ jobs:
           echo "BOOST = %env.BOOST% "
           echo "BOOST = %BOOST% "
           echo "BOOST = \%env.BOOST\% "
-          # echo "BOOST = ${{ env.BOOST:0:5 }} "
+          REM echo "BOOST = ${{ env.BOOST:0:5 }} "
           echo "BOOST = $(echo ${{ env.BOOST }}:0:5) "
           echo "BOOST = ${{ env.BOOST }}:0:5 "
           set XXX=${{ env.GITHUB_SHA }}
