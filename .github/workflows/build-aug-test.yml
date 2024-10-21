@@ -88,40 +88,6 @@ jobs:
         run: |
           echo "Get OpenSoar Version"
           echo "CurrDir = $(pwd)"
-          ls -l .
-          chmod +x ./ide/github/build.sh
-          ./ide/github/build.sh
-          ####    # include OpenSoar.config
-          ####    # VERSION=$PROGRAM_VERSION
-          ####    VERSION=7.43.22.1
-          ####    # VERSION=$(cat VERSION.txt)
-          ####    echo "$VERSION"
-          ####    echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          ####    echo "GITHUB_SHA = $GITHUB_SHA"
-          ####    echo "GIT_COMMIT = $GIT_COMMIT"
-          ####    GIT_COMMIT=$(git rev-parse --short $GITHUB_SHA)
-          ####    echo "GIT_COMMIT = $GIT_COMMIT"
-          ####    GIT_COMMIT=${GITHUB_SHA:0:7}
-          ####    echo "GIT_COMMIT = $GIT_COMMIT"
-          ####    echo "PRERELEASE = $PRERELEASE"
-          ####    echo "GITHUB_ENV = $GITHUB_ENV"
-          ####    echo "PRERELEASE = ${{ env.PRERELEASE }}"
-          ####    echo "git_hash=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
-          ####    echo "GIT_COMMIT=$GIT_COMMIT" >> $GITHUB_ENV
-          ####    echo "git_hash = ${{ env.git_hash }}"
-          ####    echo "git_hash = $git_hash"
-          ####    if [ -z ${{ env.git_hash }} ]; then
-          ####      echo "git_hash=$(git rev-parse --short --verify HEAD )" >> $GITHUB_ENV
-          ####      echo "env.git_hash = '${{ env.git_hash }}'"
-          ####    fi 
-          ####    echo "GITHUB_ENV = $GITHUB_ENV"
-          ####    echo "--------------------"
-          ####    echo "cat $GITHUB_ENV"
-          ####    cat $GITHUB_ENV
-          ####    echo "--------------------"
-          ####    echo "cat OpenSoar.config"
-          ####    cat OpenSoar.config
-          ####    echo "--------------------"
 
   build:
     runs-on: ${{ matrix.os }}
@@ -154,7 +120,7 @@ jobs:
             upload_artifact: true
             ndk: r26d
             target_container: debian:bookworm-slim
-            #  -----------------------------------------------------
+
           - os: ubuntu-24.04
             target: UNIX
             target_bin: OpenSoar_${{ needs.release.outputs.version }}_amd64
@@ -240,7 +206,7 @@ jobs:
           apt-get install -y --no-install-recommends git \
             ca-certificates rsync openssh-client
    
-   - name: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: true
