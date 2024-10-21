@@ -325,19 +325,17 @@ jobs:
           set COMMIT=12345678
           echo "env.BOOST = ${{ env.BOOST }} "
           echo "env.DEBUG = ${{ env.DEBUG }} "
-          set BOOST=${{ env.BOOST }}
           echo "BOOST = ${{ env.BOOST }} "
           echo "BOOST = %env.BOOST% "
           echo "BOOST = %BOOST% "
           echo "BOOST = \%env.BOOST\% "
-          echo "BOOST = ${{ BOOST }} "
-          echo "BOOST = $BOOST "
           echo "1"
           echo "2"
           echo "3"
           echo "BOOST = $(echo ${{ env.BOOST }}:0:5) "
           echo "BOOST = ${{ env.BOOST }}:0:5 "
           set XXX=${{ env.GITHUB_SHA }}
+          echo XXX=${{ env.GITHUB_SHA }} >>  ${{ env:XXX }}
           echo "XXX = %XXX%"
           echo "XXX = %XXX:~0,3%"
           echo "GIT_COMMIT=${{ env.COMMIT }}" >> $env:GITHUB_ENV
