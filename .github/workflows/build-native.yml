@@ -398,7 +398,7 @@ jobs:
           # if [ ${{ matrix.target }} = "UNIX" ]; then
             echo "matrix.target           = ${{ matrix.target }}"
             echo "secrets.REPOSITORY_HOST = ${{ secrets.REPOSITORY_HOST }}"
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check VFB=y SANITIZE=y DEBUG_GLIBCXX=y
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything VFB=y SANITIZE=y DEBUG_GLIBCXX=y
           # fi
 
       - name: Compile OpenSoar - Release
@@ -448,6 +448,23 @@ jobs:
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/${{ matrix.target_bin }}${{ matrix.target_ext }}
           retention-days: 2
 
+      - name: Test Directory
+        if: ${{ startsWith(matrix.target, 'UNIX') }}
+        run: |
+          if [ -d output/${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
+            echo "dir output/${{ matrix.target }}/${{ matrix.target_bin_path }}"
+            echo "=============================================================="
+            dir output/${{ matrix.target }}/${{ matrix.target_bin_path }}
+          else
+            echo "dir 'output/${{ matrix.target }}/${{ matrix.target_bin_path }}' doesn't exist"
+          fi
+          if [ -d output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
+            echo "ls -l output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}"
+            echo "=============================================================="
+            ls -l output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}
+          else
+            echo "dir 'output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}' doesn't exist"
+          fi
       - name: Upload Test artifact
         uses: actions/upload-artifact@v4
         if: ${{ matrix.target_test }}
@@ -456,6 +473,7 @@ jobs:
           name: Test-${{ env.GIT_COMMIT }}-${{ matrix.target }}
           path: |
             test/README
+            output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_*
             # output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*${{ matrix.target_ext }}
@@ -540,6 +558,13 @@ jobs:
           echo "Run Test Programs on ${{ matrix.target }}"
           echo "CurrDir = $(pwd)"
           ls -l  .
+          if [ -d output }} ]; then
+            echo "ls -l   output"
+            echo "=============================================================="
+            ls -l output
+          else
+            echo "dir 'output' doesn't exist"
+          fi
           ls -l  output
           ls -l  output/${{ matrix.target }}
           ls -l  output/${{ matrix.target }}/bin
