@@ -595,9 +595,9 @@ jobs:
       - name: Install dependencies
         if: ${{ ! startsWith(matrix.target, 'UNIX') }}
         run: |
-          # target UNIX has to install the lib environment (is not static!)
           echo "Install dependencies: ${{ matrix.target }}"
-          ./ide/provisioning/install-debian-packages.sh UPDATE BASE LINUX LIBINPUT_GBM DEBIAN
+          # target UNIX has to install the lib environment (it is not static!)
+          ./ide/provisioning/install-debian-packages.sh UPDATE LINUX
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
