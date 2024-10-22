@@ -472,64 +472,69 @@ jobs:
       - name: Test Directory (DEBIAN-UNIX)
         if: ${{ startsWith(matrix.target, 'UNIX') }}
         run: |
-          if [ -d output ]; then
-            echo "ls -l output"
-            echo "=============================================================="
-            ls -l output
+          ### if [ -d output ]; then
+          ###   echo "ls -l output"
+          ###   echo "=============================================================="
+          ###   ls -l output
+          ### else
+          ###   echo "dir 'output' doesn't exist"
+          ### fi
+          ### echo "----------------------------------------------------------------"
+          ### if [ -d output/UNIX/DPKG ]; then
+          ###   echo "ls -l output/UNIX/DPKG"
+          ###   echo "=============================================================="
+          ###   ls -l output/UNIX/DPKG
+          ### else
+          ###   echo "dir 'output/UNIX/DPKG' doesn't exist"
+          ### fi
+          ### echo "----------------------------------------------------------------"
+          ### if [ -d output/UNIX/DPKG/output ]; then
+          ###   echo "ls -l output/DPKG/output"
+          ###   echo "=============================================================="
+          ###   ls -l output/UNIX/DPKG/output
+          ### else
+          ###   echo "dir 'output/UNIX/DPKG/output' doesn't exist"
+          ### fi
+          ### echo "----------------------------------------------------------------"
+          ### if [ -d output/UNIX/DPKG/output/UNIX/bin ]; then
+          ###   echo "ls -l output/DPKG/output/UNIX/bin"
+          ###   echo "=============================================================="
+          ###   ls -l output/UNIX/DPKG/output/UNIX/bin
+          ### else
+          ###   echo "dir 'output/UNIX/DPKG/output/UNIX/bin' doesn't exist"
+          ### fi
+          ### echo "----------------------------------------------------------------"
+          ### if [ -d output/UNIX/DPKG/output/DEBIAN-UNIX/bin ]; then
+          ###   echo "ls -l output/DPKG/output/DEBIAN-UNIX/bin"
+          ###   echo "=============================================================="
+          ###   ls -l output/UNIX/DPKG/output/DEBIAN-UNIX/bin
+          ### else
+          ###   echo "dir 'output/UNIX/DPKG/output/DEBIAN-UNIX/bin' doesn't exist"
+          ### fi
+          ### echo "----------------------------------------------------------------"
+          ### if [ -d output/${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
+          ###   echo "dir output/${{ matrix.target }}/${{ matrix.target_bin_path }}"
+          ###   echo "=============================================================="
+          ###   dir output/${{ matrix.target }}/${{ matrix.target_bin_path }}
+          ### else
+          ###   echo "dir 'output/${{ matrix.target }}/${{ matrix.target_bin_path }}' doesn't exist"
+          ### fi
+          ### echo "----------------------------------------------------------------"
+          ### echo "----------------------------------------------------------------"
+          ### echo "----------------------------------------------------------------"
+          if [ -d output/UNIX/DPKG ]; then 
+            cd output/UNIX/DPKG
+            TARGET_PATH=output/DEBIAN-${{ matrix.target }}
           else
-            echo "dir 'output' doesn't exist"
+            TARGET_PATH=output/${{ matrix.target }}
           fi
           echo "----------------------------------------------------------------"
-          if [ -d output/UNIX/DPKG ]; then
-            echo "ls -l output/UNIX/DPKG"
+          if [ -d $TARGET_PATH/${{ matrix.target_bin_path }} ]; then
+            echo "ls -l $TARGET_PATH/${{ matrix.target_bin_path }}"
             echo "=============================================================="
-            ls -l output/UNIX/DPKG
+            ls -l $TARGET_PATH/${{ matrix.target_bin_path }}
           else
-            echo "dir 'output/UNIX/DPKG' doesn't exist"
-          fi
-          echo "----------------------------------------------------------------"
-          if [ -d output/UNIX/DPKG/output ]; then
-            echo "ls -l output/DPKG/output"
-            echo "=============================================================="
-            ls -l output/UNIX/DPKG/output
-          else
-            echo "dir 'output/UNIX/DPKG/output' doesn't exist"
-          fi
-          echo "----------------------------------------------------------------"
-          if [ -d output/UNIX/DPKG/output/UNIX/bin ]; then
-            echo "ls -l output/DPKG/output/UNIX/bin"
-            echo "=============================================================="
-            ls -l output/UNIX/DPKG/output/UNIX/bin
-          else
-            echo "dir 'output/UNIX/DPKG/output/UNIX/bin' doesn't exist"
-          fi
-          echo "----------------------------------------------------------------"
-          if [ -d output/UNIX/DPKG/output/DEBIAN-UNIX/bin ]; then
-            echo "ls -l output/DPKG/output/DEBIAN-UNIX/bin"
-            echo "=============================================================="
-            ls -l output/UNIX/DPKG/output/DEBIAN-UNIX/bin
-          else
-            echo "dir 'output/UNIX/DPKG/output/DEBIAN-UNIX/bin' doesn't exist"
-          fi
-          echo "----------------------------------------------------------------"
-          if [ -d output/${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
-            echo "dir output/${{ matrix.target }}/${{ matrix.target_bin_path }}"
-            echo "=============================================================="
-            dir output/${{ matrix.target }}/${{ matrix.target_bin_path }}
-          else
-            echo "dir 'output/${{ matrix.target }}/${{ matrix.target_bin_path }}' doesn't exist"
-          fi
-          echo "----------------------------------------------------------------"
-          echo "----------------------------------------------------------------"
-          echo "----------------------------------------------------------------"
-          ## cd output/UNIX/DPKG
-          echo "----------------------------------------------------------------"
-          if [ -d output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
-            echo "ls -l output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}"
-            echo "=============================================================="
-            ls -l output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}
-          else
-            echo "dir 'output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}' doesn't exist"
+            echo "dir '$TARGET_PATH/${{ matrix.target_bin_path }}' doesn't exist"
           fi
           echo "----------------------------------------------------------------"
 
