@@ -145,7 +145,7 @@ jobs:
           - os: ubuntu-24.04
             target: UNIX
             target_bin: OpenSoar_${{ needs.release.outputs.version }}_amd64
-            target_bin_path: 'bin'
+            target_bin_path: bin
             target_final: OpenSoar_
             target_ext: .deb
             target_test: true
@@ -156,7 +156,7 @@ jobs:
           #### needs long time.. - os: ubuntu-24.04
           #### needs long time..   target: KOBO
           #### needs long time..   target_bin: KoboRoot
-          #### needs long time..   target_bin_path: 'bin'
+          #### needs long time..   target_bin_path: bin
           #### needs long time..   target_final: KoboRoot
           #### needs long time..   target_ext: .tgz
           #### needs long time..   target_upload: true
