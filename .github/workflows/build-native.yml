@@ -575,7 +575,10 @@ jobs:
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
 
   test:
+    name: Check TestFiles
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     strategy:
       matrix:
         include:
