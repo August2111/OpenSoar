@@ -451,6 +451,22 @@ jobs:
       - name: Test Directory
         if: ${{ startsWith(matrix.target, 'UNIX') }}
         run: |
+          if [ -d output }} ]; then
+            echo "ls -l output }}"
+            echo "=============================================================="
+            ls -l output
+          else
+            echo "dir 'output' doesn't exist"
+          fi
+          echo "----------------------------------------------------------------"
+          if [ -d output/DPKG ]; then
+            echo "ls -l output/DPKG }}"
+            echo "=============================================================="
+            ls -l output/DPKG }}
+          else
+            echo "dir 'output/DPKG }}' doesn't exist"
+          fi
+          echo "----------------------------------------------------------------"
           if [ -d output/${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
             echo "dir output/${{ matrix.target }}/${{ matrix.target_bin_path }}"
             echo "=============================================================="
@@ -458,6 +474,7 @@ jobs:
           else
             echo "dir 'output/${{ matrix.target }}/${{ matrix.target_bin_path }}' doesn't exist"
           fi
+          echo "----------------------------------------------------------------"
           if [ -d output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
             echo "ls -l output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}"
             echo "=============================================================="
@@ -465,6 +482,7 @@ jobs:
           else
             echo "dir 'output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}' doesn't exist"
           fi
+          echo "----------------------------------------------------------------"
       - name: Upload Test artifact
         uses: actions/upload-artifact@v4
         if: ${{ matrix.target_test }}
