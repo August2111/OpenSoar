@@ -593,7 +593,7 @@ jobs:
       - id: checkout
         uses: actions/checkout@v4
       - name: Install dependencies
-        if: ${{ ! startsWith(matrix.target, 'UNIX') }}
+        if: ${{ matrix.target }} = 'UNIX')
         run: |
           echo "Install dependencies: ${{ matrix.target }}"
           # target UNIX has to install the lib environment (it is not static!)
