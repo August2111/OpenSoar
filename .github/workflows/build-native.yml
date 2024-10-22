@@ -522,7 +522,7 @@ jobs:
           echo "----------------------------------------------------------------"
           echo "----------------------------------------------------------------"
           echo "----------------------------------------------------------------"
-          cd output/UNIX/DPKG
+          ## cd output/UNIX/DPKG
           echo "----------------------------------------------------------------"
           if [ -d output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
             echo "ls -l output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}"
