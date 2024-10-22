@@ -393,7 +393,7 @@ jobs:
       - name: Test Directory (UNIX)
         if: ${{ startsWith(matrix.target, 'UNIX') }}
         run: |
-          cd output/UNIX/DPKG
+          # cd output/UNIX/DPKG
           echo "----------------------------------------------------------------"
           if [ -d output/${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
             echo "ls -l output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}"
