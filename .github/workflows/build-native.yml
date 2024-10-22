@@ -592,6 +592,12 @@ jobs:
     steps:
       - id: checkout
         uses: actions/checkout@v4
+      - name: Install dependencies
+        if: ${{ ! startsWith(matrix.target, 'UNIX') }}
+        run: |
+          # target UNIX has to install the lib environment (is not static!)
+          echo "Install dependencies: ${{ matrix.target }}"
+          ./ide/provisioning/install-debian-packages.sh UPDATE BASE LINUX LIBINPUT_GBM DEBIAN
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
