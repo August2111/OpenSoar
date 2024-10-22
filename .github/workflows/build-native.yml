@@ -460,11 +460,35 @@ jobs:
           fi
           echo "----------------------------------------------------------------"
           if [ -d output/UNIX/DPKG ]; then
-            echo "ls -l output/DPKG"
+            echo "ls -l output/UNIX/DPKG"
             echo "=============================================================="
             ls -l output/UNIX/DPKG
           else
             echo "dir 'output/UNIX/DPKG' doesn't exist"
+          fi
+          echo "----------------------------------------------------------------"
+          if [ -d output/UNIX/DPKG/output ]; then
+            echo "ls -l output/DPKG/output"
+            echo "=============================================================="
+            ls -l output/UNIX/DPKG/output
+          else
+            echo "dir 'output/UNIX/DPKG/output' doesn't exist"
+          fi
+          echo "----------------------------------------------------------------"
+          if [ -d output/UNIX/DPKG/output/UNIX/bin ]; then
+            echo "ls -l output/DPKG/output/UNIX/bin"
+            echo "=============================================================="
+            ls -l output/UNIX/DPKG/output/UNIX/bin
+          else
+            echo "dir 'output/UNIX/DPKG/output/UNIX/bin' doesn't exist"
+          fi
+          echo "----------------------------------------------------------------"
+          if [ -d output/UNIX/DPKG/output/DEBIAN-UNIX/bin ]; then
+            echo "ls -l output/DPKG/output/DEBIAN-UNIX/bin"
+            echo "=============================================================="
+            ls -l output/UNIX/DPKG/output/DEBIAN-UNIX/bin
+          else
+            echo "dir 'output/UNIX/DPKG/output/DEBIAN-UNIX/bin' doesn't exist"
           fi
           echo "----------------------------------------------------------------"
           if [ -d output/${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
@@ -474,6 +498,7 @@ jobs:
           else
             echo "dir 'output/${{ matrix.target }}/${{ matrix.target_bin_path }}' doesn't exist"
           fi
+          cd output/UNIX/DPKG
           echo "----------------------------------------------------------------"
           if [ -d output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }} ]; then
             echo "ls -l output/DEBIAN-${{ matrix.target }}/${{ matrix.target_bin_path }}"
@@ -490,6 +515,7 @@ jobs:
         with:
           name: Test-${{ env.GIT_COMMIT }}-${{ matrix.target }}
           path: |
+            cd output/UNIX/DPKG
             test/README
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/test_
             output/${{ matrix.target }}/${{ matrix.target_bin_path }}/Test*
