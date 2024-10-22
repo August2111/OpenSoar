@@ -577,8 +577,8 @@ jobs:
   test:
     name: Check TestFiles
     runs-on: ${{ matrix.os }}
-    permissions:
-      contents: write
+    # permissions:
+    #  contents: write
     strategy:
       matrix:
         include:
@@ -599,6 +599,7 @@ jobs:
         if: ${{ startsWith(matrix.os, 'ubuntu-') }}
         run: |
           echo "Install checkout dependencies: ${{ matrix.target }} "
+          chmod 757 --recursive /var/lib/apt/lists
           apt-get update
           apt-get install -y --no-install-recommends git \
             ca-certificates rsync openssh-client
