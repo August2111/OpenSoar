@@ -578,7 +578,7 @@ jobs:
           SCRIPT_BEFORE: mkdir -p ${{ secrets.REPOSITORY_REMOTE_PATH }}/releases/${{ needs.release.outputs.version }}/${{ matrix.target }}/
 
   test:
-    name: Check TestFiles
+    # name: Check TestFiles
     runs-on: ${{ matrix.os }}
     # permissions:
     #  contents: write
@@ -589,12 +589,18 @@ jobs:
         include:
           - os: ubuntu-24.04 # ubuntu-latest
             target: UNIX
+          # - os: ubuntu-22.04
+          #   target: UNIX
+          # - os: ubuntu-20.04
+          #   target: UNIX
+          # - os: ubuntu-18.04
+          #   target: UNIX
           ## - os: macos-14
           ##   target: MACOS
-          #  - os: windows-latest
-          #    target: WIN64
-          #  - os: windows-latest
-          #    target: PC
+          - os: windows-latest
+            target: WIN64
+          - os: windows-latest
+            target: PC
 
     needs: build
     # needs: release
@@ -605,20 +611,8 @@ jobs:
         if: ${{ startsWith(matrix.os, 'ubuntu-') }}
         run: |
           echo "Install checkout dependencies: ${{ matrix.target }} "
-          # chmod 757 --recursive /var/lib/apt/lists
-          whereis libfmt
           sudo apt-get update
           sudo apt-get install -y libfmt9
-          whereis libfmt
-          ## sudo apt-get install -y --no-install-recommends git \
-          ##   ca-certificates rsync openssh-client
-
-      ###- name: Install dependencies
-      ###  if: ${{ matrix.target == 'UNIX' }}
-      ###  run: |
-      ###    echo "Install dependencies: ${{ matrix.target }}"
-      ###    # target UNIX has to install the lib environment (it is not static!)
-      ###    sudo ./ide/provisioning/install-debian-packages.sh UPDATE LINUX
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
