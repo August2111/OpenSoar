@@ -584,18 +584,18 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-24.04 # ubuntu-latest
-            target: UNIX
-          ###- os: ubuntu-22.04
-          ###  target: UNIX
+          ### 50: - os: ubuntu-24.04 # ubuntu-latest
+          ### 50:   target: UNIX
+          ### 50: ###- os: ubuntu-22.04
+          ### 50: ###  target: UNIX
           # - os: ubuntu-20.04
           #   target: UNIX
           # - os: ubuntu-18.04
           #   target: UNIX
-          ### 50:- os: macos-14
-          ### 50:  target: MACOS
-          ### 50:- os: windows-latest
-          ### 50:  target: WIN64
+          ### 50: - os: macos-14
+          ### 50:   target: MACOS
+          ### 50: - os: windows-latest
+          ### 50:   target: WIN64
           - os: windows-2019
             target: PC
 
