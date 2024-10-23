@@ -115,7 +115,7 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     needs: release
-    if: contains('UNIX,WIN64' , ${{ matrix.target }})
+    # if: contains('UNIX,WIN64' , ${{ matrix.target }})
     container: ${{ matrix.target_container }}
     strategy:
       fail-fast: false
@@ -359,7 +359,6 @@ jobs:
           fi
   
       - name: Compile OpenSoar - PR
-        # if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
           echo "Compile OpenSoar - PR: ${{ matrix.target }}"
@@ -589,18 +588,18 @@ jobs:
         include:
           - os: ubuntu-24.04 # ubuntu-latest
             target: UNIX
-          # - os: ubuntu-22.04
-          #   target: UNIX
+          - os: ubuntu-22.04
+            target: UNIX
           # - os: ubuntu-20.04
           #   target: UNIX
           # - os: ubuntu-18.04
           #   target: UNIX
-          ## - os: macos-14
-          ##   target: MACOS
+          - os: macos-14
+            target: MACOS
           - os: windows-latest
             target: WIN64
-          - os: windows-latest
-            target: PC
+          # - os: windows-latest
+          #   target: PC
 
     needs: build
     # needs: release
@@ -631,12 +630,9 @@ jobs:
         with:
           name: Test-${{ env.GIT_COMMIT }}-${{ matrix.target }}
           path: ${{ github.workspace }}
-          # path: ${{ github.workspace }}/output/${{ matrix.target }}/bin
       - name: Run Test Programs on ${{ matrix.target }}
         run: |
           echo "Run Test Programs on ${{ matrix.target }}"
-          echo "CurrDir = $(pwd)"
-          ls -l  output/${{ matrix.target }}/bin
           chmod +x ./output/${{ matrix.target }}/bin/*
           echo "run tests on Target '${{ matrix.target }}'"
           make check-no-build TARGET=${{ matrix.target }}
