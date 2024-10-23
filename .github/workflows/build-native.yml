@@ -582,7 +582,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-24.04 # ubuntu-latest
             target: UNIX
           ## - os: macos-14
           ##   target: MACOS
@@ -603,7 +603,7 @@ jobs:
           # chmod 757 --recursive /var/lib/apt/lists
           whereis libfmt
           sudo apt-get update
-          sudo apt-get install -y libfmt-dev
+          sudo apt-get install -y libfmt-dev9
           whereis libfmt
           ## sudo apt-get install -y --no-install-recommends git \
           ##   ca-certificates rsync openssh-client
