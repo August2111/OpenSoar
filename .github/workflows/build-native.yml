@@ -115,7 +115,7 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     needs: release
-    if: ${{ contains(env.BUILD , matrix.target) }}
+    if: ${{ contains('UNIX,WIN64' , matrix.target) }}
     container: ${{ matrix.target_container }}
     strategy:
       fail-fast: false
@@ -582,7 +582,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     # permissions:
     #  contents: write
-    if: ${{ contains(env.TEST , matrix.target) }}
+    # if: ${{ contains(env.TEST , matrix.target) }}
+    if: ${{ contains('UNIX,KOBO' , matrix.target) }}
     strategy:
       matrix:
         include:
