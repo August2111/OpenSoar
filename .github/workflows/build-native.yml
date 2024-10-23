@@ -6,7 +6,6 @@ on:
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
-      # - 'ide/**'
       - 'kobo/**'
       - 'python/**'
       - '.github/workflows/build-container.yml'
@@ -23,7 +22,6 @@ on:
       - 'cloud/**'
       - 'doc/**'
       - 'fuzzer/**'
-      # - 'ide/**'
       - 'kobo/**'
       - 'python/**'
       - '.github/workflows/build-container.yml'
@@ -121,62 +119,62 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-22.04
-            target: ANDROIDAARCH64
-            target_bin: OpenSoar
-            target_bin_path: bin
-            target_final: OpenSoar
-            target_ext: .apk
-            target_test: true
-            target_upload: true
-            upload_artifact: false
-            ndk: r26d
-            target_container: debian:bookworm-slim
-          
-          - os: ubuntu-24.04
-            target: ANDROID
-            target_bin: OpenSoar
-            target_bin_path: bin
-            target_final: OpenSoar
-            target_ext: .apk
-            target_test: false
-            target_upload: true
-            upload_artifact: true
-            ndk: r26d
-            target_container: debian:bookworm-slim
-            # ------------------------------------------------------
-          - os: ubuntu-24.04
-            target: UNIX
-            target_bin: OpenSoar_${{ needs.release.outputs.version }}_amd64
-            target_bin_path: bin
-            target_final: OpenSoar_
-            target_ext: .deb
-            target_test: true
-            target_upload: true
-            upload_artifact: false
-            target_container: debian:bookworm-slim
-          
-          #### needs long time.. - os: ubuntu-24.04
-          #### needs long time..   target: KOBO
-          #### needs long time..   target_bin: KoboRoot
-          #### needs long time..   target_bin_path: bin
-          #### needs long time..   target_final: KoboRoot
-          #### needs long time..   target_ext: .tgz
-          #### needs long time..   target_upload: true
-          #### needs long time..   upload_artifact: false
-          #### needs long time..   target_container: debian:bookworm-slim
-          
-          - os: ubuntu-24.04
-            target: WIN64
-            target_bin: OpenSoar
-            target_bin_path: bin
-            target_final: OpenSoar
-            target_ext: .exe
-            target_test: true
-            target_upload: true
-            upload_artifact: true
-            target_container: debian:bookworm-slim
-          
+          ### 50: - os: ubuntu-22.04
+          ### 50:   target: ANDROIDAARCH64
+          ### 50:   target_bin: OpenSoar
+          ### 50:   target_bin_path: bin
+          ### 50:   target_final: OpenSoar
+          ### 50:   target_ext: .apk
+          ### 50:   target_test: true
+          ### 50:   target_upload: true
+          ### 50:   upload_artifact: false
+          ### 50:   ndk: r26d
+          ### 50:   target_container: debian:bookworm-slim
+          ### 50: 
+          ### 50: - os: ubuntu-24.04
+          ### 50:   target: ANDROID
+          ### 50:   target_bin: OpenSoar
+          ### 50:   target_bin_path: bin
+          ### 50:   target_final: OpenSoar
+          ### 50:   target_ext: .apk
+          ### 50:   target_test: false
+          ### 50:   target_upload: true
+          ### 50:   upload_artifact: true
+          ### 50:   ndk: r26d
+          ### 50:   target_container: debian:bookworm-slim
+          ### 50:   # ------------------------------------------------------
+          ### 50: - os: ubuntu-24.04
+          ### 50:   target: UNIX
+          ### 50:   target_bin: OpenSoar_${{ needs.release.outputs.version }}_amd64
+          ### 50:   target_bin_path: bin
+          ### 50:   target_final: OpenSoar_
+          ### 50:   target_ext: .deb
+          ### 50:   target_test: true
+          ### 50:   target_upload: true
+          ### 50:   upload_artifact: false
+          ### 50:   target_container: debian:bookworm-slim
+          ### 50: 
+          ### 50: #### needs long time.. - os: ubuntu-24.04
+          ### 50: #### needs long time..   target: KOBO
+          ### 50: #### needs long time..   target_bin: KoboRoot
+          ### 50: #### needs long time..   target_bin_path: bin
+          ### 50: #### needs long time..   target_final: KoboRoot
+          ### 50: #### needs long time..   target_ext: .tgz
+          ### 50: #### needs long time..   target_upload: true
+          ### 50: #### needs long time..   upload_artifact: false
+          ### 50: #### needs long time..   target_container: debian:bookworm-slim
+          ### 50: 
+          ### 50: - os: ubuntu-24.04
+          ### 50:   target: WIN64
+          ### 50:   target_bin: OpenSoar
+          ### 50:   target_bin_path: bin
+          ### 50:   target_final: OpenSoar
+          ### 50:   target_ext: .exe
+          ### 50:   target_test: true
+          ### 50:   target_upload: true
+          ### 50:   upload_artifact: true
+          ### 50:   target_container: debian:bookworm-slim
+          ### 50: 
           - os: ubuntu-24.04
             target: PC
             target_bin: OpenSoar
@@ -188,38 +186,38 @@ jobs:
             upload_artifact: false
             target_container: debian:bookworm-slim
           
-          - os: macos-12
-            target: OSX64
-            target_bin: OpenSoar
-            target_bin_path: bin
-            target_final: OpenSoar
-            target_ext: ''
-            target_test: false
-            target_upload: false
-            upload_artifact: true
-            target_container: ''
-          
-          - os: macos-14
-            target: MACOS
-            target_bin: OpenSoar
-            target_bin_path: bin
-            target_final: OpenSoar
-            target_ext: ''
-            target_test: true
-            target_upload: false
-            upload_artifact: false
-            target_container: ''
-          
-          - os: macos-14
-            target: IOS64
-            target_bin: OpenSoar
-            target_bin_path: bin
-            target_final: OpenSoar
-            target_ext: ''
-            target_test: false
-            target_upload: false
-            upload_artifact: false
-            target_container: ''
+          ### 50: - os: macos-12
+          ### 50:   target: OSX64
+          ### 50:   target_bin: OpenSoar
+          ### 50:   target_bin_path: bin
+          ### 50:   target_final: OpenSoar
+          ### 50:   target_ext: ''
+          ### 50:   target_test: false
+          ### 50:   target_upload: false
+          ### 50:   upload_artifact: true
+          ### 50:   target_container: ''
+          ### 50: 
+          ### 50: - os: macos-14
+          ### 50:   target: MACOS
+          ### 50:   target_bin: OpenSoar
+          ### 50:   target_bin_path: bin
+          ### 50:   target_final: OpenSoar
+          ### 50:   target_ext: ''
+          ### 50:   target_test: true
+          ### 50:   target_upload: false
+          ### 50:   upload_artifact: false
+          ### 50:   target_container: ''
+          ### 50: 
+          ### 50: - os: macos-14
+          ### 50:   target: IOS64
+          ### 50:   target_bin: OpenSoar
+          ### 50:   target_bin_path: bin
+          ### 50:   target_final: OpenSoar
+          ### 50:   target_ext: ''
+          ### 50:   target_test: false
+          ### 50:   target_upload: false
+          ### 50:   upload_artifact: false
+          ### 50:   target_container: ''
   
     steps:
       - name: Check Git Variables
@@ -594,12 +592,12 @@ jobs:
           #   target: UNIX
           # - os: ubuntu-18.04
           #   target: UNIX
-          - os: macos-14
-            target: MACOS
-          - os: windows-latest
-            target: WIN64
-          # - os: windows-latest
-          #   target: PC
+          ### 50:- os: macos-14
+          ### 50:  target: MACOS
+          ### 50:- os: windows-latest
+          ### 50:  target: WIN64
+          - os: windows-2019
+            target: PC
 
     needs: build
     # needs: release
