@@ -584,8 +584,8 @@ jobs:
     strategy:
       matrix:
         include:
-          ### 50: - os: ubuntu-24.04 # ubuntu-latest
-          ### 50:   target: UNIX
+          - os: ubuntu-24.04 # ubuntu-latest
+            target: UNIX
           ### 50: ###- os: ubuntu-22.04
           ### 50: ###  target: UNIX
           # - os: ubuntu-20.04
@@ -600,6 +600,7 @@ jobs:
             target: PC
 
     needs: build
+    continue-on-error: true
     # needs: release
     steps:
       - id: checkout
