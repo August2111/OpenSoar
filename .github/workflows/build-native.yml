@@ -36,6 +36,8 @@ on:
 env:
   DEBUG: y
   BOOST: boost_1_85_0
+  BUILD: UNIX,WIN64,PC
+  TEST: UNIX,KOBO
 
 jobs:
   release:
@@ -113,6 +115,7 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     needs: release
+    if: ${{ contains(env.BUILD , matrix.target) }}
     container: ${{ matrix.target_container }}
     strategy:
       fail-fast: false
@@ -579,6 +582,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     # permissions:
     #  contents: write
+    if: ${{ contains(env.TEST , matrix.target) }}
     strategy:
       matrix:
         include:
@@ -586,10 +590,10 @@ jobs:
             target: UNIX
           ## - os: macos-14
           ##   target: MACOS
-          - os: windows-latest
-            target: WIN64
-          - os: windows-latest
-            target: PC
+          #  - os: windows-latest
+          #    target: WIN64
+          #  - os: windows-latest
+          #    target: PC
 
     needs: build
     # needs: release
@@ -603,7 +607,7 @@ jobs:
           # chmod 757 --recursive /var/lib/apt/lists
           whereis libfmt
           sudo apt-get update
-          sudo apt-get install -y libfmt-dev9
+          sudo apt-get install -y libfmt9
           whereis libfmt
           ## sudo apt-get install -y --no-install-recommends git \
           ##   ca-certificates rsync openssh-client
