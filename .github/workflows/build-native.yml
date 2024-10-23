@@ -115,7 +115,7 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
     needs: release
-    # if: ${{ contains('UNIX,WIN64' , matrix.target) }}
+    if: contains('UNIX,WIN64' , ${{ matrix.target }})
     container: ${{ matrix.target_container }}
     strategy:
       fail-fast: false
