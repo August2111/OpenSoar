@@ -602,15 +602,16 @@ jobs:
           echo "Install checkout dependencies: ${{ matrix.target }} "
           # chmod 757 --recursive /var/lib/apt/lists
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends git \
-            ca-certificates rsync openssh-client
+          sudo apt-get install -y fmt
+          ## sudo apt-get install -y --no-install-recommends git \
+          ##   ca-certificates rsync openssh-client
 
-      - name: Install dependencies
-        if: ${{ matrix.target == 'UNIX' }}
-        run: |
-          echo "Install dependencies: ${{ matrix.target }}"
-          # target UNIX has to install the lib environment (it is not static!)
-          sudo ./ide/provisioning/install-debian-packages.sh UPDATE LINUX
+      ###- name: Install dependencies
+      ###  if: ${{ matrix.target == 'UNIX' }}
+      ###  run: |
+      ###    echo "Install dependencies: ${{ matrix.target }}"
+      ###    # target UNIX has to install the lib environment (it is not static!)
+      ###    sudo ./ide/provisioning/install-debian-packages.sh UPDATE LINUX
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
