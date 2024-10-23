@@ -602,7 +602,8 @@ jobs:
           echo "Install checkout dependencies: ${{ matrix.target }} "
           # chmod 757 --recursive /var/lib/apt/lists
           sudo apt-get update
-          sudo apt-get install -y fmt
+          sudo apt-get install -y libfmt
+          whereis libfmt
           ## sudo apt-get install -y --no-install-recommends git \
           ##   ca-certificates rsync openssh-client
 
