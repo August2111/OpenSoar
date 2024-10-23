@@ -634,26 +634,8 @@ jobs:
         run: |
           echo "Run Test Programs on ${{ matrix.target }}"
           echo "CurrDir = $(pwd)"
-          ls -l  .
-          if [ -d output }} ]; then
-            echo "ls -l   output"
-            echo "=============================================================="
-            ls -l output
-          else
-            echo "dir 'output' doesn't exist"
-          fi
-          ls -l  output
-          ls -l  output/${{ matrix.target }}
           ls -l  output/${{ matrix.target }}/bin
-          #### chmod +x ./ide/github/build.sh
-          #### ./ide/github/build.sh
-          ######## geht nicht: if [ ${{ matrix.os }} = 'windows-latest' ]; then
-          ######## geht nicht:   echo "Windows-OS +++++++"
-          ######## geht nicht: else
-          ######## geht nicht:   echo "Non Windows-OS ---"
-          ######## geht nicht: fi
           chmod +x ./output/${{ matrix.target }}/bin/*
-          ls -l  output/${{ matrix.target }}/bin
           echo "run tests on Target '${{ matrix.target }}'"
           make check-no-build TARGET=${{ matrix.target }}
         working-directory: ${{ github.workspace }}
