@@ -588,8 +588,8 @@ jobs:
         include:
           - os: ubuntu-24.04 # ubuntu-latest
             target: UNIX
-          - os: ubuntu-22.04
-            target: UNIX
+          ###- os: ubuntu-22.04
+          ###  target: UNIX
           # - os: ubuntu-20.04
           #   target: UNIX
           # - os: ubuntu-18.04
@@ -606,12 +606,17 @@ jobs:
     steps:
       - id: checkout
         uses: actions/checkout@v4
-      - name: Install checkout dependencies
+      - name: Install checkout dependencies (Ubuntu)
         if: ${{ startsWith(matrix.os, 'ubuntu-') }}
         run: |
           echo "Install checkout dependencies: ${{ matrix.target }} "
           sudo apt-get update
           sudo apt-get install -y libfmt9
+      - name: Install checkout dependencies (MacOS)
+        if: ${{ startsWith(matrix.os, 'macos-') }}
+        run: |
+          echo "Install checkout dependencies: ${{ matrix.target }} "
+          brew install libfmt
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
