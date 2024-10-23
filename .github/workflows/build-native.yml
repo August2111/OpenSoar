@@ -616,7 +616,7 @@ jobs:
         if: ${{ startsWith(matrix.os, 'macos-') }}
         run: |
           echo "Install checkout dependencies: ${{ matrix.target }} "
-          brew install libfmt
+          brew install fmt
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') }}
         run: |
