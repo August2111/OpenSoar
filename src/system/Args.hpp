@@ -12,6 +12,8 @@
 #include "system/ConvertPathName.hpp"
 #endif
 
+#include <tchar.h>
+
 #include <list>
 #include <algorithm>
 #include <stdlib.h>
