@@ -8,6 +8,13 @@
 #include "Math/Util.hpp"
 #include "util/StringFormat.hpp"
 
+#ifdef _UNICODE
+# define __S _T("%ls")
+#else
+# define __S _T("%s")
+#endif
+#define _FMT_STRING(f) _T(f)_T(" ")__S
+
 static void
 FormatInteger(TCHAR *buffer,
               const double value, const Unit unit, bool include_unit,
@@ -17,7 +24,7 @@ FormatInteger(TCHAR *buffer,
   const int ivalue = iround(uvalue);
 
   if (include_unit)
-    StringFormatUnsafe(buffer, include_sign ? _T("%+d %s") : _T("%d %s"),
+    StringFormatUnsafe(buffer, include_sign ? _FMT_STRING("%+d") : _FMT_STRING("%d"),
                        ivalue, Units::GetUnitName(unit));
   else
     StringFormatUnsafe(buffer, include_sign ? _T("%+d") : _T("%d"), ivalue);
@@ -38,7 +45,7 @@ FormatWingLoading(TCHAR *buffer, double value, Unit unit,
   int precision = uvalue > 20 ? 0 : 1;
 
     if (include_unit)
-      _stprintf(buffer, _T("%.*f %s"), precision, (double)uvalue,
+      _stprintf(buffer, _FMT_STRING("%.*f"), precision, (double)uvalue,
                 Units::GetUnitName(unit));
     else
       _stprintf(buffer, _T("%.*f"), precision, (double)uvalue);
@@ -65,7 +72,7 @@ FormatDistance(TCHAR *buffer, double value, Unit unit,
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    StringFormatUnsafe(buffer, _T("%.*f %s"), precision, (double)value,
+    StringFormatUnsafe(buffer, _FMT_STRING("%.*f"), precision, (double)value,
                        Units::GetUnitName(unit));
   else
     StringFormatUnsafe(buffer, _T("%.*f"), precision, (double)value);
@@ -96,7 +103,7 @@ FormatSmallDistance(TCHAR *buffer, double value, Unit unit,
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    StringFormatUnsafe(buffer, _T("%.*f %s"), precision, (double)value,
+    StringFormatUnsafe(buffer, _FMT_STRING("%.*f"), precision, (double)value,
                        Units::GetUnitName(unit));
   else
     StringFormatUnsafe(buffer, _T("%.*f"), precision, (double)value);
@@ -147,7 +154,7 @@ FormatSpeed(TCHAR *buffer,
 
   const int prec = precision && value < 100;
   if (include_unit)
-    StringFormatUnsafe(buffer, _T("%.*f %s"), prec, (double)value,
+    StringFormatUnsafe(buffer, _FMT_STRING("%.*f"), prec, (double)value,
                        Units::GetUnitName(unit));
   else
     StringFormatUnsafe(buffer, _T("%.*f"), prec, (double)value);
@@ -158,9 +165,9 @@ GetVerticalSpeedFormat(Unit unit, bool include_unit, bool include_sign)
 {
   static const TCHAR *const format[2][2][2]= {
     //      0 0 0       0 0 1            0 1 0          0 1 1
-    { { _T("%.1f"), _T("%+.1f") }, { _T("%.1f %s"), _T("%+.1f %s") } },
+    { { _T("%.1f"), _T("%+.1f") }, { _FMT_STRING("%.1f"), _FMT_STRING("%+.1f") } },
     //      1 0 0       1 0 1            1 1 0          1 1 1
-    { { _T("%.0f"), _T("%+.0f") }, { _T("%.0f %s"), _T("%+.0f %s") } }
+    { { _T("%.0f"), _T("%+.0f") }, { _FMT_STRING("%.0f"), _FMT_STRING("%+.0f") } }
   };
 
   return format[unit == Unit::FEET_PER_MINUTE]
@@ -204,7 +211,7 @@ FormatTemperature(TCHAR *buffer, double value, Unit unit,
   value = Units::ToUserUnit(value, unit);
 
   if (include_unit)
-    StringFormatUnsafe(buffer, _T("%.0f %s"),
+    StringFormatUnsafe(buffer, _FMT_STRING("%.0f"),
                        (double)value, Units::GetUnitName(unit));
   else
     StringFormatUnsafe(buffer, _T("%.0f"), (double)value);
@@ -229,7 +236,7 @@ const TCHAR*
 GetPressureFormat(Unit unit, bool include_unit)
 {
   if (include_unit)
-    return unit == Unit::INCH_MERCURY ? _T("%.2f %s") : _T("%.f %s");
+    return unit == Unit::INCH_MERCURY ? _FMT_STRING("%.2f") : _FMT_STRING("%.f");
   else
     return unit == Unit::INCH_MERCURY ? _T("%.2f") : _T("%.f");
 }
