@@ -447,6 +447,7 @@ TEST_UNITS_FORMATTER_SOURCES = \
 	$(SRC)/Formatter/Units.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestUnitsFormatter.cpp
+# TEST_UNITS_FORMATTER_CPPFLAGS = -D_UNICODE
 TEST_UNITS_FORMATTER_DEPENDS = MATH UTIL UNITS
 $(eval $(call link-program,TestUnitsFormatter,TEST_UNITS_FORMATTER))
 
@@ -468,6 +469,7 @@ TEST_BYTE_SIZE_FORMATTER_SOURCES = \
 	$(SRC)/Formatter/ByteSizeFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestByteSizeFormatter.cpp
+# TEST_BYTE_SIZE_FORMATTER_CPPFLAGS = -D_UNICODE
 TEST_BYTE_SIZE_FORMATTER_DEPENDS = MATH UTIL
 $(eval $(call link-program,TestByteSizeFormatter,TEST_BYTE_SIZE_FORMATTER))
 
@@ -482,6 +484,7 @@ TEST_IGC_FILENAME_FORMATTER_SOURCES = \
 	$(SRC)/Formatter/IGCFilenameFormatter.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestIGCFilenameFormatter.cpp
+# TEST_IGC_FILENAME_FORMATTER_CPPFLAGS = -D_UNICODE
 TEST_IGC_FILENAME_FORMATTER_DEPENDS = MATH UTIL TIME
 $(eval $(call link-program,TestIGCFilenameFormatter,TEST_IGC_FILENAME_FORMATTER))
 

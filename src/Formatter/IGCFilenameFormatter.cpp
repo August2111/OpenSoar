@@ -36,9 +36,15 @@ FormatIGCFilename(TCHAR* buffer, const BrokenDate &date,
   TCHAR cday = NumToIGCChar(date.day);
   TCHAR cflight = NumToIGCChar(flight_number);
 
+#ifdef _UNICODE
+  StringFormatUnsafe(buffer, _T("%lc%lc%lc%lc%ls%c.igc"),
+                     cyear, cmonth, cday,
+                     manufacturer, logger_id, cflight);
+#else
   StringFormatUnsafe(buffer, _T("%c%c%c%c%s%c.igc"),
                      cyear, cmonth, cday,
                      manufacturer, logger_id, cflight);
+#endif
 }
 
 void
@@ -56,7 +62,11 @@ FormatIGCFilenameLong(TCHAR* buffer, const BrokenDate &date,
   assert(logger_id != NULL);
   assert(_tcslen(logger_id) == 3);
 
+#ifdef _UNICODE
+  StringFormatUnsafe(buffer, _T("%04u-%02u-%02u-%ls-%ls-%02u.igc"),
+#else
   StringFormatUnsafe(buffer, _T("%04u-%02u-%02u-%s-%s-%02u.igc"),
+#endif
                      date.year, date.month, date.day,
                      manufacturer, logger_id, flight_number);
 }
