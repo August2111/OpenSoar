@@ -5,7 +5,13 @@
 #include "util/Macros.hpp"
 #include "util/StringFormat.hpp"
 
-#include <cassert>
+#include  <cassert>
+
+#ifdef _UNICODE
+# define __S _T("%ls")
+#else
+# define __S _T("%s")
+#endif
 
 void
 FormatByteSize(TCHAR *buffer, size_t size, unsigned long bytes, bool simple)
@@ -25,11 +31,10 @@ FormatByteSize(TCHAR *buffer, size_t size, unsigned long bytes, bool simple)
 
   const TCHAR *format;
   if (value >= 100 || i == 0)
-    format = simple ? _T("%.0f%s") : _T("%.0f %s");
+    format = simple ? _T("%.0f")__S : _T("%.0f ")__S;
   else if (value >= 10)
-    format = simple ? _T("%.1f%s") : _T("%.1f %s");
+    format = simple ? _T("%.1f")__S : _T("%.1f ")__S;
   else
-    format = simple ? _T("%.1f%s") : _T("%.2f %s");
-
+    format = simple ? _T("%.1f")__S : _T("%.2f ")__S;
   StringFormat(buffer, size, format, value, unit);
 }
