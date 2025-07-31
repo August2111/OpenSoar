@@ -39,7 +39,10 @@ class TimeSinceMidnight {
       since_midnight += _24H;
 
     if constexpr (std::is_floating_point_v<typename D::rep>)
-      since_midnight= D( std::fmod(since_midnight.count(), _24H.count()) );
+      /* Workarund, solve the PC (= Win32) test TestRoughTime failure with
+          a false rounding result */
+      since_midnight= D( std::fmod(since_midnight.count() + 0.001,
+        _24H.count()) );
     else
       since_midnight = since_midnight % _24H;
 
