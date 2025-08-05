@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <windef.h> // for MAX_PATH
+#include <iterator>
 
 #ifdef ANDROID
 #include <android/log.h>
