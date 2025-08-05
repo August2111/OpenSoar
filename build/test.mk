@@ -118,6 +118,18 @@ TEST_NAMES = \
 	TestThermalBand \
 	TestPackedFloat \
 	TestVersionNumber
+  ## aug: disable 
+  ## aug: disable 
+  ## aug: disable # TODO(August2111): Workaround for OSX64
+  ## aug: disable ### ifeq ($(TARGET_IS_OSX),n)
+  ## aug: disable TEST_NAMES += TestLogger TestGRecord TestPolars 
+  ## aug: disable ### endif
+  ## aug: disable 
+  ## aug: disable # TODO(August2111): Workaround for OSX64
+  ## aug: disable ifeq ($(TARGET_IS_OSX),n)
+  ## aug: disable     TEST_NAMES += TestWaypointReader TestFlarmNet test_replay_task 
+  ## aug: disable endif
+  ## aug: disable 
 
 ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
@@ -805,7 +817,8 @@ DEBUG_PROGRAM_NAMES += \
   FeedFlyNetData
 endif
 
-ifeq ($(HAVE_HTTP)$(TARGET_IS_ANDROID),yn)
+# TODO(August2111): hasd to be enabled for OSX too (and Android?)
+ifeq ($(HAVE_HTTP)$(TARGET_IS_ANDROID)$(TARGET_IS_OSX),ynn)
 DEBUG_PROGRAM_NAMES += DownloadFile \
 	RunDownloadToFile \
 	UploadFile \
