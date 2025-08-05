@@ -165,6 +165,15 @@ jobs:
             target_ext: ''
             target_upload: false
             target_container: ''
+          - os: macos-13
+            target: OSX64
+            target_bin: XCSoar
+            target_bin_path: bin
+            target_final: XCSoar
+            target_ext: ''
+            target_upload: false
+            target_test: true
+            target_container: ''
 
     steps:
       - name: Install checkout dependencies
@@ -235,14 +244,11 @@ jobs:
               ./ide/provisioning/install-android-tools.sh BUNDLETOOL
             fi
             ./ide/provisioning/install-debian-packages.sh CLEAN
-          elif [ ${{ matrix.os }} = 'macos-12' ] ; then
+          elif [ ${{ startsWith(matrix.os, 'macos-') }} = true ] ; then
             ./ide/provisioning/install-darwin-packages.sh BASE
             if [ ${{ matrix.target }} = 'OSX64' ]; then
               ./ide/provisioning/install-darwin-packages.sh OSX64
-            fi
-          elif [ ${{ matrix.os }} = 'macos-14' ] ; then
-            ./ide/provisioning/install-darwin-packages.sh BASE
-            if [ ${{ matrix.target }} = 'MACOS' ]; then
+            elif [ ${{ matrix.target }} = 'MACOS' ]; then
               ./ide/provisioning/install-darwin-packages.sh MACOS
             elif [ ${{ matrix.target }} = 'IOS64' ]; then
               ./ide/provisioning/install-darwin-packages.sh IOS
