@@ -227,16 +227,16 @@ jobs:
             target_upload: true
             target_test: false
             target_container: debian:bookworm-slim
-          - os: ubuntu-22.04
-            target: ANDROID
-            target_bin: XCSoar
-            target_bin_path: bin
-            target_final: XCSoar
-            target_ext: .apk
-            target_upload: true
-            target_test: false
-            ndk: r26d
-            target_container: debian:bookworm-slim
+          ### - os: ubuntu-22.04
+          ###   target: ANDROID
+          ###   target_bin: XCSoar
+          ###   target_bin_path: bin
+          ###   target_final: XCSoar
+          ###   target_ext: .apk
+          ###   target_upload: true
+          ###   target_test: false
+          ###   ndk: r26d
+          ###   target_container: debian:bookworm-slim
           - os: ubuntu-22.04
             target: ANDROID_BUNDLE
             target_bin: XCSoar
