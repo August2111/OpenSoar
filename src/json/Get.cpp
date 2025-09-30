@@ -1,0 +1,88 @@
+// SPDX-License-Identifier: BSD-2-Clause
+// Copyright OpenSoar
+// author: Uwe Augustin <Info@OpenSoar.de>
+
+#include "Get.hxx"
+
+namespace Json {
+  static boost::json::value json_null; // = boost::json::value::emplace_null();  //boost::json::null{};
+
+  boost::json::value &
+    GetValue(boost::json::value &root, std::vector<std::string_view> args) noexcept
+  {
+    boost::json::value *value = &root;
+    std::string name = "sys_config";
+    size_t i = 0;
+    try {
+      for (auto str : args) {
+        i++;
+        if (value->is_object() && value->as_object().if_contains(str)) {
+          value = &value->at(str);
+          name += "->";
+          name += str;
+        }
+        else {
+//          LogFmt("Json::GetValue: Param {}: {}->{} not exists!",
+//            i, name, str);
+          return json_null;
+        }
+      }
+      return *value;
+    }
+    catch ([[maybe_unused]]const std::exception &e) {
+//      LogFmt("Json-Exception GetConfigBool({}): {}", args.size(), e.what());
+    }
+    return json_null;
+  }
+
+  boost::json::value &
+    GetValue(boost::json::value &root, std::string_view str) noexcept
+  {
+    std::vector<std::string_view> args;
+    for (auto x = str.find('.'); x < 1000; x = str.find('.')) {
+      args.push_back(str.substr(0, x));
+      str = str.substr(x + 1);
+
+    }
+    args.push_back(str);
+    return GetValue(root, args);
+  }
+
+
+  bool
+    GetBool(boost::json::value &root, std::vector<std::string_view> args) noexcept
+  {
+    auto value = GetValue(root, args);
+    if (value.is_bool())
+      return value.as_bool();
+    else {
+//      LogFmt("No Bool");
+      return false;
+    }
+  }
+
+  bool
+    GetBool(boost::json::value &root, std::string_view str) noexcept
+  {
+    auto value = GetValue(root, str);
+    if (value.is_bool())
+      return value.as_bool();
+    else {
+//      LogFmt("No Bool");
+      return false;
+    }
+  }
+
+  boost::json::object &
+    GetObject(boost::json::value &root, std::string_view str) noexcept
+  {
+    auto value = GetValue(root, str);
+    if (value.is_object())
+      return value.as_object();
+    else {
+//      LogFmt("No Object");
+      return value.as_object();   // last valid value
+    }
+  }
+
+} // namespace Json
