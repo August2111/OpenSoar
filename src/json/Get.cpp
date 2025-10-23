@@ -5,7 +5,11 @@
 #include "Get.hpp"
 
 namespace Json {
-  static boost::json::value json_null; // = boost::json::value::emplace_null();  //boost::json::null{};
+  static boost::json::value json_null;
+
+  boost::json::value &GetNull() {
+    return json_null;
+  }
 
   boost::json::value &
     GetValue(boost::json::value &root, std::vector<std::string_view> args) noexcept
@@ -22,14 +26,14 @@ namespace Json {
           name += str;
         }
         else {
-//          LogFmt("Json::GetValue: Param {}: {}->{} not exists!",
-//            i, name, str);
+//        LogFmt("Json::GetValue: Param {}: {}->{} not exists!", i, name, str);
           return json_null;
         }
       }
       return *value;
     }
     catch ([[maybe_unused]]const std::exception &e) {
+//      LogFormat("Json-Exception GetConfigBool(): %s", e.what());
 //      LogFmt("Json-Exception GetConfigBool({}): {}", args.size(), e.what());
     }
     return json_null;
@@ -56,7 +60,6 @@ namespace Json {
     if (value.is_bool())
       return value.as_bool();
     else {
-//      LogFmt("No Bool");
       return false;
     }
   }
@@ -68,7 +71,6 @@ namespace Json {
     if (value.is_bool())
       return value.as_bool();
     else {
-//      LogFmt("No Bool");
       return false;
     }
   }
@@ -80,7 +82,6 @@ namespace Json {
     if (value.is_object())
       return value.as_object();
     else {
-//      LogFmt("No Object");
       return value.as_object();   // last valid value
     }
   }

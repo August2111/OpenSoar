@@ -5,14 +5,15 @@
 #pragma once
 
 #include <boost/json.hpp>
-#include <boost/json/value.hpp>
 
 namespace Json {
+  boost::json::value &GetNull();
 
   boost::json::value &GetValue(boost::json::value &root, std::vector<std::string_view> args) noexcept;
   boost::json::value &GetValue(boost::json::value &root, std::string_view str) noexcept;
+  boost::json::object &GetObject(boost::json::value &root, std::string_view str) noexcept;
+
   bool GetBool(boost::json::value &root, std::vector<std::string_view> args) noexcept;
   bool GetBool(boost::json::value &root, std::string_view str) noexcept;
-  boost::json::object &GetObject(boost::json::value &root, std::string_view str) noexcept;
 
 };// namespace Json
