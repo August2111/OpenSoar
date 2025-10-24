@@ -14,7 +14,8 @@
 
 #include <stdlib.h>
 
-// TODO(aug): with splitting in startProfile and portProfile some tests missin
+/* TODO(aug) : with splitting in startProfile and portProfile some tests are
+ * missing */ 
 #ifdef _DEBUG
 # define LOG_PRINT(x) LogString(x)
 #else
