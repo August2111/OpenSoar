@@ -37,7 +37,9 @@
 
 static AllocatedPath startProfileFile = nullptr;
 static AllocatedPath portSettingFile = nullptr;
-static AllocatedPath sysConfigPath = GetCachePath("system_config.xcc");
+// static const auto sysConfigPath = GetCachePath("test_config.xcc");
+// static const auto sysConfigPath = GetCachePath("system_config.xcc");
+static AllocatedPath sysConfigPath = nullptr;
 static boost::json::value &sys_config = Json::GetNull();
 
 #ifdef TEMP_FILE_RENAME_ACTION
@@ -392,7 +394,8 @@ void
 Profile::LoadConfiguration() noexcept
 {
   auto path = GetCachePath("__system_config.xcc");
-
+  sysConfigPath = GetCachePath("system_config.xcc");
+  
   if (File::Exists(path)) {
     try {
       sys_config = Json::Load(path);
@@ -470,7 +473,9 @@ Profile::LoadConfiguration() noexcept
         // config2obj.emplace("BoolItem", false);
         // config2obj.emplace("IntItem", 12345);
       }
-      Json::Save(sysConfigPath, sys_config);
+      if (!Json::Save(sysConfigPath, sys_config)) {
+        LogFmt("Error saving configuration file: {} ", sysConfigPath.c_str());
+      }
     }
     catch (std::exception &e) {
       LogFmt("Json-Exception: {}", e.what());
@@ -481,12 +486,16 @@ Profile::LoadConfiguration() noexcept
     if (sys_config.is_null()) {
       sys_config = boost::json::object{};
     }
+
+    path = GetCachePath("test2_system_config.json");
     auto x = sys_config.as_object().insert_or_assign("Device A", boost::json::object{});
     x.first->value().as_object().insert_or_assign("Baudrate", 36400);
     x.first->value().as_object().insert_or_assign("Driver", "Larus");
     x.first->value().as_object().insert_or_assign("Port", "ttyUSB0");
 
-    Json::Save(sysConfigPath, sys_config);
+    if (!Json::Save(sysConfigPath, sys_config)) {
+      LogFmt("Error saving configuration file: {} ", sysConfigPath.c_str());
+    }
 
     // std::fstream os(GetCachePath("system_config.xcj").c_str(), std::fstream::out | std::fstream::binary); // = fos(GetCachePath("system_config.xcj"));
     // Json::PrettyPrint(os, sys_config, 2);
