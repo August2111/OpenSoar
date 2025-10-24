@@ -6,7 +6,8 @@
 #include "File.hpp"
 #include "system/FileUtil.hpp"
 
-#include <boost/json/serialize.hpp>
+#include <boost/json.hpp>
+
 #include <string>
 #include <fstream>
 
@@ -29,15 +30,21 @@ namespace Json {
     return system_config;
   }
 
-  void Save(Path path, const boost::json::value &v)
+  bool
+  Save(Path path, const boost::json::value &v)
   {
     std::fstream os(path.c_str(), std::fstream::out | std::fstream::binary);
-    PrettyPrint(os, v, 2);
-    os.close();
+    if (os.is_open() == false) {
+      return false;
+    } else {
+      PrettyPrint(os, v, 2);
+      os.close();
+      return true;
+    }
   }
 
   void
-    PrettyPrint(std::ostream &os, boost::json::value const &jv,
+  PrettyPrint(std::ostream &os, boost::json::value const &jv,
       const size_t indent_size, std::string *indent)
   {
     std::string indent_;
@@ -55,7 +62,7 @@ namespace Json {
           auto it = obj.begin();
           for (;;)
           {
-            os << *indent << boost::json::serialize(it->key()) << " : ";
+            os << *indent << "\"" << it->key().data() << "\" : ";
             PrettyPrint(os, it->value(), indent_size, indent);
             if (++it == obj.end())
               break;
@@ -93,7 +100,7 @@ namespace Json {
 
       case boost::json::kind::string:
       {
-        os << boost::json::serialize(jv.get_string());
+        os << "\"" << jv.get_string().data() << "\"";
         break;
       }
 

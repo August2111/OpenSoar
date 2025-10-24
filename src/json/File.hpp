@@ -14,10 +14,8 @@ namespace Json {
 boost::json::value &
 Load(Path path);
 
-void 
-Save(Path path, const boost::json::value &v);
+bool Save(Path path, const boost::json::value &v);
 
-void
-PrettyPrint(std::ostream &os, boost::json::value const &jv,
+void PrettyPrint(std::ostream &os, boost::json::value const &jv,
   const size_t indent_size = 4, std::string *indent = nullptr);
 } // namespace Json
