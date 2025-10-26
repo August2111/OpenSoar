@@ -3,6 +3,7 @@
 // author: Uwe Augustin <Info@OpenSoar.de>
 
 #include "Get.hpp"
+#include "LogFile.hpp"
 
 namespace Json {
   static boost::json::value json_null;
@@ -26,15 +27,14 @@ namespace Json {
           name += str;
         }
         else {
-//        LogFmt("Json::GetValue: Param {}: {}->{} not exists!", i, name, str);
+          LogFmt("Json::GetValue: Param {}: {}->{} not exists!", i, name, str);
           return json_null;
         }
       }
       return *value;
     }
     catch ([[maybe_unused]]const std::exception &e) {
-//      LogFormat("Json-Exception GetConfigBool(): %s", e.what());
-//      LogFmt("Json-Exception GetConfigBool({}): {}", args.size(), e.what());
+      LogFmt("Json-Exception GetConfigBool({}): {}", args.size(), e.what());
     }
     return json_null;
   }
