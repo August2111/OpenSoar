@@ -37,8 +37,6 @@
 
 static AllocatedPath startProfileFile = nullptr;
 static AllocatedPath portSettingFile = nullptr;
-// static const auto sysConfigPath = GetCachePath("test_config.xcc");
-// static const auto sysConfigPath = GetCachePath("system_config.xcc");
 static AllocatedPath sysConfigPath = nullptr;
 static boost::json::value &sys_config = Json::GetNull();
 
@@ -393,12 +391,11 @@ SetConfigBool(std::vector<std::string_view> args, bool b) noexcept
 void
 Profile::LoadConfiguration() noexcept
 {
-  auto path = GetCachePath("__system_config.xcc");
-  sysConfigPath = GetCachePath("system_config.xcc");
+  sysConfigPath = GetCachePath("system_config.json");
   
-  if (File::Exists(path)) {
+  if (File::Exists(sysConfigPath)) {
     try {
-      sys_config = Json::Load(path);
+      sys_config = Json::Load(enumConfigs::SYSTEM_CONFIG, sysConfigPath);
 
       if (sys_config.is_object()) {
         LogFmt("JSON: {}", to_string(sys_config.kind())); //.as_string().c_str());
@@ -473,44 +470,33 @@ Profile::LoadConfiguration() noexcept
         // config2obj.emplace("BoolItem", false);
         // config2obj.emplace("IntItem", 12345);
       }
-      if (!Json::Save(sysConfigPath, sys_config)) {
-        LogFmt("Error saving configuration file: {} ", sysConfigPath.c_str());
-      }
+      SaveConfiguration();
     }
     catch (std::exception &e) {
       LogFmt("Json-Exception: {}", e.what());
     }
   } else {  // ============================================ File not exist
-    LogFmt("Configuration file not exists: {} ", path.c_str());
-    boost::json::value &sys_config = Json::Load(path);
+    LogFmt("Configuration file not exists: {} ", sysConfigPath.c_str());
+    sys_config = Json::Load(enumConfigs::SYSTEM_CONFIG, sysConfigPath);
     if (sys_config.is_null()) {
       sys_config = boost::json::object{};
     }
 
-    path = GetCachePath("test2_system_config.json");
     auto x = sys_config.as_object().insert_or_assign("Device A", boost::json::object{});
     x.first->value().as_object().insert_or_assign("Baudrate", 36400);
     x.first->value().as_object().insert_or_assign("Driver", "Larus");
     x.first->value().as_object().insert_or_assign("Port", "ttyUSB0");
 
-    if (!Json::Save(sysConfigPath, sys_config)) {
-      LogFmt("Error saving configuration file: {} ", sysConfigPath.c_str());
-    }
-
-    // std::fstream os(GetCachePath("system_config.xcj").c_str(), std::fstream::out | std::fstream::binary); // = fos(GetCachePath("system_config.xcj"));
-    // Json::PrettyPrint(os, sys_config, 2);
-    // os.close();
-
-    // FileOutputStream fos(GetCachePath("system_config.xcj"));
-    // Json::Serialize(fos, sys_config);
-    // fos.Commit();  // make it permanent!
+    SaveConfiguration();
   }
 }
 
 void
 Profile::SaveConfiguration() noexcept
 {
-  auto path = GetCachePath("device_config.xcc");
+  if (!Json::Save(enumConfigs::SYSTEM_CONFIG)) {
+    LogFmt("Error saving configuration file: {} ", sysConfigPath.c_str());
+  }
 }
 
 AllocatedPath
