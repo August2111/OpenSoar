@@ -9,12 +9,19 @@
 
 class Path;
 
+enum enumConfigs {
+  SYSTEM_CONFIG,
+  PORT_CONFIG,
+  PROFILE,
+  LAST
+};
+
 namespace Json {
 
-boost::json::value &
-Load(Path path);
 
-bool Save(Path path, const boost::json::value &v);
+boost::json::value &Load(enumConfigs config, Path path);
+
+bool Save(enumConfigs config); //  , const boost::json::value &v);
 
 void PrettyPrint(std::ostream &os, boost::json::value const &jv,
   const size_t indent_size = 4, std::string *indent = nullptr);

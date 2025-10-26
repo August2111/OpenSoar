@@ -14,30 +14,42 @@
 namespace Json {
   static boost::json::value system_config;
 
-  boost::json::value &Load(Path path) {
+  struct _structJsonConfig {
+    enumConfigs type;
+    Path path;
+    boost::json::value json_value;
+  };
+  _structJsonConfig structJsonConfig[enumConfigs::LAST];
+  // static boost::json::value json_configs[enumConfigs::LAST];
+
+  boost::json::value &Load(enumConfigs config, Path path) {
     if (File::Exists(path)) {
       int buf_size = File::GetSize(path) + 1;
       char *buffer = new char[buf_size]; // = 4k
       try {
         if (File::ReadString(path, buffer, buf_size)) {
-          system_config = boost::json::parse(buffer);
+          // system_config = boost::json::parse(buffer);
+          structJsonConfig[config].type = config;
+          structJsonConfig[config].path = path;
+          structJsonConfig[config].json_value = boost::json::parse(buffer);
         }
       }
       catch (std::exception &e) {
       }
       delete[] buffer;
     }
-    return system_config;
+    return structJsonConfig[config].json_value;
   }
 
   bool
-  Save(Path path, const boost::json::value &v)
+  Save(enumConfigs config)  //, const boost::json::value &v)
   {
-    std::fstream os(path.c_str(), std::fstream::out | std::fstream::binary);
+    std::fstream os(structJsonConfig[config].path.c_str(),
+      std::fstream::out | std::fstream::binary);
     if (os.is_open() == false) {
       return false;
     } else {
-      PrettyPrint(os, v, 2);
+      PrettyPrint(os, structJsonConfig[config].json_value, 2);
       os.close();
       return true;
     }
