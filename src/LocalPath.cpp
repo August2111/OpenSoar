@@ -254,7 +254,8 @@ FindDataPaths() noexcept
 #ifdef HAVE_POSIX
   /* on Unix, use ~/OpenSoarData too */
   if (const char *home = getenv("HOME"); home != nullptr) {
-    home_path = AllocatedPath::Build(Path(home);
+    // home_path = AllocatedPath::Build(Path(home));
+    home_path = AllocatedPath(home);
 #ifdef __APPLE__
     /* macOS users are not used to dot-files in their home
        directory - make it a little bit easier for them to find the
@@ -347,7 +348,11 @@ InitialiseDataPath()
        * C:\Users\(user)\AppData\Local\OpenSoarCache) */
       std::string str = WideToUTF8(path);
       cache_path = AllocatedPath::Build(str.c_str(), "OpenSoarCache");
+// #ifdef __MSVC__
       CoTaskMemFree(path);
+// #else __MSVC__
+//       delete[] path;
+// #endif
     } else {
       // cache path inside the data path
       cache_path = LocalPath("cache");
@@ -359,7 +364,10 @@ InitialiseDataPath()
     cache_path = AllocatedPath::Build(home_path, "cache");
     // cache_path = AllocatedPath::Build(GetPrimaryDataPath(), "cache");
 #endif
-    LogFormat("Cache path:  {}", cache_path.c_str());
+#ifndef TESTING_APP
+    LogFormat("Cache path:  %s", cache_path.c_str());
+    // not allowed (gcc) LogFmt("Cache path:  {}", cache_path.c_str());
+#endif
   }
 }
 
