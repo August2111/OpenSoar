@@ -18,6 +18,7 @@
 #endif
 
 #ifdef _WIN32
+#include "util/UTF8.hpp"
 #include "system/PathName.hpp"
 #endif
 #include <string>
@@ -42,6 +43,8 @@
 #import <Foundation/Foundation.h>
 #endif
 
+#include "LogFile.hpp"
+
 #define OPENSOAR_DATADIR "OpenSoarData"
 
 /**
@@ -56,6 +59,7 @@
 static std::list<AllocatedPath> data_paths;
 
 static AllocatedPath cache_path;
+static AllocatedPath home_path;
 
 Path
 GetPrimaryDataPath() noexcept
@@ -250,6 +254,7 @@ FindDataPaths() noexcept
 #ifdef HAVE_POSIX
   /* on Unix, use ~/OpenSoarData too */
   if (const char *home = getenv("HOME"); home != nullptr) {
+    home_path = AllocatedPath::Build(Path(home);
 #ifdef __APPLE__
     /* macOS users are not used to dot-files in their home
        directory - make it a little bit easier for them to find the
@@ -328,15 +333,34 @@ InitialiseDataPath()
       throw std::runtime_error("No data path found");
   }
   // TODO: delete the old cache directory in OpenSoarData?
+  if (cache_path == nullptr) {
 #ifdef ANDROID
-  cache_path = context->GetExternalCacheDir(Java::GetEnv());
-  if (cache_path == nullptr)
-    throw std::runtime_error("No Android cache directory");
+    cache_path = context->GetExternalCacheDir(Java::GetEnv());
+    if (cache_path == nullptr)
+      throw std::runtime_error("No Android cache directory");
 
-#else
-  if (cache_path == nullptr)
-    cache_path = LocalPath("cache");
+#elif defined( _WIN32)  // Windows: Win32, Win64
+    PWSTR path = nullptr;
+    HRESULT hres = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &path);
+    if (SUCCEEDED(hres)) {
+      /* cache path inside LocalAppData(e.g.
+       * C:\Users\(user)\AppData\Local\OpenSoarCache) */
+      std::string str = WideToUTF8(path);
+      cache_path = AllocatedPath::Build(str.c_str(), "OpenSoarCache");
+      CoTaskMemFree(path);
+    } else {
+      // cache path inside the data path
+      cache_path = LocalPath("cache");
+    }
+#elif defined(IS_OPENVARIO)  // OpenVario
+    // own folder of 3rd partition: /home/root/data/cache
+    cache_path = AllocatedPath::Build(home_path, "cache");
+#elif defined(HAVE_POSIX)
+    cache_path = AllocatedPath::Build(home_path, "cache");
+    // cache_path = AllocatedPath::Build(GetPrimaryDataPath(), "cache");
 #endif
+    LogFormat("Cache path:  {}", cache_path.c_str());
+  }
 }
 
 void
