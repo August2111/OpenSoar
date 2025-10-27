@@ -341,28 +341,31 @@ InitialiseDataPath()
   if (cache_path == nullptr) {
 #ifdef ANDROID
     cache_path = context->GetExternalCacheDir(Java::GetEnv());
-    if (cache_path == nullptr)
-      throw std::runtime_error("No Android cache directory");
 
 #elif defined( _WIN32)  // Windows: Win32, Win64
     PWSTR path = nullptr;
     HRESULT hres = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &path);
     if (SUCCEEDED(hres)) {
       /* cache path inside LocalAppData(e.g.
-       * C:/Users/${USER}/AppData/Local/OpenSoarCache) */
+       * 'C:/Users/${USER}/AppData/Local/OpenSoar/.cache' ) */
       std::string str = WideToUTF8(path);
-      std::replace(str.begin(), str.end(), '\\', '/');
-      cache_path = AllocatedPath::Build(str.c_str(), "OpenSoarCache");
       CoTaskMemFree(path);
+      std::replace(str.begin(), str.end(), '\\', '/');
+      cache_path = AllocatedPath::Build(str.c_str(), "OpenSoar/.cache");
     } else {
       // cache path inside the data path
-      cache_path = LocalPath("cache");
+      cache_path = LocalPath(".cache");
     }
 #elif defined(HAVE_POSIX)
     // OpenVario: own folder of 3rd partition '~/data/.cache'
     // Linux and others: ~/.cache
     cache_path = AllocatedPath::Build(home_path, ".cache");
 #endif
+    if (cache_path == nullptr)
+      throw std::runtime_error("Cache directory not available");
+    else {
+      Directory::Create(cache_path);
+    }
 
 #ifndef TESTING_APP
     LogFmt("Cache path: {}", cache_path.c_str());
