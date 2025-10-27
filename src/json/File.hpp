@@ -4,10 +4,10 @@
 
 #pragma once
 
+#include "system/Path.hpp"
+
 #include <boost/json/fwd.hpp>
 #include <string>
-
-class Path;
 
 enum enumConfigs {
   SYSTEM_CONFIG,
@@ -19,9 +19,13 @@ enum enumConfigs {
 namespace Json {
 
 
-boost::json::value &Load(enumConfigs config, Path path);
+boost::json::value &Load(enumConfigs config, const Path &path);
 
-bool Save(enumConfigs config); //  , const boost::json::value &v);
+bool Save(enumConfigs config);
+
+boost::json::value &GetValue(enumConfigs config);
+boost::json::object &GetObject(enumConfigs config);
+
 
 void PrettyPrint(std::ostream &os, boost::json::value const &jv,
   const size_t indent_size = 4, std::string *indent = nullptr);

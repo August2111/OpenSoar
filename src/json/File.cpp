@@ -5,6 +5,7 @@
 #include "Get.hpp"
 #include "File.hpp"
 #include "system/FileUtil.hpp"
+#include "LocalPath.hpp"
 
 #include <boost/json.hpp>
 
@@ -22,7 +23,7 @@ namespace Json {
   _structJsonConfig structJsonConfig[enumConfigs::LAST];
   // static boost::json::value json_configs[enumConfigs::LAST];
 
-  boost::json::value &Load(enumConfigs config, Path path) {
+  boost::json::value &Load(enumConfigs config, const Path &path) {
     if (File::Exists(path)) {
       int buf_size = File::GetSize(path) + 1;
       char *buffer = new char[buf_size]; // = 4k
@@ -34,16 +35,26 @@ namespace Json {
           structJsonConfig[config].json_value = boost::json::parse(buffer);
         }
       }
-      catch (std::exception &e) {
+      catch ([[m]] std::exception &e) {
       }
       delete[] buffer;
+    } else {
+      // file not exists, create empty json object
+      structJsonConfig[config].type = config;
+      structJsonConfig[config].path = path;
+      structJsonConfig[config].json_value = boost::json::object{};
     }
     return structJsonConfig[config].json_value;
   }
 
   bool
-  Save(enumConfigs config)  //, const boost::json::value &v)
+  Save(enumConfigs config)
   {
+    if (structJsonConfig[config].path.empty()) {
+      structJsonConfig[config].type = config;
+      structJsonConfig[config].path = GetCachePath();
+      // structJsonConfig[config].json_value = boost::json::object{};
+    }
     std::fstream os(structJsonConfig[config].path.c_str(),
       std::fstream::out | std::fstream::binary);
     if (os.is_open() == false) {
@@ -142,6 +153,18 @@ namespace Json {
 
     if (indent->empty())
       os << std::endl;
+  }
+
+
+  boost::json::value &
+    GetValue(enumConfigs config)
+  {
+    return structJsonConfig[config].json_value;
+  }
+  boost::json::object &
+    GetObject(enumConfigs config)
+  {
+    return structJsonConfig[config].json_value.as_object();
   }
 
 } // namespace Json
