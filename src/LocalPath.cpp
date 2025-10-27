@@ -21,10 +21,6 @@
 #include "util/UTF8.hpp"
 #include "system/PathName.hpp"
 #endif
-#include <string>
-
-#include <algorithm>
-#include <list>
 
 #include <cassert>
 #include <stdlib.h>
@@ -38,6 +34,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #endif
+
+#include <string>
+#include <algorithm>
+#include <list>
 
 #ifdef __APPLE__
 #import <Foundation/Foundation.h>
@@ -246,8 +246,12 @@ FindDataPaths() noexcept
   {
     char buffer[MAX_PATH];
     if (SHGetSpecialFolderPath(nullptr, buffer, CSIDL_PERSONAL,
-                               result.empty()))
-      result.emplace_back(AllocatedPath::Build(buffer, OPENSOAR_DATADIR));
+      result.empty()))
+    {
+      std::string text = buffer;
+      std::replace(text.begin(), text.end(), '\\', '/'); 
+      result.emplace_back(AllocatedPath::Build(text.data(), OPENSOAR_DATADIR));
+    }
   }
 #endif // _WIN32
 
@@ -345,27 +349,23 @@ InitialiseDataPath()
     HRESULT hres = SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &path);
     if (SUCCEEDED(hres)) {
       /* cache path inside LocalAppData(e.g.
-       * C:\Users\(user)\AppData\Local\OpenSoarCache) */
+       * C:/Users/${USER}/AppData/Local/OpenSoarCache) */
       std::string str = WideToUTF8(path);
+      std::replace(str.begin(), str.end(), '\\', '/');
       cache_path = AllocatedPath::Build(str.c_str(), "OpenSoarCache");
-// #ifdef __MSVC__
       CoTaskMemFree(path);
-// #else __MSVC__
-//       delete[] path;
-// #endif
     } else {
       // cache path inside the data path
       cache_path = LocalPath("cache");
     }
-#elif defined(IS_OPENVARIO)  // OpenVario
-    // own folder of 3rd partition: /home/root/data/cache
-    cache_path = AllocatedPath::Build(home_path, "cache");
 #elif defined(HAVE_POSIX)
-    cache_path = AllocatedPath::Build(home_path, "cache");
-    // cache_path = AllocatedPath::Build(GetPrimaryDataPath(), "cache");
+    // OpenVario: own folder of 3rd partition '~/data/.cache'
+    // Linux and others: ~/.cache
+    cache_path = AllocatedPath::Build(home_path, ".cache");
 #endif
+
 #ifndef TESTING_APP
-    LogFormat("Cache path:  %s", cache_path.c_str());
+    LogFmt("Cache path: {}", cache_path.c_str());
     // not allowed (gcc) LogFmt("Cache path:  {}", cache_path.c_str());
 #endif
   }
