@@ -26,6 +26,8 @@
 #include <memory>
 #include <stdio.h>
 
+void VisitDataFiles(const char *filter, File::Visitor &visitor);
+
 void VisitDataFiles([[maybe_unused]] const char* filter,
                     [[maybe_unused]] File::Visitor &visitor) {}
 
