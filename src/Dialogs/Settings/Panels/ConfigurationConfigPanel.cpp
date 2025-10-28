@@ -101,6 +101,7 @@ ConfigurationConfigPanel::Save(bool &_changed) noexcept
   bool ClubProfileChanged = SaveValueFileReader(ConfigurationClubProfile,
     ProfileKeys::ConfigurationClubProfileFile);
 
+  changed |= ClubProfileChanged;
 
   _changed |= changed;
 
