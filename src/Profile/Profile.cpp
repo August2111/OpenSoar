@@ -313,10 +313,12 @@ Profile::LoadConfiguration() noexcept
           }
         }
         LogFmt("JSON: {}", config2.at("ClubProfile").as_string().c_str());
+#if 0
         auto &config2obj = Json::GetObject(*sys_config, "Config2");
-        // config2obj.emplace("NewItem", "new_item");
-        // config2obj.emplace("BoolItem", false);
-        // config2obj.emplace("IntItem", 12345);
+        config2obj.emplace("NewItem", "new_item");
+        config2obj.emplace("BoolItem", false);
+        config2obj.emplace("IntItem", 12345);
+#endif
       }
       SaveConfiguration();
     }
