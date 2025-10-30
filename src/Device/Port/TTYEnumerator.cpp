@@ -29,7 +29,7 @@ CheckTTYName(const char *name) noexcept
     if (IsDigitASCII(*t))
       return false;
 
-    return true;  // => correct 
+    return true;
   } else if (StringStartsWith(name, "rfcomm"))
     return true;
   else
@@ -48,14 +48,8 @@ TTYEnumerator::Next() noexcept
       /* truncated - ignore */
       continue;
 
-    if (File::IsCharDev(Path{ path })) {
-      if ((access(path, R_OK | W_OK) == 0) ||
-        // detect USB sticks independent of permissions
-        StringStartsWith(ent->d_name, "ttyUSB") ||
-        // detect Arduino (USB) devices independent of permissions
-        StringStartsWith(ent->d_name, "ttyACM"))
+    if (File::IsCharDev(Path{path}) && access(path, R_OK|W_OK) == 0)
       return path;
-    }
   }
 
   return nullptr;
