@@ -18,27 +18,29 @@
 static AVAudioPlayer *player = nil;
 #endif
 
+#include <string>
+
 bool
-SoundUtil::Play(const TCHAR *resource_name)
+SoundUtil::Play([[maybe_unused]]const std::string_view resource_name)
 {
 #if TARGET_OS_IPHONE
   // Map resource names to actual file names
   // ToDo: Avoid duplication of static mapping information with android/src/SoundUtil.java ?
   const char *filename = nullptr;
-  if (strcmp(resource_name, "IDR_FAIL") == 0) {
+  if (resource_name == "IDR_FAIL") {
     filename = "fail";
-  } else if (strcmp(resource_name, "IDR_INSERT") == 0) {
+  } else if (resource_name == "IDR_INSERT") {
     filename = "insert";
-  } else if (strcmp(resource_name, "IDR_REMOVE") == 0) {
+  } else if (resource_name == "IDR_REMOVE") {
     filename = "remove";
-  } else if (strcmp(resource_name, "IDR_WAV_BEEPBWEEP") == 0) {
+  } else if (resource_name == "IDR_WAV_BEEPBWEEP") {
     filename = "beep_bweep";
-  } else if (strcmp(resource_name, "IDR_WAV_CLEAR") == 0) {
+  } else if (resource_name == "IDR_WAV_CLEAR") {
     filename = "beep_clear";
-  } else if (strcmp(resource_name, "IDR_WAV_DRIP") == 0) {
+  } else if (resource_name == "IDR_WAV_DRIP") {
     filename = "beep_drip";
   } else {
-    LogFormat("Unknown sound resource: %s", resource_name);
+    LogFormat("Unknown sound resource: %s", resource_name.data());
     return false;
   }
   
@@ -55,10 +57,12 @@ SoundUtil::Play(const TCHAR *resource_name)
 
   if (!player) {
     if (error) {
-      LogFormat("Failed to create AVAudioPlayer for %s (%s): %s", resource_name, filename,
+      LogFormat("Failed to create AVAudioPlayer for %s (%s): %s",
+                resource_name.data(), filename,
                 [[error localizedDescription] UTF8String]);
     } else {
-      LogFormat("Failed to create AVAudioPlayer for %s (%s): unknown reason", resource_name, filename);
+      LogFormat("Failed to create AVAudioPlayer for %s (%s): unknown reason",
+                resource_name.data(), filename);
     }
     return false;
   }
@@ -68,7 +72,6 @@ SoundUtil::Play(const TCHAR *resource_name)
 
   return true;
 #else
-  (void)resource_name;
   return false;
 #endif
 }
