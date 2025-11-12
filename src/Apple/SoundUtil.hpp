@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <tchar.h>
+#include <string>
 
 class SoundUtil {
 public:
-  static bool Play(const TCHAR *resource_name);
+  static bool Play(const std::string_view resource_name);
 };

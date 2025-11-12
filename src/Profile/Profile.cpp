@@ -17,7 +17,6 @@
 #include "util/StringAPI.hxx"
 #include "util/StringCompare.hxx"
 #include "util/StringUtil.hpp"
-#include "util/tstring.hpp"
 
 #include "Device/Config.hpp"
 #include "Interface.hpp"
@@ -219,7 +218,7 @@ Profile::GetPath(std::string_view key) noexcept
 }
 
 std::vector<AllocatedPath>
-Profile::GetMultiplePaths(std::string_view key, const TCHAR *patterns)
+Profile::GetMultiplePaths(std::string_view key, const char *patterns)
 {
   return map.GetMultiplePaths(key, patterns);
 }
