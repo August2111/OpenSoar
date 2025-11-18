@@ -140,7 +140,7 @@ install_android() {
   # there is an error with jdk 21, the default jdk at ubuntu 24.04.3 (and later)
   # At least fix this error (the .class files couldn't use from DEX tool d8!)
   # (normally: default-jdk-headless)
-  apt-get install ${APTOPTS[*]} openjdk-17-jre-headless \
+  apt-get install ${APTOPTS[*]} openjdk-17-jdk-headless \
       vorbis-tools \
       adb \
       libtool \
