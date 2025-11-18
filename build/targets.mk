@@ -544,6 +544,10 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += -DANDROID
+  # August2111: for NetCDF:
+    # ? TARGET_CPPFLAGS += -D__ARM_PCS_VFP
+    # TARGET_CPPFLAGS += -isystem /usr/include
+    # TARGET_CPPFLAGS += -isystem /usr/arm-linux-gnueabihf/include
   CXXFLAGS += -D__STDC_VERSION__=199901L
   # disable pretty printer embedding
   CXXFLAGS += -DBOOST_ALL_NO_EMBEDDED_GDB_SCRIPTS
