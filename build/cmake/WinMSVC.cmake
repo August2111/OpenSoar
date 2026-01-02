@@ -23,7 +23,7 @@ endif()
 
 # SkySight support feature:
 set (HAVE_SKYSIGHT ON)
-set (HAVE_SKYSIGHT OFF)
+# set (HAVE_SKYSIGHT OFF)
 ###  see CMakeLists.txt, line 216: add_compile_definitions(HAVE_SKYSIGHT) 
 
 if (HAVE_SKYSIGHT)
@@ -83,10 +83,10 @@ set(BASIC_LINK_LIBRARIES
 )
 
 list(APPEND BASIC_LINK_LIBRARIES
-        shlwapi.lib # needed from hdf5
+#        shlwapi.lib # needed from hdf5
 )
 
-set(SSL_LIBS )  # no ssl lib on windows for curl necessary!
+set(SSL_LIBS)  # no ssl lib on windows for curl necessary!
 set(CRYPTO_LIBS Crypt32.lib BCrypt.lib)
 
 set(USE_MEMORY_CANVAS OFF)

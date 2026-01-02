@@ -9,14 +9,14 @@ if (_COMPLETE_INSTALL)
         "-DCMAKE_INSTALL_PREFIX=${_INSTALL_DIR}"
         "-DCMAKE_INSTALL_BINDIR=${_INSTALL_BIN_DIR}"
         "-DCMAKE_INSTALL_LIBDIR=${_INSTALL_LIB_DIR}"
-        # "-DCMAKE_INSTALL_COMPONENT=bin/${TOOLCHAIN}"
-        # "-DCMAKE_INSTALL_INCLUDEDIR=include/${TOOLCHAIN}"
         "-DCMAKE_INSTALL_INCLUDEDIR=${_INSTALL_INC_DIR}"
         "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
         "-DCARES_SHARED=OFF"
         "-DCARES_STATIC=ON"
         "-DCARES_STATIC_PIC=ON"
-        "-DCARES_BUILD_TESTS=OFF" )
+        "-DCARES_BUILD_TESTS=OFF"
+        "-DCARES_BUILD_TOOLS=OFF"   # OFF"
+    )
 
     # GIT_TAG before 1.30.0 (f.e. "cares-1_29_0")
     # string(REPLACE "." "_" GIT_TAG cares-${${TARGET_CNAME}_VERSION})  # after 1.17.1 only 'cares', before c-ares!
@@ -34,7 +34,7 @@ if (_COMPLETE_INSTALL)
         # PATCH_COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_SOURCE_DIR}/CURL_CMakeLists.txt.in" <SOURCE_DIR>/CMakeLists.txt
         CMAKE_ARGS ${CMAKE_ARGS}
         # INSTALL_COMMAND   cmake --build . --target install --config Release
-        ${_INSTALL_COMMAND}
+        INSTALL_COMMAND ${_INSTALL_COMMAND}
         BUILD_ALWAYS ${EP_BUILD_ALWAYS}
         BUILD_IN_SOURCE ${EP_BUILD_IN_SOURCE}
         DEPENDS  ${ZLIB_TARGET}  # !!!!

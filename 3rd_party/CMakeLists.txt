@@ -20,6 +20,8 @@ cmake_minimum_required(VERSION 3.15)
 # - <TARGET>_INCLUDE_DIR    = ${TARGET_CNAME}_INCLUDE_DIR 
 #           -
 
+  CMAKE_POLICY(SET CMP0135 NEW) # Or OLD
+
   if (SHOW_SUBPROJECTS)
     message(STATUS "+++ Start CMake ${CMAKE_CURRENT_SOURCE_DIR}!")
   endif()
@@ -30,18 +32,33 @@ cmake_minimum_required(VERSION 3.15)
 
 if (NOT LINK_LIBS)
   message(STATUS "+++ No LINK_LIBS!!!")
-  set (LINK_LIBS /usr/lib/link_libs)  # August2111: this Windows, Flaps6,....
-endif (NOT LINK_LIBS)
+  if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+    set (LINK_LIBS D:/Projects/link_libs)  # August2111: this Windows, Flaps6,....
+  else()
+    set (LINK_LIBS /usr/lib/link_libs)  # Linux,...
+    message(STATUS "+++ LINK_LIBS not Windows (${LINK_LIBS})!!!")
+  endif()
+endif ()
 
   include(3rd_party.cmake)
   
 ##   if (${EP_CMAKE} MATCHES "")
   if (NOT THIRD_PARTY)
-     message(FATAL_ERROR "THIRD_PARTY is empty!")
-     set(EP_CMAKE D:/Libs)   ## shorter and better? (August2111, 2025-12-15)
+     message(Status "THIRD_PARTY is empty!")
+     if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
+       set(THIRD_PARTY D:/Libs)   ## shorter and better? (August2111, 2025-12-15)
+     endif()
   endif()
-  set(THIRD_PARTY D:/Libs)   ## shorter and better? (August2111, 2025-12-15)
-  set(EP_CMAKE "${THIRD_PARTY}") # ??
+  if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows" AND NOT THIRD_PARTY STREQUAL "D:/Libs")
+     message(STATUS "THIRD_PARTY = ${THIRD_PARTY}!")
+     message(FATAL_ERROR "THIRD_PARTY!")
+     set(THIRD_PARTY D:/Libs)   ## 
+  endif()
+
+  set(EP_CMAKE "${THIRD_PARTY}")
+  # ATTENTION: (ExtendedProject_Add needs the line 'PREFIX  "${${TARGET_CNAME}_PREFIX}"'
+  # for using an other directory and not the internal one 
+
   option(USE_SYSTEM_${TARGET_CNAME} "Should we use the system ${TARGET_NAME}?" OFF)
   option(EP_BUILD_ALWAYS "Build 3rd party packages always?" OFF)
   option(EP_BUILD_IN_SOURCE "Build 3rd party in sources (Recommended: OFF)?" OFF)
@@ -51,10 +68,20 @@ include(CMakeSource.cmake)
 set(EXTRA_BUILD 1)
 
 
+# param 1: target_name
+# param 2: lib_name  (w/o LIB_PREFIX)
+# param 3: debug_name (optional - if different from lib_name)
 macro(prepare_3rdparty target_name)
     set(params ${ARGN}) # ARGN isn't like a list
     list (GET params 0 lib_name)
     list (LENGTH params _LENGTH)
+    get_filename_component(_SOURCE_BASE ${CMAKE_CURRENT_SOURCE_DIR} ABSOLUTE)
+    string(REGEX REPLACE "/3rd_party" "" _SOURCE_BASE  ${_SOURCE_BASE})
+
+    set(_PATCH_BASE ${_SOURCE_BASE}/lib)
+    set(_PATCH_DIR ${_PATCH_BASE}/${lib_name})
+
+    # message(FATAL_ERROR "Pathes = ${_SOURCE_BASE} / ${_PATCH_DIR} !!!!!!!!!!!!!!!!!!!!!!!!!")
 
     if (_LENGTH LESS 2)
      #  message(FATAL_ERROR "Empty String (${_LENGTH}) !!!!!!!!!!!!!!!!!!!!!!!!!")
@@ -73,6 +100,7 @@ macro(prepare_3rdparty target_name)
     string(REPEAT ${_NEW_STRING} 6 _DISPLAY_STRING)
     message(STATUS "${_DISPLAY_STRING}")
     # message(STATUS "${_DISPLAY_STRING}  (${_LENGTH} vs ${_LENGTH2})")  # to check the length
+    set (${TARGET_CNAME}_VERSION ${${TARGET_CNAME}_VERSION}  PARENT_SCOPE)
 
     set(LIB_TARGET_NAME ${target_name})
     set(${TARGET_CNAME}_TARGET ${LIB_TARGET_NAME}_3rd)
@@ -91,6 +119,7 @@ macro(prepare_3rdparty target_name)
     # set(${TARGET_CNAME}_INSTALL_DIR "${LINK_LIBS}/${LIB_TARGET_NAME}/${XCSOAR_${TARGET_CNAME}_VERSION}")
     set(${TARGET_CNAME}_PREFIX "${EP_CMAKE}/${LIB_TARGET_NAME}/${XCSOAR_${TARGET_CNAME}_VERSION}")
     set(${TARGET_CNAME}_SOURCE_DIR  "${${TARGET_CNAME}_PREFIX}/src/${LIB_TARGET_NAME}")
+    set(${TARGET_CNAME}_BUILD_DIR  "${${TARGET_CNAME}_PREFIX}/build/${TOOLCHAIN}")
 
 
     #-------------------
@@ -152,11 +181,9 @@ else()
 #  message(FATAL_ERROR "_INSTALL_DIR = ${_INSTALL_DIR}")
 endif()
 
-# message (FATAL_ERROR "Config = '$<CONFIG:Debug>', '$<CONFIG>', '$<CONFIGURATION>', '${CMAKE_BUILD_TYPE}' ")
-## if($<CONFIG:Debug>) 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
-    # set(CMAKE_BUILD_TYPE Debug)
+  # set(CMAKE_BUILD_TYPE Debug)
     # message(FATAL_ERROR "+++++ CMAKE_BUILD_TYPE = ${CMAKE_BUILD_TYPE} ++++++")
     if(VERBOSE_LEVEL GREATER 99)
       message(STATUS "+++++ CMAKE_BUILD_TYPE (1) = ${CMAKE_BUILD_TYPE} ++++++")
@@ -168,10 +195,7 @@ else()
 endif()
 # message(FATAL_ERROR "Stop !!!!!!!!!!!!!!!!!!!!!!!!!")
 
-set(_INSTALL_COMMAND INSTALL_COMMAND cmake --build . --target install)
-### ??? install_step(irgendwas)
-### ??? # set(_INSTALL_COMMAND  _install_cmd  )
-
+set(_INSTALL_COMMAND cmake --build . --target install)
 set(_INSTALL_BIN_DIR "bin/${TOOLCHAIN}")
 set(_INSTALL_LIB_DIR "lib/${TOOLCHAIN}")
 if(MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -181,6 +205,7 @@ if(MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
     string(APPEND _INSTALL_LIB_DIR "d")
 else()
     set(_TARGET_LIBRARY    ${_TARGET_LIB_RELEASE})
+    # mgw152? 
     list(APPEND _INSTALL_COMMAND --config Release)
 endif()
     set(${TARGET_CNAME}_LIBRARY  ${_TARGET_LIBRARY})
@@ -202,15 +227,30 @@ if(${lib_name} MATCHES "boost")
   file(GLOB BOOST_LIB_FILES ${_GLOB_DIR}/libboost_*.lib)
   list(LENGTH BOOST_LIB_FILES BOOST_LIB_COUNT)
   if (BOOST_LIB_COUNT  GREATER 1)
-    set(_COMPLETE_INSTALL OFF)
+##    set(_COMPLETE_INSTALL OFF)
     message(STATUS "### boost: BOOST_LIB_FILES = ${BOOST_LIB_FILES} -> ${BOOST_LIB_COUNT} ")
   else()
-    set(_COMPLETE_INSTALL ON)
-    message(FATAL_ERROR "### boost: BOOST_LIB_FILES = ${BOOST_LIB_FILES} -> ${BOOST_LIB_COUNT} ")
+##    set(_COMPLETE_INSTALL ON)
+    # message(FATAL_ERROR "### boost: BOOST_LIB_FILES = ${BOOST_LIB_FILES} -> ${BOOST_LIB_COUNT} ")
   endif()
 
 elseif(EXISTS ${_TARGET_LIBRARY}) 
-    set(_COMPLETE_INSTALL OFF)
+   set(_COMPLETE_INSTALL OFF)
+   if (ON) #  ON means do enable compiling some projects !!!!
+     # only a check if some libraries have to be compiled
+     if(
+        ${lib_name} STREQUAL "sodium" OR 
+        # ${lib_name} STREQUAL "curl" OR 
+        # ${lib_name} STREQUAL "sqlite3"  OR 
+        # ${lib_name} STREQUAL "proj" OR 
+        # ${lib_name} STREQUAL "geotiff" OR 
+        # ${lib_name} STREQUAL "netcdf" OR
+        # ${lib_name} STREQUAL "netcdf-cxx4" OR
+        OFF
+     )
+       set(_COMPLETE_INSTALL ON)
+     endif()
+   endif()
 else()
     set(_COMPLETE_INSTALL ON)
     ##   message(FATAL_ERROR "### PNG: _TARGET_LIBRARY = ${_TARGET_LIBRARY} ")
@@ -242,6 +282,11 @@ macro(post_3rdparty)
         set_target_properties(${${TARGET_CNAME}_TARGET} PROPERTIES FOLDER 3rdParty)
         # set_target_properties(${_BUILD_TARGET} PROPERTIES FOLDER 3rdParty)
         add_dependencies(${${TARGET_CNAME}_TARGET}  ${_BUILD_TARGET})
+
+  if(${lib_name} MATCHES "sqlite")
+    message(STATUS "!!!!! sqlite3 = ${TARGET_CNAME}_TARGET ||| ${${TARGET_CNAME}_TARGET}")
+    # message(FATAL_ERROR "!!!!! Stop !!!!")
+  endif()
     endif()
 
 if (_COMPLETE_INSTALL)
@@ -292,15 +337,13 @@ set_target_properties(ThirdParty PROPERTIES FOLDER 3rdParty)
 
 
 if(VERBOSE_LEVEL GREATER 80)
-message(STATUS      "!!!! HDF5_LIB_DIR: ${HDF5_LIB_DIR}")
+# message(STATUS      "!!!! HDF5_LIB_DIR: ${HDF5_LIB_DIR}")
 message(STATUS      "!!!! CURL_LIB_DIR: ${CURL_LIB_DIR}")
 message(STATUS      "!!!! ------------------------------------------  !!")
-message(STATUS      "!!!! HDF5_DIR:     ${HDF5_DIR}")
+# message(STATUS      "!!!! HDF5_DIR:     ${HDF5_DIR}")
 message(STATUS      "!!!! CURL_DIR:     ${CURL_DIR}")
 message(STATUS      "!!!! ZLIB_DIR:     ${ZLIB_DIR}")
 message(STATUS      "!!!! ------------------------------------------  !!")
-message(STATUS      "!!!! HDF5F_CXX_CMAKE_DIR: ${HDF5_CMAKE_DIR}")
+# message(STATUS      "!!!! HDF5F_CXX_CMAKE_DIR: ${HDF5_CMAKE_DIR}")
 message(STATUS      "!!!! NETCDF_CXX_CMAKE_DIR: ${NETCDF_CXX_CMAKE_DIR}")
 endif(VERBOSE_LEVEL GREATER 80)
-# message(FATAL_ERROR "!!!! HDF5_DIR: ${LINK_LIBS}/hdf5/hdf5-${HDF5_VERSION}")
-
