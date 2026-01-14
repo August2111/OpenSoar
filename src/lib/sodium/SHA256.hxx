@@ -16,11 +16,21 @@ class SHA256State {
 	crypto_hash_sha256_state state;
 
 public:
-	SHA256State() noexcept {
-		crypto_hash_sha256_init(&state);
+#if !defined(__MSVC__)  // def __CLANG__
+  SHA256State() noexcept {
 	}
 
-	void Update(std::span<const std::byte> p) noexcept {
+	void Update([[maybe_unused]] std::span<const std::byte> p) noexcept {
+	}
+
+	void Final([[maybe_unused]] std::span<std::byte, crypto_hash_sha256_BYTES> out) noexcept {
+	}
+
+#else
+  SHA256State() noexcept {
+    crypto_hash_sha256_init(&state);
+  }
+  void Update(std::span<const std::byte> p) noexcept {
 		crypto_hash_sha256_update(&state,
 					  reinterpret_cast<const unsigned char *>(p.data()),
 					  p.size());
@@ -30,6 +40,7 @@ public:
 		crypto_hash_sha256_final(&state,
 					 reinterpret_cast<unsigned char *>(out.data()));
 	}
+#endif
 
 	auto Final() noexcept {
 		SHA256DigestBuffer out;
