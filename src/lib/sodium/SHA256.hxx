@@ -16,7 +16,7 @@ class SHA256State {
 	crypto_hash_sha256_state state;
 
 public:
-#if !defined(__MSVC__)  // def __CLANG__
+#if 1  // !defined(__MSVC__)  // def __CLANG__
   SHA256State() noexcept {
 	}
 
