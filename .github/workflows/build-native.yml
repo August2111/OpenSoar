@@ -25,6 +25,8 @@ on:
       - 'VERSION.txt'
     branches:
       - master
+      - dev-branch
+      - dev-xcsoar
       - apple-testing
     tags:
       - 'v*'
