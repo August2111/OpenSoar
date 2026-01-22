@@ -72,7 +72,7 @@ struct TrafficList {
     modified.Expire(clock, std::chrono::minutes(5));
     new_traffic.Expire(clock, std::chrono::minutes(1));
 
-    for (unsigned i = list.size(); i-- > 0;)
+    for (size_t i = list.size(); i-- > 0;)
       if (!list[i].Refresh(clock))
         list.quick_remove(i);
   }
@@ -87,7 +87,8 @@ struct TrafficList {
    * @param id FLARM id
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  constexpr FlarmTraffic *FindTraffic(FlarmId id) noexcept {
+  constexpr FlarmTraffic *
+  FindTraffic(FlarmId id) noexcept {
     for (auto &traffic : list)
       if (traffic.id == id)
         return &traffic;
@@ -101,7 +102,8 @@ struct TrafficList {
    * @param id FLARM id
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  constexpr const FlarmTraffic *FindTraffic(FlarmId id) const noexcept {
+  constexpr const FlarmTraffic *
+  FindTraffic(FlarmId id) const noexcept {
     for (const auto &traffic : list)
       if (traffic.id == id)
         return &traffic;
@@ -144,7 +146,8 @@ struct TrafficList {
    *
    * @return the FLARM_TRAFFIC pointer, NULL if the array is full
    */
-  constexpr FlarmTraffic *AllocateTraffic() noexcept {
+  constexpr FlarmTraffic *
+  AllocateTraffic() noexcept {
     return list.full()
       ? NULL
       : &list.append();
@@ -153,33 +156,47 @@ struct TrafficList {
   /**
    * Search for the previous traffic in the ordered list.
    */
-  constexpr const FlarmTraffic *PreviousTraffic(const FlarmTraffic *t) const noexcept {
-    return t > list.begin()
-      ? t - 1
-      : NULL;
+  constexpr const FlarmTraffic *
+  PreviousTraffic(const FlarmTraffic *t) const noexcept {
+    const FlarmTraffic *ret = nullptr;
+    for (auto const &iter : list) {
+      if (&iter == t)
+        return ret;  // the previous
+      else
+        ret = &iter;
+    }
+    return nullptr;
   }
 
   /**
    * Search for the next traffic in the ordered list.
    */
-  constexpr const FlarmTraffic *NextTraffic(const FlarmTraffic *t) const noexcept {
-    return t + 1 < list.end()
-      ? t + 1
-      : NULL;
+  constexpr const FlarmTraffic *
+  NextTraffic(const FlarmTraffic *t) const noexcept {
+    bool found = false;
+    for (auto const &iter : list) {
+      if (&iter == t)
+        found = true;  // and continue...
+      else if (found)
+        return &iter;  // the next one in the list after t
+    }
+    return nullptr;
   }
 
   /**
    * Search for the first traffic in the ordered list.
    */
-  constexpr const FlarmTraffic *FirstTraffic() const noexcept {
-    return list.empty() ? NULL : list.begin();
+  constexpr const FlarmTraffic *
+  FirstTraffic() const noexcept {
+    return list.empty() ? nullptr : &list.front();
   }
 
   /**
    * Search for the last traffic in the ordered list.
    */
-  constexpr const FlarmTraffic *LastTraffic() const noexcept {
-    return list.empty() ? NULL : list.end() - 1;
+  constexpr const FlarmTraffic *
+  LastTraffic() const noexcept {
+    return list.empty() ? nullptr : &list.back();
   }
 
   /**
@@ -187,10 +204,14 @@ struct TrafficList {
    * alert.
    */
   [[gnu::pure]]
-  const FlarmTraffic *FindMaximumAlert() const noexcept;
+  const FlarmTraffic *
+  FindMaximumAlert() const noexcept;
 
-  constexpr unsigned TrafficIndex(const FlarmTraffic *t) const noexcept {
-    return t - list.begin();
+  constexpr size_t
+  TrafficIndex(const FlarmTraffic *t) const noexcept {   
+    if (list.empty())
+      return -1;
+    return t - list.data();
   }
 
   /**
