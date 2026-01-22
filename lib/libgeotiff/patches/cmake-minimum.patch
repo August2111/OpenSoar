@@ -1,0 +1,27 @@
+From 25ef4697ea3a6c84421297a3e9c3350d5a031676 Mon Sep 17 00:00:00 2001
+From: August2111 <Info@FlapsOnline.de>
+Date: Mon, 22 Dec 2025 10:14:28 +0100
+Subject: [PATCH 2/2] try patch
+
+---
+ libgeotiff/CMakeLists.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/libgeotiff/CMakeLists.txt b/libgeotiff/CMakeLists.txt
+index 001df67..1784f37 100644
+--- a/libgeotiff/CMakeLists.txt
++++ b/libgeotiff/CMakeLists.txt
+@@ -12,7 +12,9 @@ SET(GEOTIFF_LIBRARY_TARGET geotiff_library)
+ 
+ ##############################################################################
+ # CMake settings
+-CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
++# CMAKE_MINIMUM_REQUIRED(VERSION 3.0.0)
++#patch this:
++cmake_minimum_required(VERSION 3.15)
+ 
+ SET(CMAKE_COLOR_MAKEFILE ON)
+ 
+-- 
+2.30.1.windows.1
+
