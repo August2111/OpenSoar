@@ -2,6 +2,10 @@
 // Copyright The XCSoar Project
 
 #pragma once
+#ifdef __MSVC__
+# include "msvc/Compiler.h"
+// sollte nie erreicht werden!!!!
+#else  // __MSVC__
 
 #define GCC_MAKE_VERSION(major, minor, patchlevel) ((major) * 10000 + (minor) * 100 + patchlevel)
 
@@ -13,6 +17,9 @@
 
 #ifdef __clang__
 #  define CLANG_VERSION GCC_MAKE_VERSION(__clang_major__, __clang_minor__, __clang_patchlevel__)
+#  ifdef _WIN32
+     typedef SSIZE_T ssize_t;
+#  endif
 #else
 #  define CLANG_VERSION 0
 #endif
@@ -113,3 +120,4 @@
 #else
 #define gcc_unreachable()
 #endif
+#endif // __MSVC__
