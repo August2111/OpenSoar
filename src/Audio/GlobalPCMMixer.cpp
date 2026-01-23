@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright The XCSoar Project
 
+#ifndef _WIN32
+
 #include "GlobalPCMMixer.hpp"
 #include "PCMPlayerFactory.hpp"
 #include "PCMMixer.hpp"
@@ -28,3 +30,4 @@ DeinitialisePCMMixer()
   delete pcm_mixer;
   pcm_mixer = nullptr;
 }
+#endif  // _WIN32
