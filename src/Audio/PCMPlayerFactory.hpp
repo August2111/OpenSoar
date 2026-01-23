@@ -30,8 +30,10 @@ inline PCMPlayer *CreateInstance()
   return new AndroidPCMPlayer();
 #elif defined(ENABLE_SDL) || defined(ENABLE_ALSA)
   return new MixerPCMPlayer();
+#elif defined(_WIN32)
+  return nullptr; PCMPlayer not available
 #else
-#error No PCMPlayer implementation available
+# error No PCMPlayer implementation available
 #endif
 }
 
