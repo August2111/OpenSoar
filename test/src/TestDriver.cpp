@@ -37,7 +37,9 @@
 #include "Device/Driver/XCTracer.hpp"
 #include "Device/Driver/XCVario.hpp"
 #include "Device/Driver/Zander.hpp"
-#include "Device/Driver/RemoteStick.hpp"
+#ifdef HAVE_REMOTE_STICK
+# include "Device/Driver/RemoteStick.hpp"
+#endif
 #include "Device/Driver.hpp"
 #include "Device/RecordedFlight.hpp"
 #include "Device/Parser.hpp"
@@ -1859,7 +1861,11 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main()
 {
+#ifdef HAVE_REMOTE_STICK
   plan_tests(1006);
+#else
+  plan_tests(1009);
+#endif
   // August2111: after merge XCSoar: could be more...
   TestGeneric();
   TestTasman();
@@ -1902,7 +1908,9 @@ int main()
   TestDeclare(lx_eos_driver);
   TestDeclare(imi_driver);
   TestDeclare(flarm_driver);
+#ifdef HAVE_REMOTE_STICK
   TestDeclare(remote_stick_driver);
+#endif
   //TestDeclare(vega_driver);
 
   /* XXX Volkslogger doesn't do well with this test case */
