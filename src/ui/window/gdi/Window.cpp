@@ -326,8 +326,8 @@ Window::OnMessage([[maybe_unused]] HWND _hWnd, UINT message,
           LogFmt("WM_DEVICECHANGE: wParam={}, lParam={}", wParam, lParam);
           break;
         }
+      }
 #endif   // WINDOWS_USBPORT_DETECTION
-    }
   }
 
   if (message >= WM_USER && message <= 0x7FFF && OnUser(message - WM_USER))
