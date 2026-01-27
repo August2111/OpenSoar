@@ -9,6 +9,10 @@
 #include "Asset.hpp"
 #include "LogFile.hpp"
 
+#ifdef __MSVC__
+# define WINDOWS_USBPORT_DETECTION  1
+#endif
+#ifdef WINDOWS_USBPORT_DETECTION
 // new with usb detection:
 #include "Components.hpp"
 #include "BackendComponents.hpp"
@@ -18,6 +22,7 @@
 // #include <usbiodef.h>
 #include <Dbt.h>
 // #include "ProcessTimer.hpp"  
+#endif  //  WINDOWS_USBPORT_DETECTION
 
 #include <cassert>
 #include <windowsx.h>
@@ -279,6 +284,7 @@ Window::OnMessage([[maybe_unused]] HWND _hWnd, UINT message,
       if (OnKeyCheck(wParam))
         return DLGC_WANTMESSAGE;
       break;
+#ifdef WINDOWS_USBPORT_DETECTION
     case WM_DEVICECHANGE:
     {
       // PDEV_BROADCAST_HDR lpdb = (PDEV_BROADCAST_HDR)lParam;
@@ -320,6 +326,7 @@ Window::OnMessage([[maybe_unused]] HWND _hWnd, UINT message,
           LogFmt("WM_DEVICECHANGE: wParam={}, lParam={}", wParam, lParam);
           break;
         }
+#endif   // WINDOWS_USBPORT_DETECTION
     }
   }
 
