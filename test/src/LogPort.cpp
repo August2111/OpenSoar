@@ -16,6 +16,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+PixelSize
+SystemWindowSize() noexcept
+{
+  return PixelSize(100,100);
+}
+
 class MyListener final : public PortListener {
   EventLoop &event_loop;
 
