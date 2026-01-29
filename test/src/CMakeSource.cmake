@@ -223,86 +223,89 @@ ${SRC_DIR}/TestPolylineDecoder.cpp    # add 7.38
 # ${SRC_DIR}/test_troute.cpp
 # ${SRC_DIR}/test_vopt.cpp
   ${SRC_DIR}/RunSkysightCredential.cpp
+  ${SRC_DIR}/LogPort.cpp
 )
 
 set(TEST_LIST
-    ${SRC_DIR}/UploadFile.cpp
-    ${SRC_DIR}/RunWeGlideClient.cpp
-    ${SRC_DIR}/RunDownloadFlight.cpp
-    ${SRC_DIR}/RunDownloadToFile.cpp
-    ${SRC_DIR}/DownloadFile.cpp
-    ${SRC_DIR}/TestDriver.cpp
-    ${SRC_DIR}/test_fixed.cpp
-    # needs ParseArgs with getopt.h: ${SRC_DIR}/TestWaypoints.cpp
-    # needs ParseArgs with getopt.h: ${SRC_DIR}/test_pressure.cpp
-    # needs ParseArgs with getopt.h: ${SRC_DIR}/test_task.cpp
-    ${SRC_DIR}/TestOverwritingRingBuffer.cpp
-    ${SRC_DIR}/TestDateTime.cpp
-    ${SRC_DIR}/TestRoughTime.cpp
-    ${SRC_DIR}/TestWrapClock.cpp
-    ${SRC_DIR}/TestPolylineDecoder.cpp
-    ${SRC_DIR}/TestTransponderCode.cpp
-    # needs TestQuadrilateral.cpp... ${SRC_DIR}/TestMath.cpp
-    ${SRC_DIR}/TestMathTables.cpp
-    ${SRC_DIR}/TestAngle.cpp
-    ${SRC_DIR}/TestARange.cpp
-    ${SRC_DIR}/TestGrahamScan.cpp
-    ${SRC_DIR}/TestUnits.cpp
-    ${SRC_DIR}/TestEarth.cpp
-    ${SRC_DIR}/TestSunEphemeris.cpp
-    ${SRC_DIR}/TestValidity.cpp
-    ${SRC_DIR}/TestUTM.cpp
-    ${SRC_DIR}/TestAllocatedGrid.cpp
-    ${SRC_DIR}/TestRadixTree.cpp
-    ${SRC_DIR}/TestGeoBounds.cpp
-    ${SRC_DIR}/TestGeoClip.cpp
-    ${SRC_DIR}/TestLogger.cpp
-    ${SRC_DIR}/TestGRecord.cpp
-    ${SRC_DIR}/TestClimbAvCalc.cpp
-    ${SRC_DIR}/TestWaypointReader.cpp
-    ${SRC_DIR}/TestThermalBase.cpp
-    ${SRC_DIR}/TestFlarmNet.cpp
-    ${SRC_DIR}/TestColorRamp.cpp
-    ${SRC_DIR}/TestGeoPoint.cpp
-    ${SRC_DIR}/TestDiffFilter.cpp
-    ${SRC_DIR}/TestFileUtil.cpp
-    ${SRC_DIR}/TestPolars.cpp
-    ${SRC_DIR}/TestCSVLine.cpp
-    ${SRC_DIR}/TestGlidePolar.cpp
-    # needs ParseArgs with getopt.h: ${SRC_DIR}/test_replay_task.cpp
-    ${SRC_DIR}/TestProfile.cpp
-    ${SRC_DIR}/TestProjection.cpp
-    ${SRC_DIR}/TestFlatPoint.cpp
-    ${SRC_DIR}/TestFlatLine.cpp
-    ${SRC_DIR}/TestFlatGeoPoint.cpp
-    ${SRC_DIR}/TestMacCready.cpp
-    ${SRC_DIR}/TestOrderedTask.cpp
-    ${SRC_DIR}/TestAATPoint.cpp
-    ${SRC_DIR}/TestPlanes.cpp
-    ${SRC_DIR}/TestTaskPoint.cpp
-    ${SRC_DIR}/TestTaskWaypoint.cpp
-    ${SRC_DIR}/TestTeamCode.cpp
-    ${SRC_DIR}/TestZeroFinder.cpp
-    ${SRC_DIR}/TestAirspaceParser.cpp
-    ${SRC_DIR}/TestMETARParser.cpp
-    ${SRC_DIR}/TestIGCParser.cpp
-    ${SRC_DIR}/TestStrings.cpp
-    ${SRC_DIR}/TestUTF8.cpp
-    ${SRC_DIR}/TestCRC16.cpp
-    ${SRC_DIR}/TestCRC8.cpp
-    ${SRC_DIR}/TestUnitsFormatter.cpp
-    ${SRC_DIR}/TestGeoPointFormatter.cpp
-    ${SRC_DIR}/TestHexColorFormatter.cpp
-    ${SRC_DIR}/TestPackedFloat.cpp
-    ${SRC_DIR}/TestByteSizeFormatter.cpp
-    ${SRC_DIR}/TestTimeFormatter.cpp
-    ${SRC_DIR}/TestIGCFilenameFormatter.cpp
-    ${SRC_DIR}/TestNMEAFormatter.cpp
-    ${SRC_DIR}/TestLXNToIGC.cpp
-    ${SRC_DIR}/TestLeastSquares.cpp
-    ${SRC_DIR}/TestHexString.cpp
-    ${SRC_DIR}/TestThermalBand.cpp
-    ${SRC_DIR}/RunSkysightCredential.cpp
+  ${SRC_DIR}/UploadFile.cpp
+  ${SRC_DIR}/RunWeGlideClient.cpp
+  ${SRC_DIR}/RunDownloadFlight.cpp
+  ${SRC_DIR}/RunDownloadToFile.cpp
+  ${SRC_DIR}/DownloadFile.cpp
+  ${SRC_DIR}/TestDriver.cpp
+  ${SRC_DIR}/test_fixed.cpp
+  # needs ParseArgs with getopt.h: ${SRC_DIR}/TestWaypoints.cpp
+  # needs ParseArgs with getopt.h: ${SRC_DIR}/test_pressure.cpp
+  # needs ParseArgs with getopt.h: ${SRC_DIR}/test_task.cpp
+  ${SRC_DIR}/TestOverwritingRingBuffer.cpp
+  ${SRC_DIR}/TestDateTime.cpp
+  ${SRC_DIR}/TestRoughTime.cpp
+  ${SRC_DIR}/TestWrapClock.cpp
+  ${SRC_DIR}/TestPolylineDecoder.cpp
+  ${SRC_DIR}/TestTransponderCode.cpp
+  # needs TestQuadrilateral.cpp... ${SRC_DIR}/TestMath.cpp
+  ${SRC_DIR}/TestMathTables.cpp
+  ${SRC_DIR}/TestAngle.cpp
+  ${SRC_DIR}/TestARange.cpp
+  ${SRC_DIR}/TestGrahamScan.cpp
+  ${SRC_DIR}/TestUnits.cpp
+  ${SRC_DIR}/TestEarth.cpp
+  ${SRC_DIR}/TestSunEphemeris.cpp
+  ${SRC_DIR}/TestValidity.cpp
+  ${SRC_DIR}/TestUTM.cpp
+  ${SRC_DIR}/TestAllocatedGrid.cpp
+  ${SRC_DIR}/TestRadixTree.cpp
+  ${SRC_DIR}/TestGeoBounds.cpp
+  ${SRC_DIR}/TestGeoClip.cpp
+  ${SRC_DIR}/TestLogger.cpp
+  ${SRC_DIR}/TestGRecord.cpp
+  ${SRC_DIR}/TestClimbAvCalc.cpp
+  ${SRC_DIR}/TestWaypointReader.cpp
+  ${SRC_DIR}/TestThermalBase.cpp
+  ${SRC_DIR}/TestFlarmNet.cpp
+  ${SRC_DIR}/TestColorRamp.cpp
+  ${SRC_DIR}/TestGeoPoint.cpp
+  ${SRC_DIR}/TestDiffFilter.cpp
+  ${SRC_DIR}/TestFileUtil.cpp
+  ${SRC_DIR}/TestPolars.cpp
+  ${SRC_DIR}/TestCSVLine.cpp
+  ${SRC_DIR}/TestGlidePolar.cpp
+  # needs ParseArgs with getopt.h: ${SRC_DIR}/test_replay_task.cpp
+  ${SRC_DIR}/TestProfile.cpp
+  ${SRC_DIR}/TestProjection.cpp
+  ${SRC_DIR}/TestFlatPoint.cpp
+  ${SRC_DIR}/TestFlatLine.cpp
+  ${SRC_DIR}/TestFlatGeoPoint.cpp
+  ${SRC_DIR}/TestMacCready.cpp
+  ${SRC_DIR}/TestOrderedTask.cpp
+  ${SRC_DIR}/TestAATPoint.cpp
+  ${SRC_DIR}/TestPlanes.cpp
+  ${SRC_DIR}/TestTaskPoint.cpp
+  ${SRC_DIR}/TestTaskWaypoint.cpp
+  ${SRC_DIR}/TestTeamCode.cpp
+  ${SRC_DIR}/TestZeroFinder.cpp
+  ${SRC_DIR}/TestAirspaceParser.cpp
+  ${SRC_DIR}/TestMETARParser.cpp
+  ${SRC_DIR}/TestIGCParser.cpp
+  ${SRC_DIR}/TestStrings.cpp
+  ${SRC_DIR}/TestUTF8.cpp
+  ${SRC_DIR}/TestCRC16.cpp
+  ${SRC_DIR}/TestCRC8.cpp
+  ${SRC_DIR}/TestUnitsFormatter.cpp
+  ${SRC_DIR}/TestGeoPointFormatter.cpp
+  ${SRC_DIR}/TestHexColorFormatter.cpp
+  ${SRC_DIR}/TestPackedFloat.cpp
+  ${SRC_DIR}/TestByteSizeFormatter.cpp
+  ${SRC_DIR}/TestTimeFormatter.cpp
+  ${SRC_DIR}/TestIGCFilenameFormatter.cpp
+  ${SRC_DIR}/TestNMEAFormatter.cpp
+  ${SRC_DIR}/TestLXNToIGC.cpp
+  ${SRC_DIR}/TestLeastSquares.cpp
+  ${SRC_DIR}/TestHexString.cpp
+  ${SRC_DIR}/TestThermalBand.cpp
+  ${SRC_DIR}/RunSkysightCredential.cpp
+
+  ${SRC_DIR}/LogPort.cpp
 )
 
 set(GUI_TEST_LIST 
