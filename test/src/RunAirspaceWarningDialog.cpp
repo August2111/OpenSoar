@@ -28,7 +28,10 @@
 #include <memory>
 #include <stdio.h>
 
-extern bool SoundUtil::Play(const std::string_view resource_name);
+class SoundUtil {
+public:
+  static bool Play(const std::string_view resource_name);
+};
 
 bool
 SoundUtil::Play([[maybe_unused]] const std::string_view resource_name)
