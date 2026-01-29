@@ -2,19 +2,18 @@ Author: Uwe Augustin <Info@FlapsOnline.de>
 Date:   Thu Jan 06 10:00:00 2025 +0200
 
     use CriticalSection on windows - not std::mutex
-    #include "/home/august2111/OpenSoaring/OpenSoar/src/thread/CriticalSection.hxx"
+    #include "../../../../src/thread/CriticalSection.hxx"
 
 diff --git a/src/mutex.cpp b/src/mutex.cpp
 --- a/src/mutex.cpp
 +++ b/src/mutex.cpp
-@@ -29,9 +29,17 @@ #include <mutex>
+@@ -29,9 +29,16 @@ #include <mutex>
  
  #include "proj.h"
  #include "proj_internal.h"
  
 -static std::recursive_mutex core_lock;
-+#ifdef _WIN32
-+  // -> Patch Nr 46
++#if defined(_WIN32) && !defined(_MSC_VER)
 +  #include "../../../../src/thread/CriticalSection.hxx"
 +  using Mutex = CriticalSection;
 +  using RecursiveMutex = CriticalSection;
@@ -33,7 +32,7 @@ diff --git a/src/networkfilemanager.cpp b/src/networkfilemanager.cpp
  
  //! @cond Doxygen_Suppress
  
-+#ifdef _WIN32
++#if defined(_WIN32) && !defined(_MSC_VER)
 +# include "../../../../src/thread/CriticalSection.hxx"
 +  using Mutex = CriticalSection;
 +  using RecursiveMutex = CriticalSection;
@@ -72,7 +71,7 @@ index 260b5b05..042a09b5 100644
  PROJ_HEAD(gridshift, "Generic grid shift");
 -
 -static std::mutex gMutex{};
-+#ifdef _WIN32
++#if defined(_WIN32) && !defined(_MSC_VER)
 +# include "../../../../src/thread/CriticalSection.hxx"
 +using Mutex = CriticalSection;
 +#else
@@ -99,7 +98,7 @@ index 4be74159..4355899a 100644
  PROJ_HEAD(hgridshift, "Horizontal grid shift");
  
 -static std::mutex gMutexHGridShift{};
-+#ifdef _WIN32
++#if defined(_WIN32) && !defined(_MSC_VER)
 +# include "../../../../src/thread/CriticalSection.hxx"
 +using Mutex = CriticalSection;
 +#else
@@ -126,7 +125,7 @@ index 6460bfd6..de15fabe 100644
  PROJ_HEAD(vgridshift, "Vertical grid shift");
  
 -static std::mutex gMutexVGridShift{};
-+#ifdef _WIN32
++#if defined(_WIN32) && !defined(_MSC_VER)
 +# include "../../../../src/thread/CriticalSection.hxx"
 +using Mutex = CriticalSection;
 +#else
@@ -151,7 +150,7 @@ diff --git a/src/iso19111/factory.cpp b/src/iso19111/factory.cpp
  #define REOPEN_SQLITE_DB_AFTER_FORK
  #endif
  
-+#ifdef _WIN32
++#if defined(_WIN32) && !defined(_MSC_VER)
 +# include "../../../../src/thread/CriticalSection.hxx"
 +  using Mutex = CriticalSection;
 +#else
