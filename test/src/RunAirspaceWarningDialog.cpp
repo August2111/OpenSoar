@@ -27,7 +27,15 @@
 
 #include <memory>
 #include <stdio.h>
-#include <tchar.h>
+
+extern bool SoundUtil::Play(const std::string_view resource_name);
+
+bool
+SoundUtil::Play([[maybe_unused]] const std::string_view resource_name)
+{
+  return false;
+}
+
 
 void VisitDataFiles(const char *filter, File::Visitor &visitor);
 
