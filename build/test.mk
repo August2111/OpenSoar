@@ -1631,6 +1631,7 @@ VIEW_IMAGE_SOURCES = \
 	$(SRC)/Compatibility/fmode.c \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/ViewImage.cpp
 VIEW_IMAGE_LDADD = $(FAKE_LIBS)
 VIEW_IMAGE_DEPENDS = SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
@@ -1642,6 +1643,7 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Look/ButtonLook.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
 RUN_CANVAS_LDADD = $(FAKE_LIBS)
 RUN_CANVAS_DEPENDS = FORM SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
