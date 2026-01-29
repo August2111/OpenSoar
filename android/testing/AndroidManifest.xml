@@ -46,10 +46,10 @@
                  android:value="2.1"/>
     </activity>
 
-    <service android:name="org.xcsoar.MyService" android:foregroundServiceType="location"/>
+    <service android:name="de.opensoar.MyService" android:foregroundServiceType="location"/>
 
     <!-- this Activity receives scanned QR codes -->
-    <activity android:name="org.xcsoar.ReceiveTaskActivity"
+    <activity android:name="de.opensoar.ReceiveTaskActivity"
               android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
