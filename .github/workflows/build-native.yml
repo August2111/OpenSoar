@@ -104,11 +104,11 @@ jobs:
         include:
           - os: ubuntu-latest
             target: UNIX
-            # target_container: debian:bookworm-slim
+            # target_container: debian:trixie-slim
 
           - os: ubuntu-22.04
             target: UNIX
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
 
           - os: ubuntu-24.04
             target: UNIX
@@ -234,8 +234,7 @@ jobs:
             target_ext: .apk
             target_test: false
             target_upload: true
-            ndk: r29
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
 
           - os: ubuntu-24.04
             target: ANDROID
@@ -244,8 +243,8 @@ jobs:
             target_ext: .apk
             target_test: false
             target_upload: false
-            ndk: r29
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
+
           #### needs very long time.. 
           - os: ubuntu-24.04
             target: ANDROIDFAT
@@ -256,8 +255,8 @@ jobs:
             target_test: false
             target_upload: false
             # target_upload: true
-            ndk: r28
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
+
             # ------------------------------------------------------
           - os: ubuntu-22.04
             target: UNIX
@@ -267,7 +266,8 @@ jobs:
             target_ext: .deb
             target_test: false
             target_upload: false
-            target_container: debian:bookworm-slim    # => Ubuntu 24.04
+            target_container: debian:trixie-slim
+            # target_container: debian:bookworm-slim    # => Ubuntu 24.04
             # target_container: debian:bullseye-slim # => Ubuntu 22.04
 
           - os: ubuntu-24.04      # - os: ubuntu-22.04
@@ -280,8 +280,9 @@ jobs:
             target_test: true
             target_upload: true
             # target_container: ubuntu:24.04
-            target_container: debian:bookworm-slim    # => Ubuntu 24.04
-            #  target_container: debian:bullseye-slim # => Ubuntu 22.04
+            target_container: debian:trixie-slim
+            # target_container: debian:bookworm-slim    # => Ubuntu 24.04
+            # target_container: debian:bullseye-slim # => Ubuntu 22.04
 
           - os: ubuntu-24.04      # - os: ubuntu-22.04
             target: UNIX
@@ -291,7 +292,8 @@ jobs:
             target_test: false
             target_upload: false
             sanitizer: true
-            target_container: debian:bookworm-slim    # => Ubuntu 24.04
+            target_container: debian:trixie-slim  # => Ubuntu 24.04
+            # target_container: debian:bookworm-slim    # => Ubuntu 24.04
             #  target_container: debian:bullseye-slim # => Ubuntu 22.04
           
           - os: ubuntu-22.04
@@ -301,7 +303,7 @@ jobs:
             target_ext: .exe
             target_test: false
             target_upload: false
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
 
           - os: ubuntu-24.04
             target: WIN64
@@ -310,7 +312,7 @@ jobs:
             target_ext: .exe
             target_test: true
             target_upload: true
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
 
           - os: ubuntu-24.04
             target: PC
@@ -319,7 +321,7 @@ jobs:
             target_ext: .exe
             target_test: true
             target_upload: true
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
 
           - os: macos-15-intel
             target: OSX64
@@ -357,7 +359,7 @@ jobs:
             target_ext: .tgz
             target_test: false
             target_upload: true
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
   
     steps:
       - name: Check Git Variables
