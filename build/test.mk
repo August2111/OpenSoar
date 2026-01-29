@@ -1814,6 +1814,7 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunTextEntry.cpp
 RUN_TEXT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunTextEntry,RUN_TEXT_ENTRY))
@@ -1833,6 +1834,7 @@ RUN_NUMBER_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunNumberEntry.cpp
 RUN_NUMBER_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC IO OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunNumberEntry,RUN_NUMBER_ENTRY))
@@ -1852,6 +1854,7 @@ RUN_DATE_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunDateEntry.cpp
 RUN_DATE_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunDateEntry,RUN_DATE_ENTRY))
@@ -1871,6 +1874,7 @@ RUN_TIME_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunTimeEntry.cpp
 RUN_TIME_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunTimeEntry,RUN_TIME_ENTRY))
@@ -1890,6 +1894,7 @@ RUN_ANGLE_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunAngleEntry.cpp
 RUN_ANGLE_ENTRY_DEPENDS = FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunAngleEntry,RUN_ANGLE_ENTRY))
@@ -1910,6 +1915,7 @@ RUN_GEOPOINT_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeListPicker.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunGeoPointEntry.cpp
 RUN_GEOPOINT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB GEOPOINT
 $(eval $(call link-program,RunGeoPointEntry,RUN_GEOPOINT_ENTRY))
@@ -1920,6 +1926,7 @@ RUN_TERMINAL_SOURCES = \
 	$(SRC)/Look/TerminalLook.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunTerminal.cpp
 RUN_TERMINAL_DEPENDS = SCREEN EVENT ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunTerminal,RUN_TERMINAL))
@@ -1936,6 +1943,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunRenderOZ.cpp
 RUN_RENDER_OZ_DEPENDS = TASK FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD GEO MATH UTIL
 $(eval $(call link-program,RunRenderOZ,RUN_RENDER_OZ))
@@ -1950,6 +1958,7 @@ RUN_CHART_RENDERER_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunChartRenderer.cpp
 RUN_CHART_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunChartRenderer,RUN_CHART_RENDERER))
@@ -1966,6 +1975,7 @@ RUN_WIND_ARROW_RENDERER_SOURCES = \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunWindArrowRenderer.cpp
 RUN_WIND_ARROW_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL UNITS
 $(eval $(call link-program,RunWindArrowRenderer,RUN_WIND_ARROW_RENDERER))
@@ -1980,6 +1990,7 @@ RUN_HORIZON_RENDERER_SOURCES = \
 	$(SRC)/Renderer/RadarRenderer.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunHorizonRenderer.cpp
 RUN_HORIZON_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunHorizonRenderer,RUN_HORIZON_RENDERER))
@@ -2003,6 +2014,7 @@ RUN_FINAL_GLIDE_BAR_RENDERER_SOURCES = \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunFinalGlideBarRenderer.cpp
 RUN_FINAL_GLIDE_BAR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD TASK GLIDE LIBNMEA GEO MATH UTIL UNITS
 $(eval $(call link-program,RunFinalGlideBarRenderer,RUN_FINAL_GLIDE_BAR_RENDERER))
@@ -2019,6 +2031,7 @@ RUN_FAI_TRIANGLE_SECTOR_RENDERER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Task/Shapes/FAITriangleArea.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunFAITriangleSectorRenderer.cpp
 RUN_FAI_TRIANGLE_SECTOR_RENDERER_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD GEO MATH UTIL
 $(eval $(call link-program,RunFAITriangleSectorRenderer,RUN_FAI_TRIANGLE_SECTOR_RENDERER))
@@ -2031,6 +2044,7 @@ RUN_FLIGHT_LIST_RENDERER_SOURCES = \
 	$(SRC)/Logger/FlightParser.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunFlightListRenderer.cpp
 RUN_FLIGHT_LIST_RENDERER_DEPENDS = FORM SCREEN EVENT ASYNC IO OS THREAD MATH UTIL TIME
 $(eval $(call link-program,RunFlightListRenderer,RUN_FLIGHT_LIST_RENDERER))
@@ -2042,6 +2056,7 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunProgressWindow.cpp
 RUN_PROGRESS_WINDOW_DEPENDS = SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunProgressWindow,RUN_PROGRESS_WINDOW))
@@ -2061,6 +2076,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunJobDialog.cpp
 RUN_JOB_DIALOG_DEPENDS = OPERATION FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunJobDialog,RUN_JOB_DIALOG))
@@ -2174,6 +2190,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_DEPENDS = \
 	TERRAIN \
@@ -2226,6 +2243,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
 RUN_AIRSPACE_WARNING_DIALOG_LDADD = $(FAKE_LIBS)
@@ -2254,6 +2272,7 @@ RUN_PROFILE_LIST_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunProfileListDialog.cpp
 RUN_PROFILE_LIST_DIALOG_LDADD = $(FAKE_LIBS)
 RUN_PROFILE_LIST_DIALOG_DEPENDS = PROFILE FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL JSON
