@@ -13,6 +13,14 @@
 
 #include <stdio.h>
 
+PixelSize SystemWindowSize() noexcept;
+
+PixelSize
+SystemWindowSize() noexcept
+{
+  return PixelSize(100,100);
+}
+
 class KeyCodeDumper : public PaintWindow {
 protected:
   struct key_event {
