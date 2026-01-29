@@ -10,11 +10,14 @@
 #include "event/net/cares/Channel.hxx"
 #include "util/PrintException.hxx"
 #include "HexDump.hpp"
+#include "ui/dim/Size.hpp"
 
 #include <chrono>
 
 #include <stdio.h>
 #include <stdlib.h>
+
+PixelSize SystemWindowSize() noexcept;
 
 PixelSize
 SystemWindowSize() noexcept
