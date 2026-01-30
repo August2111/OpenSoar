@@ -267,9 +267,8 @@ jobs:
             target_test: false
             target_upload: false
             target_container: debian:trixie-slim
-	    # target_container: ubuntu:24.04
-            # target_container: debian:bookworm--slim
-	    # target_container: debian:bookworm-slim    # => Ubuntu 24.04
+            # target_container: ubuntu:24.04
+            # target_container: debian:bookworm-slim    # => Ubuntu 24.04
             # target_container: debian:bullseye-slim # => Ubuntu 22.04
 
           - os: ubuntu-24.04      # - os: ubuntu-22.04
