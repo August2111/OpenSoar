@@ -234,7 +234,7 @@ jobs:
             target_ext: .apk
             target_test: false
             target_upload: true
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
 
           - os: ubuntu-24.04
             target: ANDROID
@@ -243,7 +243,7 @@ jobs:
             target_ext: .apk
             target_test: false
             target_upload: false
-            target_container: debian:bookworm-slim
+            target_container: debian:trixie-slim
 
           #### needs very long time.. 
           - os: ubuntu-24.04
@@ -266,9 +266,8 @@ jobs:
             target_ext: .deb
             target_test: false
             target_upload: false
-            target_container: debian:bookworm-slim
-            # target_container: ubuntu:24.04
-            # target_container: debian:trixie-slim
+            target_container: debian:bookworm--slim
+            #target_container: debian:trixie-slim
             # target_container: debian:bookworm-slim    # => Ubuntu 24.04
             # target_container: debian:bullseye-slim # => Ubuntu 22.04
 
@@ -281,7 +280,10 @@ jobs:
             target_ext: .deb
             target_test: true
             target_upload: true
-            target_container: debian:bookworm-slim
+            # target_container: ubuntu:24.04
+            target_container: debian:bookworm--slim
+            # target_container: debian:bookworm-slim    # => Ubuntu 24.04
+            # target_container: debian:bullseye-slim # => Ubuntu 22.04
 
           - os: ubuntu-24.04      # - os: ubuntu-22.04
             target: UNIX
@@ -291,7 +293,9 @@ jobs:
             target_test: false
             target_upload: false
             sanitizer: true
-            target_container: debian:bookworm-slim
+            target_container: debian:bookworm--slim  # => Ubuntu 24.04
+            # target_container: debian:bookworm-slim    # => Ubuntu 24.04
+            #  target_container: debian:bullseye-slim # => Ubuntu 22.04
           
           - os: ubuntu-22.04
             target: WIN64
