@@ -16,6 +16,7 @@ on:
     branches:
       - master
       - dev-branch
+      - dev-xcsoar
     tags:
       - 'v*'
 
@@ -32,7 +33,6 @@ on:
       - '.readthedocs.yaml'
     branches:
       - master
-      # - dev-branch
 
 env:
   BOOST: boost_1_87_0
