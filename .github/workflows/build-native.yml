@@ -234,7 +234,7 @@ jobs:
             target_ext: .apk
             target_test: false
             target_upload: true
-            target_container: debian:trixie-slim
+            target_container: debian:bookworm-slim
 
           - os: ubuntu-24.04
             target: ANDROID
@@ -243,7 +243,7 @@ jobs:
             target_ext: .apk
             target_test: false
             target_upload: false
-            target_container: debian:trixie-slim
+            target_container: debian:bookworm-slim
 
           #### needs very long time.. 
           - os: ubuntu-24.04
@@ -255,7 +255,7 @@ jobs:
             target_test: false
             target_upload: false
             # target_upload: true
-            target_container: debian:trixie-slim
+            target_container: debian:bookworm-slim
 
             # ------------------------------------------------------
           - os: ubuntu-22.04
