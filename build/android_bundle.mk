@@ -285,8 +285,6 @@ $(NO_ARCH_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/org/xcsoar/R.java 
 		-Xlint:-deprecation \
 		-Xlint:-options \
 		-Xlint:-static \
-		-Xlint:-this-escape \
-		-Xlint:-removal \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/org/xcsoar/R.java \
 		-h $(NATIVE_INCLUDE_DIR) \

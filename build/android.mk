@@ -272,8 +272,6 @@ $(ANDROID_OUTPUT_DIR)/classes.zip: $(JAVA_SOURCES) $(GEN_DIR)/de/$(PROGRAM_NAME_
 		-Xlint:-deprecation \
 		-Xlint:-options \
 		-Xlint:-static \
-		-Xlint:-this-escape \
-		-Xlint:-removal \
 		-cp $(ANDROID_SDK_PLATFORM_DIR)/android.jar:$(JAVA_CLASSFILES_DIR) \
 		-d $(JAVA_CLASSFILES_DIR) $(GEN_DIR)/de/$(PROGRAM_NAME_LC)/R.java \
 		-h $(NATIVE_INCLUDE) \
