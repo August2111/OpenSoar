@@ -517,14 +517,15 @@ netcdf = AutotoolsProject(
 
 netcdfcxx = AutotoolsProject(
     (
-      # 'https://storage.googleapis.com/lazyrasp.com/xcsoar/netcdf-cxx-4.2.tar.gz',
+      'https://storage.googleapis.com/lazyrasp.com/xcsoar/netcdf-cxx-4.2.tar.gz',
       # 'ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.2-rc2.tar.gz',
-      'https://downloads.unidata.ucar.edu/netcdf-cxx/4.3.1/netcdf-cxx4-4.3.1.tar.gz',
-      'https://github.com/Unidata/netcdf-cxx4/archive/refs/tags/v4.3.1.tar.gz',
+      ## 'https://downloads.unidata.ucar.edu/netcdf-cxx/4.3.1/netcdf-cxx4-4.3.1.tar.gz',
+      ## 'https://github.com/Unidata/netcdf-cxx4/archive/refs/tags/v4.3.1.tar.gz',
       # invalide - new 4.3.1: 'https://fossies.org/linux/misc/netcdf-cxx4-4.3.1.tar.gz',
     ),
-    # 4.2: '95ed6ab49a0ee001255eac4e44aacb5ca4ea96ba850c08337a3e4c9a0872ccd1',
-    '6a1189a181eed043b5859e15d5c080c30d0e107406fbb212c8fb9814e90f3445',
+    # 4.2: 
+    '95ed6ab49a0ee001255eac4e44aacb5ca4ea96ba850c08337a3e4c9a0872ccd1',
+    # '6a1189a181eed043b5859e15d5c080c30d0e107406fbb212c8fb9814e90f3445',
     'lib/libnetcdf_c++.a',
     [
         '--disable-shared', '--enable-static',
