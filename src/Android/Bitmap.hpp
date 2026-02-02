@@ -18,7 +18,7 @@ public:
     assert(env != nullptr);
     assert(bitmap != nullptr);
 
-    return env->CallVoidMethod(bitmap, recycle_method);
+    env->CallVoidMethod(bitmap, recycle_method);
   }
 
   [[gnu::pure]]
