@@ -5,14 +5,8 @@
 #include "OutputStream.hxx"
 #include "util/SpanCast.hxx"
 
-#if 1 // w.o. fmt/core.h not available
-# include <fmt/core.h>
-# if !defined(FMT_VERSION) || (FMT_VERSION >= 80000 && FMT_VERSION < 90000)
-#   include <fmt/format.h>
-# endif
-#else
-# include <fmt/format.h>
-#endif
+#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <cstdarg>
 #include <iterator>
@@ -55,11 +49,7 @@ BufferedOutputStream::VFmt(fmt::string_view format_str, fmt::format_args args)
 	/* TODO format into this object's buffer instead of allocating
 	   a new one */
 	fmt::memory_buffer b;
-#if FMT_VERSION >= 80000
 	fmt::vformat_to(std::back_inserter(b), format_str, args);
-#else
-	fmt::vformat_to(b, format_str, args);
-#endif
 	return Write(std::as_bytes(std::span{b.data(), b.size()}));
 }
 

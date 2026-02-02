@@ -13,14 +13,8 @@
 #include "UIGlobals.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 
-#if 1 // w.o. fmt/core.h not available
-# include <fmt/core.h>
-# if !defined(FMT_VERSION) || (FMT_VERSION >= 80000 && FMT_VERSION < 90000)
-#   include <fmt/format.h>
-# endif
-#else
-# include <fmt/format.h>
-#endif
+#include <fmt/core.h>
+#include <fmt/format.h>
 
 static const char *const flarm_setting_names[] = {
   "RANGE",

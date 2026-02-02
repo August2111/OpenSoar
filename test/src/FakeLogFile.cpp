@@ -4,14 +4,8 @@
 #include "LogFile.hpp"
 #include "util/Exception.hxx"
 
-#if 1 // w.o. fmt/core.h not available
-# include <fmt/core.h>
-# if !defined(FMT_VERSION) || (FMT_VERSION >= 80000 && FMT_VERSION < 90000)
-#   include <fmt/format.h>
-# endif
-#else
-# include <fmt/format.h>
-#endif
+#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <exception>
 #include <cstdarg>
@@ -32,17 +26,7 @@ void
 LogVFmt(fmt::string_view format_str,
   [[maybe_unused]] fmt::format_args args) noexcept
 {
-#if 0  // FakeLogFile: do nothing!
-	fmt::memory_buffer buffer;
-#if FMT_VERSION >= 80000
-	fmt::vformat_to(std::back_inserter(buffer), format_str, args);
-#else
-	fmt::vformat_to(buffer, format_str, args);
-#endif
-	LogString({buffer.data(), buffer.size()});
-#else
   LogString(format_str.data());
-#endif
 }
 
 void

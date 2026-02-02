@@ -8,14 +8,8 @@
 #include "Units/Unit.hpp"
 #include "time/FloatDuration.hxx"
 
-#if 1 // w.o. fmt/core.h not available
-# include <fmt/core.h>
-# if !defined(FMT_VERSION) || (FMT_VERSION >= 80000 && FMT_VERSION < 90000)
-#   include <fmt/format.h>
-# endif
-#else
-# include <fmt/format.h>
-#endif
+#include <fmt/core.h>
+#include <fmt/format.h>
 
 #include <chrono>
 #include <cstdint>
@@ -97,13 +91,8 @@ struct InfoBoxData {
 
   template<typename S, typename... Args>
   void FmtTitle(const S &format_str, Args&&... args) noexcept {
-#if FMT_VERSION >= 90000
-    return VFmtTitle(format_str,
+    VFmtTitle(format_str,
                      fmt::make_format_args<fmt::format_context>(args...));
-#else
-    return VFmtTitle(fmt::to_string_view(format_str),
-                     fmt::make_args_checked<Args...>(format_str, args...));
-#endif
   }
 
   /**
@@ -121,13 +110,8 @@ struct InfoBoxData {
 
   template<typename S, typename... Args>
   void FmtValue(const S &format_str, Args&&... args) noexcept {
-#if FMT_VERSION >= 90000
-    return VFmtValue(format_str,
+    VFmtValue(format_str,
                      fmt::make_format_args<fmt::format_context>(args...));
-#else
-    return VFmtValue(fmt::to_string_view(format_str),
-                     fmt::make_args_checked<Args...>(format_str, args...));
-#endif
   }
 
   /**
@@ -192,13 +176,8 @@ struct InfoBoxData {
 
   template<typename S, typename... Args>
   void FmtComment(const S &format_str, Args&&... args) noexcept {
-#if FMT_VERSION >= 90000
-    return VFmtComment(format_str,
+    VFmtComment(format_str,
                        fmt::make_format_args<fmt::format_context>(args...));
-#else
-    return VFmtComment(fmt::to_string_view(format_str),
-                       fmt::make_args_checked<Args...>(format_str, args...));
-#endif
   }
 
   /**
