@@ -494,7 +494,7 @@ jobs:
                 ./ide/provisioning/install-debian-packages.sh WIN
                 ;;
               UNIX)
-                ./ide/provisioning/install-debian-packages.sh LIBINPUT_GBM DEBIAN
+                ./ide/provisioning/install-debian-packages.sh LINUX LIBINPUT_GBM DEBIAN
                 ;;
               KOBO)
                 ./ide/provisioning/install-debian-packages.sh ARM KOBO
