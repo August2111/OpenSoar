@@ -201,7 +201,7 @@ ParseInputFile(InputConfig &config, BufferedReader &reader)
         pt2Event event = InputEvents::findEvent(string_converter.Convert(d_event));
         if (!event) {
           LogFmt("Invalid event type: {} at {}",
-                 d_event.data(), line);  // TODO(August2111): WorkAround only (2026-02-02)
+                 d_event, line);
           continue;
         }
 
