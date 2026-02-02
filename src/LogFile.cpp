@@ -14,7 +14,7 @@
 #include "util/Exception.hxx"
 #include "util/StaticString.hxx"
 
-#include <fmt/format.h>
+// #include <fmt/format.h>
 
 #include <filesystem>
 //  #include <cwchar>  // Unicode???

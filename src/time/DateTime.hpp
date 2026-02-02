@@ -14,7 +14,6 @@
 # else
 #   include <iomanip>  // put_time
 #   include <sstream>  // stringstream
-// #   include <fmt/format.h>
 # endif
 
 #include <ctime>
