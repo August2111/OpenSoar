@@ -12,12 +12,8 @@
 #include "system/FileUtil.hpp"
 #include "io/UniqueFileDescriptor.hxx"
 #include "util/Exception.hxx"
-// #include "util/StaticString.hxx"
-
-// #include <fmt/format.h>
 
 #include <filesystem>
-//  #include <cwchar>  // Unicode???
 
 #include <stdio.h>
 #include <stdarg.h>
