@@ -15,9 +15,9 @@
 #include "Dialogs/WidgetDialog.hpp"
 #include "lib/fmt/ToBuffer.hxx"
 
-#if 0 // w.o. fmt/core.h not available
+#if 1 // w.o. fmt/core.h not available
 # include <fmt/core.h>
-# if FMT_VERSION >= 80000 && FMT_VERSION < 90000
+# if !defined(FMT_VERSION) || (FMT_VERSION >= 80000 && FMT_VERSION < 90000)
 #   include <fmt/format.h>
 # endif
 #else
