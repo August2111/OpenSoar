@@ -155,22 +155,22 @@ jobs:
             target_ext: .exe
             target_upload: true
             target_container: debian:trixie-slim
-          - os: macos-15
-            target: MACOS
-            target_bin: OpenSoar
-            target_bin_path: ''
-            target_final: OpenSoar
-            target_ext: .dmg
-            target_upload: true
-            target_container: ''
-          - os: macos-15
-            target: IOS64
-            target_bin: xcsoar-signed
-            target_bin_path: ''
-            target_final: OpenSoar
-            target_ext: .ipa
-            target_upload: true
-            target_container: ''
+          ### August2111: - os: macos-15
+          ### August2111:   target: MACOS
+          ### August2111:   target_bin: OpenSoar
+          ### August2111:   target_bin_path: ''
+          ### August2111:   target_final: OpenSoar
+          ### August2111:   target_ext: .dmg
+          ### August2111:   target_upload: true
+          ### August2111:   target_container: ''
+          ### August2111: - os: macos-15
+          ### August2111:   target: IOS64
+          ### August2111:   target_bin: xcsoar-signed
+          ### August2111:   target_bin_path: ''
+          ### August2111:   target_final: OpenSoar
+          ### August2111:   target_ext: .ipa
+          ### August2111:   target_upload: true
+          ### August2111:   target_container: ''
 
     steps:
       - name: Install checkout dependencies
