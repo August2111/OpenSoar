@@ -10,7 +10,7 @@
 #include "time/BrokenDateTime.hpp"
 #include "system/Path.hpp"
 #include "system/FileUtil.hpp"
-// #include "io/UniqueFileDescriptor.hxx"
+#include "io/UniqueFileDescriptor.hxx"
 #include "util/Exception.hxx"
 // #include "util/StaticString.hxx"
 
@@ -118,11 +118,7 @@ void
 LogVFmt(fmt::string_view format_str, fmt::format_args args) noexcept
 {
 	fmt::memory_buffer buffer;
-#if FMT_VERSION >= 80000
 	fmt::vformat_to(std::back_inserter(buffer), format_str, args);
-#else
-	fmt::vformat_to(buffer, format_str, args);
-#endif
 	LogString({buffer.data(), buffer.size()});
 }
 
