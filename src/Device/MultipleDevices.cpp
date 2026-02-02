@@ -133,6 +133,9 @@ MultipleDevices::PutStandbyFrequency(RadioFrequency frequency,
     i->PutStandbyFrequency(frequency, name, env);
 }
 
+#if 0
+TODO(August2111)
+i->ExchangeRadioFrequencies(..) is not available yet (02.02.2026)!!!!!!!!!!!!!!!!
 void
 MultipleDevices::ExchangeRadioFrequencies(OperationEnvironment &env) noexcept
 {
@@ -141,8 +144,15 @@ MultipleDevices::ExchangeRadioFrequencies(OperationEnvironment &env) noexcept
     if (i->ExchangeRadioFrequencies(env, basic)) {
       blackboard.LockSetDeviceDataScheduleMerge(i->GetIndex(), basic);
     }
+
   }
 }
+#else
+void
+MultipleDevices::ExchangeRadioFrequencies([[maybe_unused]] OperationEnvironment &env) noexcept
+{
+}
+#endif
 
 void
 MultipleDevices::PutTransponderCode(TransponderCode code,
