@@ -4,6 +4,8 @@
 #include "MultipleDevices.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Descriptor.hpp"
+#include "NMEA/Info.hpp"
+#include "Device/DataEditor.hpp"
 #include "Dispatcher.hpp"
 
 #include <algorithm> // for std::any_of()
@@ -11,6 +13,7 @@
 MultipleDevices::MultipleDevices(DeviceBlackboard &blackboard,
                                  NMEALogger *nmea_logger,
                                  DeviceFactory &factory) noexcept
+  : blackboard(blackboard)
 {
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceDispatcher *dispatcher = dispatchers[i] =

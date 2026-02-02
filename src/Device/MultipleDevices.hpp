@@ -11,12 +11,11 @@
 #include "Features.hpp"
 #include "Device/Port/Listener.hpp"
 #include "thread/Mutex.hxx"
+#include "Blackboard/DeviceBlackboard.hpp"
 
 #include <array>
 #include <list>
-#ifdef _WIN32
-# include <string>
-#endif
+#include <string>
 
 class DeviceBlackboard;
 class NMEALogger;
@@ -36,6 +35,8 @@ class OperationEnvironment;
 class MultipleDevices final : PortListener {
   std::array<DeviceDescriptor *, NUMDEV> devices;
   std::array<DeviceDispatcher *, NUMDEV> dispatchers;
+
+  DeviceBlackboard &blackboard;
 
   Mutex listeners_mutex;
   std::list<PortListener *> listeners;
@@ -84,6 +85,7 @@ public:
                           OperationEnvironment &env) noexcept;
   void PutStandbyFrequency(RadioFrequency frequency, const char *name,
                            OperationEnvironment &env) noexcept;
+  void ExchangeRadioFrequencies(OperationEnvironment &env) noexcept;
   void PutTransponderCode(TransponderCode code, OperationEnvironment &env) noexcept;
   void PutQNH(AtmosphericPressure pres, OperationEnvironment &env) noexcept;
   void NotifySensorUpdate(const MoreData &basic) noexcept;
