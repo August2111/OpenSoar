@@ -215,9 +215,22 @@ jobs:
           echo "path: output/${{ matrix.target }}/bin"
           ls -l output/${{ matrix.target }}/bin
 
+      - name: Check FMT on ${{ matrix.target }}
+        if: ${{ startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-') }}
+        run: |
+          echo "Check FMT on ${{ matrix.target }}"
+            whereis fmt
+            ls /usr/bin/fmt
+            find /usr -name "*fmt*"
+        working-directory: ${{ github.workspace }}
+
       - name: Run Test Programs on ${{ matrix.target }}
         run: |
           echo "Run Test Programs on ${{ matrix.target }}"
+          if [ ${{ startsWith(matrix.os, 'macos') != 'false' }} ]; then
+            whereis fmt
+            ls /usr/bin/fmt
+          fi
           chmod +x ./output/${{ matrix.target }}/bin/*
           echo "run tests on Target '${{ matrix.target }}'"
           make check-no-build TARGET=${{ matrix.target }}
@@ -507,8 +520,7 @@ jobs:
             esac
             ## unknown section!!!: ./ide/provisioning/install-debian-packages.sh CLEAN
           elif [ ${{ startsWith(matrix.os, 'macos-') }} = true ] ; then
-            ./ide/provisioning/install-darwin-packages.sh BASE
-            ./ide/provisioning/install-darwin-packages.sh ${{ matrix.target }}            
+            ./ide/provisioning/install-darwin-packages.sh BASE  ${{ matrix.target }}            
           fi
   
       - name: Prepare signing key
@@ -559,6 +571,11 @@ jobs:
                 mv -v ${{ env.BINARY_DIR }}/vali-xcs${{ matrix.target_ext }} ${{ env.DEPLOY_DIR }} 
                 ;;
           esac
+          if [ ${{ startsWith(matrix.os, 'macos') }} ]; then
+             echo 'whereis fmt'
+             whereis fmt
+            ls /usr/bin/fmt
+          fi
 
       - name: Compile OpenSoar - Sanitizer Check
         if: ${{ matrix.sanitizer }}  # a boolean variable
