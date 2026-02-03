@@ -132,7 +132,8 @@ jobs:
           - os: macos-15
             target: MACOS
 
-          - os: ios-1
+          ### - os: ios-1
+          - os: macos-15
             target: IOS64
 
           ### - os: ios-2
@@ -155,42 +156,6 @@ jobs:
     steps:
       - id: checkout
         uses: actions/checkout@v5
-
-        # needed to easy download iOS Versions
-      - name: Setup xcodesorg/made/xcodes
-        if: ${{ startsWith(matrix.os, 'ios') }}
-        run: |
-          brew install xcodesorg/made/xcodes
-          brew install aria2
-      
-      - name: Check and Download iOS Runtime
-        if: ${{ startsWith(matrix.os, 'ios') }}
-        id: check-runtime
-        run: |
-          echo "Runtimes before download"
-          available_runtimes="$(xcrun simctl list runtimes)"
-          echo "$available_runtimes"
-      
-          if echo "$available_runtimes" | grep -q "^iOS 16.4"; then
-            echo "iOS 16.4 runtime is already installed"
-          else
-            echo "iOS 16.4 runtime is not installed"
-            sudo xcodes runtimes install "iOS 16.4"
-          fi
-      
-          echo ""
-          echo "Runtimes after download"
-          xcrun simctl list runtimes
-          echo ""
-          echo "Available device types"
-          xcrun simctl list devicetypes
-      
-      - name: Create iOS Simulators
-        if: ${{ startsWith(matrix.os, 'ios') }}
-        run: |
-          sudo xcodebuild -license accept || echo "License already accepted"
-          
-          xcrun simctl create "iPhone 8 Plus" com.apple.CoreSimulator.SimDeviceType.iPhone-8-Plus com.apple.CoreSimulator.SimRuntime.iOS-16-4 || echo "Simulator already exists"
 
       - name: Install checkout dependencies (Ubuntu)
         if: ${{ startsWith(matrix.os, 'ubuntu-') }}
@@ -542,7 +507,8 @@ jobs:
             esac
             ## unknown section!!!: ./ide/provisioning/install-debian-packages.sh CLEAN
           elif [ ${{ startsWith(matrix.os, 'macos-') }} = true ] ; then
-            ./ide/provisioning/install-darwin-packages.sh BASE ${{ matrix.target }}            
+            ./ide/provisioning/install-darwin-packages.sh BASE
+            ./ide/provisioning/install-darwin-packages.sh ${{ matrix.target }}            
           fi
   
       - name: Prepare signing key
