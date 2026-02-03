@@ -104,14 +104,18 @@ jobs:
         include:
           - os: ubuntu-latest
             target: UNIX
-            # target_container: debian:trixie-slim
+            # ...but this isn't ubuntu-latest: 
+            target_container: debian:trixie-slim
 
           - os: ubuntu-22.04
             target: UNIX
+            # ...but this isn't ubuntu-22.04: 
             target_container: debian:trixie-slim
 
           - os: ubuntu-24.04
             target: UNIX
+            # ...but this isn't ubuntu-24.04: 
+            target_container: debian:trixie-slim
 
           - os: macos-14
             target: OSX64
@@ -168,7 +172,7 @@ jobs:
         if: ${{ startsWith(matrix.os, 'macos-') }}
         run: |
           echo "Install checkout dependencies: ${{ matrix.target }} "
-          brew install fmt
+          ./ide/provisioning/install-darwin-packages.sh BASE ${{ matrix.target }}
 
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') && (env.TEST_COMMIT == '') }}
@@ -556,8 +560,7 @@ jobs:
           esac
 
       - name: Compile OpenSoar - Sanitizer Check
-        # if: ${{ matrix.sanitizer == 'yes' }}  # !!!!August2111:
-        if: ${{ matrix.sanitizer }}  # !!!!August2111:
+        if: ${{ matrix.sanitizer }}  # a boolean variable
         run: |
           echo "Unix - Sanitizer Check"
           ${{ env.BUILDER }} -j${{ env.PHYS_KERNELS }} TARGET=${{ matrix.target }} DEBUG=y USE_CCACHE=y V=${{ env.VERBOSE }} everything VFB=y SANITIZE=y DEBUG_GLIBCXX=y
