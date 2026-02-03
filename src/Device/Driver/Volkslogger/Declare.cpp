@@ -15,7 +15,7 @@ static void
 CopyToNarrowBuffer(char *dest, size_t max_size, const char *src)
 {
   strncpy(dest, src, max_size - 1);
-  dest[max_size - 1] = 0;
+  dest[max_size - 1] = '\0';
 }
 
 static void
