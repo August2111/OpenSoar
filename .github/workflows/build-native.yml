@@ -40,7 +40,8 @@ on:
       - master
 
 env:
-  DEBUG: y
+  # DEBUG: y
+  DEBUG: n  # temporary August2111
   BOOST: boost_1_87_0
 
 jobs:
