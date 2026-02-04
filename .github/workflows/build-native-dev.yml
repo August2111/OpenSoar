@@ -174,8 +174,6 @@ jobs:
         run: |
           echo "Install checkout dependencies: ${{ matrix.target }} "
           ./ide/provisioning/install-darwin-packages.sh BASE ${{ matrix.target }}
-          port install libfmt10 
-          brew install libfmt10 
 
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') && (env.TEST_COMMIT == '') }}
@@ -190,12 +188,12 @@ jobs:
           #  ASAN_OPTIONS=detect_odr_violation=0
           #  ASAN_OPTIONS=detect_odr_violation=0 new_delete_type_mismatch=0
           echo "ASAN_OPTIONS=$ASAN_OPTIONS" >> $GITHUB_ENV
-          if [ ${{ startsWith(matrix.os, 'macos') }} ]; then
-            brew info fmt
-          else
-            whereis fmt
-            fmt --version
-          fi
+          ### if [ ${{ startsWith(matrix.os, 'macos') }} ]; then
+          ###   brew info fmt
+          ### else
+          ###   whereis fmt
+          ###   fmt --version
+          ### fi
 
       - name: Set Git Variables (Windows)
         if: ${{ startsWith(matrix.os, 'windows-')  && (env.TEST_COMMIT == '') }}
@@ -227,13 +225,13 @@ jobs:
           echo "path: output/${{ matrix.target }}/bin"
           ls -l output/${{ matrix.target }}/bin
 
-      - name: Check FMT on ${{ matrix.target }}
-        if: ${{ startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-') }}
-        run: |
-          echo "Check FMT on ${{ matrix.target }}"
-          whereis fmt
-          fmt --version
-        working-directory: ${{ github.workspace }}
+      ### - name: Check FMT on ${{ matrix.target }}
+      ###   if: ${{ startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-') }}
+      ###   if: ${{ startsWith(matrix.os, 'macos-') }}
+      ###   run: |
+      ###     echo "Check FMT on ${{ matrix.target }}"
+      ###     brew reinstall fmt
+      ###   working-directory: ${{ github.workspace }}
 
       - name: Run Test Programs on ${{ matrix.target }}
         run: |
