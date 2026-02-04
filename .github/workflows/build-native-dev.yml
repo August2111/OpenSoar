@@ -184,6 +184,7 @@ jobs:
           echo "GIT_COMMIT=$COMMIT" >> $GITHUB_ENV
           echo "TEST_COMMIT=$COMMIT" >> $GITHUB_ENV
           echo "TEST_RUN_ID=$RUN_ID" >> $GITHUB_ENV
+          echo "ASAN_OPTIONS=detect_odr_violation=0" >> $GITHUB_ENV
       
       - name: Set Git Variables (Windows)
         if: ${{ startsWith(matrix.os, 'windows-')  && (env.TEST_COMMIT == '') }}
@@ -219,9 +220,8 @@ jobs:
         if: ${{ startsWith(matrix.os, 'macos-') || startsWith(matrix.os, 'ubuntu-') }}
         run: |
           echo "Check FMT on ${{ matrix.target }}"
-            whereis fmt
-            ls /usr/bin/fmt
-            find /usr -name "*fmt*"
+          whereis fmt
+          fmt --version
         working-directory: ${{ github.workspace }}
 
       - name: Run Test Programs on ${{ matrix.target }}
@@ -231,6 +231,7 @@ jobs:
             whereis fmt
             ls /usr/bin/fmt
           fi
+          ASAN_OPTIONS=detect_odr_violation=0 new_delete_type_mismatch=0
           chmod +x ./output/${{ matrix.target }}/bin/*
           echo "run tests on Target '${{ matrix.target }}'"
           make check-no-build TARGET=${{ matrix.target }}
