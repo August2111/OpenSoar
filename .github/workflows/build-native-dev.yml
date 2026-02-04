@@ -174,6 +174,8 @@ jobs:
         run: |
           echo "Install checkout dependencies: ${{ matrix.target }} "
           ./ide/provisioning/install-darwin-packages.sh BASE ${{ matrix.target }}
+          port install libfmt10 
+          brew install libfmt10 
 
       - name: Set Git Variables
         if: ${{ ! startsWith(matrix.os, 'windows-') && (env.TEST_COMMIT == '') }}
@@ -184,8 +186,17 @@ jobs:
           echo "GIT_COMMIT=$COMMIT" >> $GITHUB_ENV
           echo "TEST_COMMIT=$COMMIT" >> $GITHUB_ENV
           echo "TEST_RUN_ID=$RUN_ID" >> $GITHUB_ENV
-          echo "ASAN_OPTIONS=detect_odr_violation=0" >> $GITHUB_ENV
-      
+          ASAN_OPTIONS=detect_odr_violation=0 new_delete_type_mismatch=0
+          #  ASAN_OPTIONS=detect_odr_violation=0
+          #  ASAN_OPTIONS=detect_odr_violation=0 new_delete_type_mismatch=0
+          echo "ASAN_OPTIONS=$ASAN_OPTIONS" >> $GITHUB_ENV
+          if [ ${{ startsWith(matrix.os, 'macos') }} ]; then
+            brew info fmt
+          else
+            whereis fmt
+            fmt --version
+          fi
+
       - name: Set Git Variables (Windows)
         if: ${{ startsWith(matrix.os, 'windows-')  && (env.TEST_COMMIT == '') }}
         run: |
@@ -227,11 +238,6 @@ jobs:
       - name: Run Test Programs on ${{ matrix.target }}
         run: |
           echo "Run Test Programs on ${{ matrix.target }}"
-          if [ ${{ startsWith(matrix.os, 'macos') != 'false' }} ]; then
-            whereis fmt
-            ls /usr/bin/fmt
-          fi
-          ASAN_OPTIONS=detect_odr_violation=0 new_delete_type_mismatch=0
           chmod +x ./output/${{ matrix.target }}/bin/*
           echo "run tests on Target '${{ matrix.target }}'"
           make check-no-build TARGET=${{ matrix.target }}
