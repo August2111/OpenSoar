@@ -321,10 +321,10 @@ PopupMessage::AddMessage(const char* text, const char *data) noexcept
   // TODO code: consider what is a sensible size?
   if (msg.visible) {
     char msgcache[1024];
-    _tcscpy(msgcache, text);
+    strcpy(msgcache, text);
     if (data != nullptr) {
-      _tcscat(msgcache, _T(" "));
-      _tcscat(msgcache, data);
+      strcat(msgcache, _T(" "));
+      strcat(msgcache, data);
     }
 
     AddMessage(msg.delay, MSG_USERINTERFACE, msgcache);
