@@ -82,7 +82,7 @@ InputEvents::eventZoom(const char* misc)
       Message::AddMessage(_("Circling zoom off"));
   } else {
     char *endptr;
-    double zoom = _tcstod(misc, &endptr);
+    double zoom = strtod(misc, &endptr);
     if (endptr == misc)
       return;
 

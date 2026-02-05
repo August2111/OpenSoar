@@ -18,14 +18,14 @@ typedef char TCHAR;
 #define _ftprintf fprintf
 #define _vftprintf vfprintf
 #define _fputts fputs
-#define _tcsdup strdup
-#define _tcscpy strcpy
-#define _tcscmp strcmp
-#define _tcslen strlen
-#define _tcsclen strlen
-#define _tcsstr strstr
-#define _tcspbrk strpbrk
-#define _tcscat strcat
+#define A_tcsdup strdup
+#define A_tcscpy strcpy
+#define A_tcscmp strcmp
+#define A_tcslen strlen
+#define A_tcsclen strlen
+#define A_tcsstr strstr
+#define A_tcspbrk strpbrk
+#define A_tcscat strcat
 #define _T(x) x
 #define _topen open
 #define _tfopen fopen
@@ -33,5 +33,5 @@ typedef char TCHAR;
 #define _putts puts
 #define _stscanf sscanf
 
-#define _tcstol strtol
-#define _tcstod strtod
+#define A_tcstol strtol
+#define A_tcstod strtod
