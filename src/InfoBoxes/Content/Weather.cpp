@@ -124,7 +124,7 @@ UpdateInfoBoxWindBearing(InfoBoxData &data) noexcept
 
   data.SetValue(info.wind.bearing);
 
-  TCHAR buffer[16];
+  char buffer[16];
   FormatUserWindSpeed(info.wind.norm, buffer, true, false);
   data.SetComment(buffer);
 }
@@ -176,7 +176,7 @@ InfoBoxContentWindArrow::Update(InfoBoxData &data) noexcept
   data.SetCustom(info.wind_available.ToInteger() +
                  basic.attitude.heading_available.ToInteger());
 
-  TCHAR speed_buffer[16];
+  char speed_buffer[16];
   FormatUserWindSpeed(info.wind.norm, speed_buffer, true, false);
 
   StaticString<36> buffer;
