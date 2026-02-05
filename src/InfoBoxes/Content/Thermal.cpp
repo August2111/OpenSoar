@@ -19,7 +19,7 @@
 static void
 SetVSpeed(InfoBoxData &data, double value) noexcept
 {
-  TCHAR buffer[32];
+  char buffer[32];
   FormatUserVerticalSpeed(value, buffer, false);
   data.SetValue(buffer[0] == _T('+') ? buffer + 1 : buffer);
   data.SetValueUnit(Units::current.vertical_speed_unit);
@@ -215,7 +215,7 @@ UpdateInfoBoxCircleDiameter(InfoBoxData &data) noexcept
     return;
   }
 
-  TCHAR buffer[32];
+  char buffer[32];
   Unit unit = FormatSmallUserDistance(buffer, circle_diameter, false, 0);
   data.SetValue (buffer);
   data.SetValueUnit(unit);

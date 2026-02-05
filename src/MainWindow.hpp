@@ -35,7 +35,7 @@ namespace InfoBoxLayout { struct Layout; }
  * The XCSoar main window.
  */
 class MainWindow : public UI::SingleWindow {
-  static constexpr const TCHAR *title = PRODUCT_NAME_T;
+  static constexpr const char *title = PRODUCT_NAME;
 
   Look *look = nullptr;
 
@@ -355,7 +355,7 @@ public:
    * @see InputEvents::IsFlavour(), InputEvents::SetFlavour()
    */
   [[gnu::pure]]
-  Widget *GetFlavourWidget(const TCHAR *flavour) noexcept;
+  Widget *GetFlavourWidget(const char *flavour) noexcept;
 
   void ShowMenu(const Menu &menu, const Menu *overlay=nullptr,
                 bool full=true) noexcept;
