@@ -38,13 +38,13 @@ set(SODIUM_VERSION      "1.0.18") #
 if (NOT ${TOOLCHAIN} MATCHES "mgw*")
   set(SODIUM_VERSION      "1.0.20") # 2024-05-25 (XCSoar since ...)
 #----------------------------------------------------
-  # set(SODIUM_VERSION      "1.0.21") # 2026-01-06
+  set(SODIUM_VERSION      "1.0.21") # 2026-01-06
 endif()
 
 ### LUA:
 set(LUA_VERSION         "5.4.4")  # 2022.01-27, functional 2024-11-08
+set(LUA_VERSION         "5.4.6")  # 2023-05-15 (XCSoar since ...)
 #----------------------------------------------------
-# set(LUA_VERSION         "5.4.6")  # 2023-05-15
 # set(LUA_VERSION         "5.4.8")  # 2025-06-23
 # set(LUA_VERSION         "5.5.0")  # 2025-12-15: ?
 
