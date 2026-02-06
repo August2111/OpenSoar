@@ -7,12 +7,18 @@
 #include <span>
 #include <utility>
 
-#include <unistd.h>
-#include <sys/types.h>
-
-#ifdef _WIN32
-#include <wchar.h>
+#ifdef __MSVC__
+# include <BaseTsd.h>
+# include <stdio.h>
+# include <io.h>
+  typedef SSIZE_T ssize_t;
+  typedef size_t mode_t;
+# define lseek _lseek
+#else
+# include <unistd.h>
 #endif
+
+#include <sys/types.h>
 
 class UniqueFileDescriptor;
 
