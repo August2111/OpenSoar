@@ -4,7 +4,6 @@
 #pragma once
 #ifdef __MSVC__
 # include "msvc/Compiler.h"
-// sollte nie erreicht werden!!!!
 #else  // __MSVC__
 
 #define GCC_MAKE_VERSION(major, minor, patchlevel) ((major) * 10000 + (minor) * 100 + patchlevel)
