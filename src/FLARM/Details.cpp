@@ -11,6 +11,8 @@
 #include "util/Macros.hpp"
 #include "util/StringCompare.hxx"
 
+#include "util/Compiler.h"
+
 #include <cassert>
 #include <utility>
 
