@@ -18,11 +18,15 @@
 #include <fcntl.h>
 
 #ifdef HAVE_POSIX
-#include <dirent.h>
-#include <unistd.h>
-#include <fnmatch.h>
-#include <utime.h>
-#include <time.h>
+# include <dirent.h>
+# include <unistd.h>
+# include <fnmatch.h>
+# include <utime.h>
+# include <time.h>
+#elif defined( __MSVC__)
+# include <corecrt_io.h>
+# include <BaseTsd.h>
+  typedef SSIZE_T ssize_t;
 #endif
 
 void
