@@ -15,6 +15,7 @@
 #include <utility>
 
 #ifdef _WIN32
+#include "util/Compiler.h"
 #include <winsock2.h> // for SOCKET, INVALID_SOCKET
 #endif
 
