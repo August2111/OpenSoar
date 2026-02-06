@@ -64,8 +64,10 @@ CommandLine::Parse(Args &args)
       Profile::SetFiles(convert);
     } else if (StringIsEqual(s, "-datapath=", 10)) {
       s += 10;
-      PathName convert(s);
-      SetSingleDataPath(convert);
+      if (*s) {
+        PathName convert(s);
+        SetSingleDataPath(convert);
+      }
 #ifdef HAVE_CMDLINE_REPLAY
     } else if (StringIsEqual(s, "-replay=", 8)) {
       replay_path = s + 8;
