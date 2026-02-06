@@ -5,11 +5,19 @@
 #define JAS_VERSION "unknown"
 #define JAS_ENABLE_32BIT 1
 #define JAS_HAVE_FCNTL_H		1
-#undef  JAS_HAVE_IO_H
-#define JAS_HAVE_UNISTD_H 1
-#undef JAS_HAVE_WINDOWS_H
-#define JAS_HAVE_SYS_TIME_H 1
-#define JAS_HAVE_SYS_TYPES_H 1
+#ifdef __MSVC__
+#   define  JAS_HAVE_IO_H  1
+#   undef JAS_HAVE_UNISTD_H
+#   define JAS_HAVE_WINDOWS_H 1
+#   undef JAS_HAVE_SYS_TIME_H
+#   undef JAS_HAVE_SYS_TYPES_H
+#else  // __MSVC__
+#   undef  JAS_HAVE_IO_H
+#   define JAS_HAVE_UNISTD_H 1
+#   undef JAS_HAVE_WINDOWS_H
+#   define JAS_HAVE_SYS_TIME_H 1
+#   define JAS_HAVE_SYS_TYPES_H 1
+#endif  // __MSVC__ 
 #undef JAS_HAVE_GETTIMEOFDAY
 #undef JAS_HAVE_GETRUSAGE
 
