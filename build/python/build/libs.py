@@ -200,7 +200,9 @@ freetype = MesonProject(
 )
 
 cares = CmakeProject(
-    "https://github.com/c-ares/c-ares/releases/download/cares-1_24_0/c-ares-1.24.0.tar.gz",
+    (
+      "https://github.com/c-ares/c-ares/releases/download/cares-1_24_0/c-ares-1.24.0.tar.gz",
+    ),
     "c517de6d5ac9cd55a9b72c1541c3e25b84588421817b5f092850ac09a8df5103",
     "lib/libcares.a",
     [
@@ -283,6 +285,9 @@ proj = CmakeProject(
     "3643b19b1622fe6b2e3113bdb623969f5117984b39f173b4e3fb19a8833bd216",
     "lib/libproj.a",
     [
+        "-DCMAKE_C_COMPILER_WORKS=ON",
+        "-DCMAKE_CXX_COMPILER_WORKS=ON",
+
         "-DBUILD_TESTING=OFF",
         "-DENABLE_TIFF=OFF",
         "-DENABLE_CURL=OFF",
@@ -415,8 +420,11 @@ libgeotiff = CmakeProject(
     "c598d04fdf2ba25c4352844dafa81dde3f7fd968daa7ad131228cd91e9d3dc47",
     "lib/libgeotiff.a",
     [
+        "-DCMAKE_C_COMPILER_WORKS=ON",
+        "-DCMAKE_CXX_COMPILER_WORKS=ON",
         "-DWITH_UTILITIES=OFF",
         "-DBUILD_SHARED_LIBS=OFF",
+        "-DTIFF_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/include",
     ],
     patches=abspath("lib/libgeotiff/patches"),
 )
