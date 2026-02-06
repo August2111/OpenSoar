@@ -43,7 +43,6 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <sys/param.h>
 #include <stdbool.h>
 #include <math.h>
 #include "mapserver.h"
