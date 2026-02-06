@@ -11,7 +11,7 @@
 std::optional<double>
 ParseDecimal(std::string_view src) noexcept
 {
-	const char *first = src.begin(), *const last = first + src.size();
+	const char *first = src.data(), *const last = first + src.size();
 	if (first == last)
 		return std::nullopt;
 
