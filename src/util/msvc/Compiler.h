@@ -3,6 +3,8 @@
 
 #pragma once
 
+/* TODO(August2111): Cleanup this file  - and align this w/ other compiler */
+
 #include <io.h>
 #include "corecrt_math_defines.h"
 #include <BaseTsd.h>
@@ -12,10 +14,10 @@
 
 #define CLANG_OR_GCC_VERSION(x, y)  0
 #define GCC_CHECK_VERSION(x, y)     0
-// #define GCC_OLDER_THAN(x, y)        1  // This isn't a (new!) GCC
+// #define GCC_OLDER_THAN(x, y)     1  // This isn't a (new!) GCC
 #define CLANG_CHECK_VERSION(x, y)   0
 
-#define DT_UNDERLINE 0  // gibt es in WinUser.h nicht!
+#define DT_UNDERLINE 0  // not available in WinUser.h
 
 #ifndef __clang__
 # define __attribute__(x)
@@ -24,24 +26,9 @@
 #define gcc_const
 // not used: #define gcc_deprecated
 // not used: #define gcc_may_alias
+#define gcc_packed
 #define gcc_malloc
 #define gcc_noreturn [[noreturn]]  // C17++
-#if 0
-// Unfortunately the PACKED structures definition are differently completely
-// in MSVC yoe have to work with #pragma, on gcc/clang the definition of this
-// is on the end of the structue, maybe this:
-// https://stackoverflow.com/questions/1537964/visual-c-equivalent-of-gccs-attribute-packed
-#ifdef _MSC_VER
-#define PACKED_STRUCT(name)                                                    \
-  __pragma(pack(push, 1)) struct name __pragma(pack(pop))
-#elif defined(__GNUC__)
-#define PACKED_STRUCT(name) struct __attribute__((packed)) name
-#endif
-#else
-#define gcc_packed
-#endif
-
-
 #define gcc_printf(a,b)  // TODO(August2111): _Printf_format_string_ p
 #define gcc_pure  //  TODO(August2111): is used!
 // not used: #define gcc_sentinel    //  aug: sentinel
