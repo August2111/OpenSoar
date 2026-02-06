@@ -16,9 +16,9 @@
 #include "io/ZipReader.hpp"
 #include "io/ProgressReader.hpp"
 #include "io/BufferedReader.hxx"
-
 #include "util/Compiler.h"
 
+#include <stdexcept>
 #include <memory>
 
 static WaypointReaderBase *
