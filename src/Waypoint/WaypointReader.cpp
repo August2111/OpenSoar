@@ -15,6 +15,7 @@
 #include "io/ProgressReader.hpp"
 #include "io/BufferedReader.hxx"
 
+#include <stdexcept>
 #include <memory>
 
 static WaypointReaderBase *
