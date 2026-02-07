@@ -67,7 +67,7 @@ try {
          XCSoar_Version);
 
   if (argc > 1 && strcmp(argv[1], "-?") != 0) {
-    return RunValidate(path);
+    return RunValidate(Path(argv[1]));
   } else
     return 0;
 } catch (...) {
