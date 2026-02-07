@@ -85,7 +85,7 @@ try {
       unsigned nt = pow(2,i);
       char buf[100];
       sprintf(buf," trace size %d", nt);
-      ok(TestTrace(argv[1], nt),buf, 0);
+      ok(TestTrace(Path(argv[1]), nt),buf, 0);
     }
   }
   return 0;
