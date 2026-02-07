@@ -34,7 +34,7 @@
 #include "Profile/Keys.hpp"
 #include "system/RunFile.hpp"
 #include "system/Path.hpp"
-#include "system/ConvertPathName.hpp"
+// #include "system/ConvertPathName.hpp"
 #include "io/CupxArchive.hpp"
 #include "io/FileOutputStream.hxx"
 #include "system/FileUtil.hpp"
@@ -469,7 +469,7 @@ WaypointDetailsWidget::Prepare(ContainerWindow &parent,
       }
     } catch (const std::exception &e) {
       LogFormat("Failed to load %s: %s",
-                (const char *)NarrowPathName(Path(i.c_str())),
+                i.c_str(),
                 e.what());
       images.shrink(images.size() - 1);
     }

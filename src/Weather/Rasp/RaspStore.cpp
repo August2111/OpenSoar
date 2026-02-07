@@ -4,7 +4,6 @@
 #include "RaspStore.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
-#include "system/ConvertPathName.hpp"
 #include "system/Path.hpp"
 #include "io/ZipArchive.hpp"
 #include "util/StringCompare.hxx"
@@ -108,13 +107,12 @@ bool
 RaspStore::WeatherFilename(char *filename, Path name,
                                           unsigned time_index)
 {
-  const NarrowPathName narrow_name(name);
-  if (!narrow_name.IsDefined())
+  if (name.empty())
     return false;
 
   const BrokenTime t = IndexToTime(time_index);
   sprintf(filename, RASP_FORMAT,
-          (const char *)narrow_name, t.hour, t.minute);
+          name.c_str(), t.hour, t.minute);
   return true;
 }
 
