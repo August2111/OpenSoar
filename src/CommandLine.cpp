@@ -4,7 +4,6 @@
 #include "CommandLine.hpp"
 #include "Profile/Profile.hpp"
 #include "system/Args.hpp"
-#include "system/ConvertPathName.hpp"
 #include "Hardware/DisplayDPI.hpp"
 #include "Simulator.hpp"
 #include "LocalPath.hpp"
@@ -60,12 +59,12 @@ CommandLine::Parse(Args &args)
       if (StringIsEmpty(s))
         args.UsageError();
 
-      PathName convert(s);
-      Profile::SetFiles(convert);
+      Profile::SetFiles(Path(s));
     } else if (StringIsEqual(s, "-datapath=", 10)) {
       s += 10;
-      PathName convert(s);
-      SetSingleDataPath(convert);
+      if (*s) {
+        SetSingleDataPath(Path(s));
+      }
 #ifdef HAVE_CMDLINE_REPLAY
     } else if (StringIsEqual(s, "-replay=", 8)) {
       replay_path = s + 8;
