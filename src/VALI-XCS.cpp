@@ -6,7 +6,6 @@
  * to validate the GRecord of an XCSoar-generated IGC file
  */
 
-#include "system/ConvertPathName.hpp"
 #include "Logger/GRecord.hpp"
 #include "Version.hpp"
 #include "util/PrintException.hxx"
@@ -67,7 +66,6 @@ try {
          XCSoar_Version);
 
   if (argc > 1 && strcmp(argv[1], "-?") != 0) {
-    PathName path(argv[1]);
     return RunValidate(path);
   } else
     return 0;

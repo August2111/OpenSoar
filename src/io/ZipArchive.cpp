@@ -4,7 +4,6 @@
 #include "ZipArchive.hpp"
 #include "lib/fmt/RuntimeError.hxx"
 #include "lib/fmt/PathFormatter.hpp"
-#include "system/ConvertPathName.hpp"
 
 #include <zzip/zzip.h>
 
