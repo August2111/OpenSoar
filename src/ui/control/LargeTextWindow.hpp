@@ -7,8 +7,8 @@
 
 #ifndef USE_WINUSER
 #include "Renderer/TextRenderer.hpp"
-#include "util/tstring.hpp"
 #endif
+#include <string>
 
 #include <tchar.h>
 
@@ -36,7 +36,7 @@ class LargeTextWindow : public NativeWindow {
 #ifndef USE_WINUSER
   const Font *font = nullptr;
 
-  tstring value;
+  std::string value;
 
   /**
    * The first visible line.

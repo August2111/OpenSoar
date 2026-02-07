@@ -11,11 +11,12 @@
 #include "system/Path.hpp"
 #include "io/BufferedOutputStream.hxx"
 #include "io/StringOutputStream.hxx"
-#include "util/tstring.hpp"
 #include "util/StringAPI.hxx"
 #include "util/StringStrip.hxx"
 #include "Operation/Operation.hpp"
 
+#include <string>
+#include <string_view>
 #include <vector>
 
 using std::string_view_literals::operator""sv;
@@ -179,9 +180,9 @@ TestZanderWaypoint(const Waypoint org_wp, const Waypoint *wp)
 }
 
 static void
-TruncateStrip(tstring &s, std::size_t max_length) noexcept
+TruncateStrip(std::string &s, std::size_t max_length) noexcept
 {
-  tstring_view v = s;
+  std::string_view v = s;
   if (v.size() > max_length)
     v = v.substr(0, max_length);
   v = Strip(v);
@@ -248,7 +249,7 @@ TestOzi(const wp_vector &org_wp)
   }
 
   for (auto i : org_wp) {
-    i.name = tstring{Strip(i.name)};
+    i.name = std::string{Strip(i.name)};
     GetWaypoint(i, way_points);
   }
 }
@@ -265,7 +266,7 @@ TestCompeGPS(const wp_vector &org_wp)
 
   for (auto i : org_wp) {
     size_t pos;
-    while ((pos = i.name.find_first_of(_T(' '))) != tstring::npos)
+    while ((pos = i.name.find_first_of(_T(' '))) != std::string::npos)
       i.name.erase(pos, 1);
 
     TruncateStrip(i.name, 6);
@@ -286,7 +287,7 @@ TestCompeGPS_UTM(const wp_vector &org_wp)
 
   for (auto i : org_wp) {
     size_t pos;
-    while ((pos = i.name.find_first_of(_T(' '))) != tstring::npos)
+    while ((pos = i.name.find_first_of(_T(' '))) != std::string::npos)
       i.name.erase(pos, 1);
 
     TruncateStrip(i.name, 6);
