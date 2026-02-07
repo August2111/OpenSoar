@@ -9,6 +9,7 @@
 #include "Logger/GRecord.hpp"
 #include "Version.hpp"
 #include "util/PrintException.hxx"
+#include "system/Path.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
