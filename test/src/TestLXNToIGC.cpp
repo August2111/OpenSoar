@@ -28,7 +28,7 @@ RunConversion()
     return false;
   }
 
-  FileOutputStream igc_fos(igc_out_path.c_str());
+  FileOutputStream igc_fos(Path(igc_out_path));
   BufferedOutputStream igc_bos(igc_fos);
 
   long size;
