@@ -59,11 +59,11 @@ CommandLine::Parse(Args &args)
       if (StringIsEmpty(s))
         args.UsageError();
 
-      Profile::SetFiles(s);
+      Profile::SetFiles(Path(s));
     } else if (StringIsEqual(s, "-datapath=", 10)) {
       s += 10;
       if (*s) {
-        SetSingleDataPath(s);
+        SetSingleDataPath(Path(s));
       }
 #ifdef HAVE_CMDLINE_REPLAY
     } else if (StringIsEqual(s, "-replay=", 8)) {
