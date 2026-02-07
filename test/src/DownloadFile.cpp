@@ -8,6 +8,7 @@
 #include "thread/AsyncWaiter.hxx"
 #include "util/PrintException.hxx"
 #include "util/ScopeExit.hxx"
+#include "system/Path.hpp"
 
 #include <exception>
 #include <iostream>
