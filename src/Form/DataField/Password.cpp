@@ -10,7 +10,7 @@
 const char *
 PasswordDataField::GetAsDisplayString() const noexcept
 {
-  static const char *obfuscated = _T("********************************");
+  static const char *obfuscated = "********************************";
   const size_t obfuscated_length = sizeof(obfuscated) - 1;
   std::string_view s = GetAsString();
   size_t length = std::min(std::mbstowcs(nullptr, s.data(), s.size()),

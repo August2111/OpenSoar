@@ -49,7 +49,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
   AddFile(_("Map database"),
           _("The name of the file (.xcm) containing terrain, topography, and optionally "
             "waypoints, their details and airspaces."),
-          ProfileKeys::MapFile, _T("*.xcm\0*.lkm\0"), FileType::MAP);
+          ProfileKeys::MapFile, "*.xcm\0*.lkm\0", FileType::MAP);
 
   AddMultipleFiles(_("Waypoints"),
                    _("Primary waypoints files.  Supported file types are "
@@ -73,7 +73,7 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
                    _("The files may contain extracts from enroute supplements "
                      "or other contributed "
                      "information about individual waypoints and airfields."),
-                   ProfileKeys::AirfieldFileList, _T("*.txt\0"),
+                   ProfileKeys::AirfieldFileList, "*.txt\0",
                    FileType::WAYPOINTDETAILS);
   SetExpertRow(AirfieldFileList);
 
@@ -87,16 +87,16 @@ SiteConfigPanel::Prepare([[maybe_unused]] ContainerWindow &parent, [[maybe_unuse
 
   AddFile(_("FLARM database"),
           _("The name of the file containing information about registered FLARM devices."),
-          ProfileKeys::FlarmFile, _T("*.fln\0"),
+          ProfileKeys::FlarmFile, "*.fln\0",
           FileType::FLARMNET);
 
-  AddFile(_T("RASP"), nullptr,
-          ProfileKeys::RaspFile, _T("*-rasp*.dat\0"),
+  AddFile("RASP", nullptr,
+          ProfileKeys::RaspFile, "*-rasp*.dat\0",
           FileType::RASP);
 
   AddFile(_("Checklist"),
           _("The checklist file containing pre-flight and other checklists."),
-          ProfileKeys::ChecklistFile, _T("*.xcc\0xcsoar-checklist.txt\0"),
+          ProfileKeys::ChecklistFile, "*.xcc\0xcsoar-checklist.txt\0",
           FileType::CHECKLIST);
 }
 
