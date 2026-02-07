@@ -14,8 +14,6 @@
 #include "PageActions.hpp"
 #include "UIState.hpp"
 
-#include <tchar.h>
-
 static void
 SetVSpeed(InfoBoxData &data, double value) noexcept
 {

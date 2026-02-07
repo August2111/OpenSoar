@@ -5,8 +5,6 @@
 
 #include "TextRenderer.hpp"
 
-#include <tchar.h>
-
 struct DialogLook;
 struct PixelRect;
 class Canvas;

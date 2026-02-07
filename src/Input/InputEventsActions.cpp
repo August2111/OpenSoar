@@ -73,7 +73,6 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "DataComponents.hpp"
 
 #include <cassert>
-#include <tchar.h>
 #include <algorithm>
 
 #ifdef __APPLE__
