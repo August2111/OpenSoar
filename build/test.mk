@@ -810,11 +810,18 @@ DEBUG_PROGRAM_NAMES = \
 	lxn2igc \
 	DebugDisplay \
 	TaskInfo DumpTaskFile \
-	DumpFlarmNet \
 	RunRepositoryParser \
 	NearestWaypoints \
 	RunKalmanFilter1d \
 	ArcApprox
+
+ifeq ($(TARGET_IS_DARWIN),n)
+# These test programs are broken on Mac - or it needs OpenGL, but not included
+# in the moment (August2111: 2026-02-08)
+DEBUG_PROGRAM_NAMES += \
+	DumpFlarmNet \
+
+endif
 
 ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
