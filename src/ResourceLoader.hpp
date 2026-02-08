@@ -14,6 +14,8 @@ class ResourceId;
 namespace ResourceLoader {
 
 #ifdef _WIN32
+bool Initialized();
+
 void
 Init(HINSTANCE hInstance);
 #endif
@@ -30,7 +32,7 @@ Load(ResourceId id);
 
 #ifdef _WIN32
 HBITMAP
-LoadBitmap2(ResourceId id);
+LoadResBitmap(ResourceId id);
 #endif
 
 } // namespace ResourceLoader
