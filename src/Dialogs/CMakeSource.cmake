@@ -40,6 +40,10 @@ set(_SOURCES
         Dialogs/dlgQuickMenu.cpp
         Dialogs/dlgSimulatorPrompt.cpp
         Dialogs/dlgStatus.cpp
+
+        Dialogs/dlgGestureHelp.cpp
+        Dialogs/dlgQuickGuide.cpp
+
         Dialogs/DownloadFilePicker.cpp
         Dialogs/Error.cpp
         Dialogs/FileManager.cpp
@@ -56,6 +60,7 @@ set(_SOURCES
         Dialogs/MapItemListSettingsPanel.cpp
         Dialogs/Message.cpp
         Dialogs/NumberEntry.cpp
+        Dialogs/InternalLink.cpp
 
         Dialogs/Plane/PlaneDetailsDialog.cpp
         Dialogs/Plane/PlaneListDialog.cpp
@@ -136,7 +141,6 @@ set(_SOURCES
         Dialogs/DateEntry.cpp
         Dialogs/TouchTextEntry.cpp
 
-        Dialogs/Tracking/CloudEnableDialog.cpp
         Dialogs/Traffic/FlarmTrafficDetails.cpp
         Dialogs/Traffic/TeamCodeDialog.cpp
         Dialogs/Traffic/TrafficList.cpp

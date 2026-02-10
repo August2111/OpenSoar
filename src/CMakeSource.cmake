@@ -64,6 +64,7 @@ set(BASIC_SOURCES
 
     ${SRC}/Version.cpp
     ${SRC}/TransponderMode.cpp
+    ${SRC}/ResourceLookup.cpp
 )
 if (NOT TEST_APPLICATION)
     list(APPEND BASIC_SOURCES

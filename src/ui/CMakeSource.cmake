@@ -9,11 +9,16 @@ set(SCREEN_SOURCES
     ${WINDOW_SRC_DIR}/Init.cpp
     ../Renderer/ProgressBarRenderer.cpp
     ${CONTROL_SRC_DIR}/ProgressBar.cpp
+    ${CONTROL_SRC_DIR}/LinkableWindow.cpp   # new with 7.44
+    ${CONTROL_SRC_DIR}/RichTextWindow.cpp   # new with 7.44
+
     ${CANVAS_SRC_DIR}/Ramp.cpp
     ${CANVAS_SRC_DIR}/Util.cpp
     ${CANVAS_SRC_DIR}/Icon.cpp
     ${CANVAS_SRC_DIR}/Color.cpp
     ${CANVAS_SRC_DIR}/BufferCanvas.cpp
+    ${CANVAS_SRC_DIR}/TextWrapper.cpp
+
     ${WINDOW_SRC_DIR}/Window.cpp
     ${WINDOW_SRC_DIR}/ContainerWindow.cpp
     ${WINDOW_SRC_DIR}/SolidContainerWindow.cpp
@@ -240,6 +245,7 @@ elseif (WIN32)
         ${CANVAS_SRC_DIR}/gdi/BufferCanvas.cpp
         ${CANVAS_SRC_DIR}/gdi/PaintCanvas.cpp
         ${CANVAS_SRC_DIR}/gdi/UTF8Win.cpp
+        ${CANVAS_SRC_DIR}/gdi/SubCanvas.cpp
 
         ${CANVAS_SRC_DIR}/custom/GeoBitmap.cpp
         ${CANVAS_SRC_DIR}/custom/LibTiff.cpp

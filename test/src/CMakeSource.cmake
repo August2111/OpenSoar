@@ -222,7 +222,7 @@ ${SRC_DIR}/TestPolylineDecoder.cpp    # add 7.38
 # ${SRC_DIR}/test_task.cpp
 # ${SRC_DIR}/test_troute.cpp
 # ${SRC_DIR}/test_vopt.cpp
-
+    ${SRC_DIR}/TestDMStScoring.cpp
 )
 
 if(IS_OPENSOAR)
@@ -308,6 +308,7 @@ set(TEST_LIST
     ${SRC_DIR}/TestLeastSquares.cpp
     ${SRC_DIR}/TestHexString.cpp
     ${SRC_DIR}/TestThermalBand.cpp
+    ${SRC_DIR}/TestDMStScoring.cpp   # new with 7.44
 )
 
 if(IS_OPENSOAR)
