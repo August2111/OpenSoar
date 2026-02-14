@@ -77,6 +77,7 @@ $(call SRC_TO_OBJ,$(SRC)/lua/InputEvent.cpp): $(OUT)/include/InputEvents_Char2GC
 $(OUT)/include/Status_defaults.hpp: Data/Status/default.xcs \
 	tools/xcs2cpp.pl | $(OUT)/include/dirstamp
 	@$(NQ)echo "  GEN     $@"
+	@$(NQ)echo "  GEN     $(Q)$(PERL) tools/xcs2cpp.pl $< >$@.tmp"
 	$(Q)$(PERL) tools/xcs2cpp.pl $< >$@.tmp
 	@mv $@.tmp $@
 
