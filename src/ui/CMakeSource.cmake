@@ -226,7 +226,6 @@ elseif (WIN32)
         ${DISPLAY_SRC_DIR}/gdi/Display.cpp
 
         ${CONTROL_SRC_DIR}/gdi/LargeTextWindow.cpp
-        
         ${WINDOW_SRC_DIR}/gdi/Window.cpp
         ${WINDOW_SRC_DIR}/gdi/PaintWindow.cpp
         ${WINDOW_SRC_DIR}/gdi/ContainerWindow.cpp
@@ -377,7 +376,6 @@ set(SCREEN_HEADERS
         ${WINDOW_SRC_DIR}/SingleWindow.cpp
         ${WINDOW_SRC_DIR}/SolidContainerWindow.cpp
         ${WINDOW_SRC_DIR}/Window.cpp
-
 )
 
 set(SCRIPT_FILES 
