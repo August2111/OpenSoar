@@ -31,6 +31,7 @@ set(CURL_VERSION        "8.5.0")  # functional with OpenSoar(2025-12-23)
 ### PNG:
 set(PNG_VERSION         "1.6.40") 
 set(PNG_VERSION         "1.6.43") # XCSoar version
+#----------------------------------------------------
 
 ### SODIUM:
 set(SODIUM_VERSION      "1.0.18") # 
