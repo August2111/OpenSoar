@@ -2,15 +2,10 @@
 // author: Max Kellermann <max.kellermann@gmail.com>
 
 #include "ToString.hxx"
-#include "Features.hxx"
+#include "net/Features.hxx"
 #include "SocketAddress.hxx"
-#include "IPv4Address.hxx"
 
 #include <fmt/format.h>
-
-#include <algorithm>
-#include <cassert>
-#include <cstring>
 
 #ifdef _WIN32
 #include <ws2tcpip.h>
@@ -26,6 +21,7 @@
 #endif
 
 #ifdef HAVE_UN
+#include <algorithm>
 
 static std::string
 LocalAddressToString(std::string_view raw) noexcept
