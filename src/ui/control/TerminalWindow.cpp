@@ -21,7 +21,8 @@ TerminalWindow::Write(const char *p, size_t length)
       if (!IsASCII(ch) || !IsPrintableASCII(ch))
         ch = '.';
       data.Get(cursor_x, cursor_y) = ch;
-      Advance();
+      if (*p != '\r' && *p != '\n')
+        Advance();
     }
   }
 
