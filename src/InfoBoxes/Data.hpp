@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include "lib/fmt/tchar.hxx"
 #include "util/StaticString.hxx"
 #include "Units/Unit.hpp"
 #include "time/FloatDuration.hxx"
@@ -81,7 +80,7 @@ struct InfoBoxData {
     return title;
   };
 
-  void VFmtTitle(fmt_tstring_view format_str, fmt_tformat_args args) noexcept {
+  void VFmtTitle(fmt::string_view format_str, fmt::format_args args) noexcept {
     auto [p, _] = fmt::vformat_to_n(title.begin(), title.capacity() - 1,
                                     format_str, args);
     *p = 0;
@@ -92,7 +91,7 @@ struct InfoBoxData {
   void FmtTitle(const S &format_str, Args&&... args) noexcept {
 #if FMT_VERSION >= 90000
     return VFmtTitle(format_str,
-                     fmt::make_format_args<fmt_tformat_context>(args...));
+                     fmt::make_format_args<fmt::format_context>(args...));
 #else
     return VFmtTitle(fmt::to_string_view(format_str),
                      fmt::make_args_checked<Args...>(format_str, args...));
@@ -105,7 +104,7 @@ struct InfoBoxData {
    */
   void SetValue(const char *value) noexcept;
 
-  void VFmtValue(fmt_tstring_view format_str, fmt_tformat_args args) noexcept {
+  void VFmtValue(fmt::string_view format_str, fmt::format_args args) noexcept {
     auto [p, _] = fmt::vformat_to_n(value.begin(), value.capacity() - 1,
                                     format_str, args);
     *p = 0;
@@ -116,7 +115,7 @@ struct InfoBoxData {
   void FmtValue(const S &format_str, Args&&... args) noexcept {
 #if FMT_VERSION >= 90000
     return VFmtValue(format_str,
-                     fmt::make_format_args<fmt_tformat_context>(args...));
+                     fmt::make_format_args<fmt::format_context>(args...));
 #else
     return VFmtValue(fmt::to_string_view(format_str),
                      fmt::make_args_checked<Args...>(format_str, args...));
@@ -176,7 +175,7 @@ struct InfoBoxData {
    */
   void SetComment(const char *comment) noexcept;
 
-  void VFmtComment(fmt_tstring_view format_str, fmt_tformat_args args) noexcept {
+  void VFmtComment(fmt::string_view format_str, fmt::format_args args) noexcept {
     auto [p, _] = fmt::vformat_to_n(comment.begin(), comment.capacity() - 1,
                                     format_str, args);
     *p = 0;
@@ -187,7 +186,7 @@ struct InfoBoxData {
   void FmtComment(const S &format_str, Args&&... args) noexcept {
 #if FMT_VERSION >= 90000
     return VFmtComment(format_str,
-                       fmt::make_format_args<fmt_tformat_context>(args...));
+                       fmt::make_format_args<fmt::format_context>(args...));
 #else
     return VFmtComment(fmt::to_string_view(format_str),
                        fmt::make_args_checked<Args...>(format_str, args...));

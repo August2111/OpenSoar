@@ -18,7 +18,7 @@
 #include "Formatter/TimeFormatter.hpp"
 #include "json/ParserOutputStream.hxx"
 #include "Language/Language.hpp"
-#include "lib/fmt/tchar.hxx"
+#include "fmt/format.h"
 #include "net/http/Init.hpp"
 #include "Operation/PluggableOperationEnvironment.hpp"
 #include "util/StaticString.hxx"
