@@ -14,7 +14,7 @@
 
 #include <boost/json.hpp>
 
-using std::string_view_literals::operator""sv;
+#include <string_view>
 
 namespace WeGlide {
 
@@ -41,11 +41,11 @@ ToString(TaskKind kind) noexcept
 TaskKind
 ParseTaskKind(std::string_view kind) noexcept
 {
-  if (kind == "FR"sv)
+  if (kind == "FR")
     return TaskKind::FREE;
-  else if (kind == "FR4"sv)
+  else if (kind == "FR4")
     return TaskKind::FREE4;
-  else if (kind == "TR"sv)
+  else if (kind == "TR")
     return TaskKind::TRIANGLE;
   else
     return TaskKind::UNKNOWN;
@@ -67,23 +67,23 @@ ParseTurnpoints(const boost::json::value &jv)
 
     TurnpointInfo tp;
 
-    if (auto p = obj.if_contains("properties"sv); p && p->is_object()) {
+    if (auto p = obj.if_contains("properties"); p && p->is_object()) {
       const auto &props = p->as_object();
 
-      if (auto n = props.if_contains("name"sv); n && n->is_string())
+      if (auto n = props.if_contains("name"); n && n->is_string())
         tp.name = n->as_string();
 
-      if (auto e = props.if_contains("elevation"sv); e && e->is_number())
+      if (auto e = props.if_contains("elevation"); e && e->is_number())
         tp.elevation = e->to_number<int>();
 
-      if (auto r = props.if_contains("radius"sv); r && r->is_number())
+      if (auto r = props.if_contains("radius"); r && r->is_number())
         tp.radius = r->to_number<double>() * 1000;
     }
 
-    if (auto g = obj.if_contains("geometry"sv); g && g->is_object()) {
+    if (auto g = obj.if_contains("geometry"); g && g->is_object()) {
       const auto &geom = g->as_object();
 
-      if (auto c = geom.if_contains("coordinates"sv); c && c->is_array()) {
+      if (auto c = geom.if_contains("coordinates"); c && c->is_array()) {
         const auto &coords = c->as_array();
         if (coords.size() >= 2) {
           tp.longitude = coords[0].to_number<double>();
@@ -114,15 +114,15 @@ ParseScores(const boost::json::value &jv)
 
     ScoreEntry se;
 
-    if (auto u = obj.if_contains("user"sv); u && u->is_object()) {
-      if (auto n = u->as_object().if_contains("name"sv); n && n->is_string())
+    if (auto u = obj.if_contains("user"); u && u->is_object()) {
+      if (auto n = u->as_object().if_contains("name"); n && n->is_string())
         se.user_name = n->as_string();
     }
 
-    if (auto p = obj.if_contains("points"sv); p && p->is_number())
+    if (auto p = obj.if_contains("points"); p && p->is_number())
       se.points = p->to_number<double>();
 
-    if (auto s = obj.if_contains("speed"sv); s && s->is_number())
+    if (auto s = obj.if_contains("speed"); s && s->is_number())
       se.speed = s->to_number<double>();
 
     scores.push_back(std::move(se));
@@ -141,30 +141,30 @@ tag_invoke(boost::json::value_to_tag<TaskInfo>,
   info.id = json.at("id").to_number<uint_least64_t>();
   info.name = json.at("name").as_string();
 
-  if (auto u = json.if_contains("user"sv); u && u->is_object()) {
-    if (auto n = u->as_object().if_contains("name"sv); n && n->is_string())
+  if (auto u = json.if_contains("user"); u && u->is_object()) {
+    if (auto n = u->as_object().if_contains("name"); n && n->is_string())
       info.user_name = n->as_string();
   }
 
   // convert km to m
   info.distance = json.at("distance").to_number<double>() * 1000;
 
-  if (auto k = json.if_contains("kind"sv); k && k->is_string())
+  if (auto k = json.if_contains("kind"); k && k->is_string())
     info.kind = ParseTaskKind(k->as_string());
 
-  if (auto r = json.if_contains("ruleset"sv); r && r->is_string())
+  if (auto r = json.if_contains("ruleset"); r && r->is_string())
     info.ruleset = r->as_string();
 
-  if (auto t = json.if_contains("token"sv); t && t->is_string())
+  if (auto t = json.if_contains("token"); t && t->is_string())
     info.token = t->as_string();
 
-  if (auto sd = json.if_contains("scoring_date"sv); sd && sd->is_string())
+  if (auto sd = json.if_contains("scoring_date"); sd && sd->is_string())
     info.scoring_date = sd->as_string();
 
-  if (auto pf = json.if_contains("point_features"sv))
+  if (auto pf = json.if_contains("point_features"))
     info.turnpoints = ParseTurnpoints(*pf);
 
-  if (auto ts = json.if_contains("task_score"sv))
+  if (auto ts = json.if_contains("task_score"))
     info.scores = ParseScores(*ts);
 
   return info;
