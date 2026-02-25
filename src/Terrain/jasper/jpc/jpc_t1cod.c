@@ -124,27 +124,29 @@ static void jpc_initmqctxs(void);
 
 enum jpc_passtype JPC_PASSTYPE(unsigned passno)
 {
-	unsigned passtype;
-	switch (passno % 3) {
-	case 0:
-		passtype = JPC_CLNPASS;
-		break;
-	case 1:
-		passtype = JPC_SIGPASS;
-		break;
-	case 2:
-		passtype = JPC_REFPASS;
-		break;
-	default:
-		assert(0);
-		JAS_UNREACHABLE();
-	}
-	return passtype;
+  unsigned passtype = (unsigned) -1;
+  switch (passno % 3) {
+  case 0:
+    passtype = JPC_CLNPASS;
+    break;
+  case 1:
+    passtype = JPC_SIGPASS;
+    break;
+  case 2:
+    passtype = JPC_REFPASS;
+    break;
+  default:
+    assert(0);
+    JAS_UNREACHABLE();
+  }
+  return passtype;
 }
 
-unsigned JPC_NOMINALGAIN(unsigned qmfbid, unsigned numlvls, unsigned lvlno, enum jpc_tsfb_orient orient)
+unsigned 
+JPC_NOMINALGAIN(unsigned qmfbid, unsigned numlvls,
+                unsigned lvlno, enum jpc_tsfb_orient orient)
 {
-	/* Avoid compiler warnings about unused parameters. */
+	/* Avoid compiler warnings about unused parameters in c-files. */
 	(void)numlvls;
 
 	if (qmfbid == JPC_COX_INS) {
@@ -174,59 +176,59 @@ unsigned JPC_NOMINALGAIN(unsigned qmfbid, unsigned numlvls, unsigned lvlno, enum
 
 enum jpc_segtype JPC_SEGTYPE(unsigned passno, unsigned firstpassno, bool bypass)
 {
-	if (bypass) {
-		enum jpc_passtype passtype = JPC_PASSTYPE(passno);
-		if (passtype == JPC_CLNPASS) {
-			return JPC_SEG_MQ;
-		}
-		return ((passno < firstpassno + 10) ? JPC_SEG_MQ : JPC_SEG_RAW);
-	} else {
-		return JPC_SEG_MQ;
-	}
+  if (bypass) {
+    enum jpc_passtype passtype = JPC_PASSTYPE(passno);
+    if (passtype == JPC_CLNPASS) {
+      return JPC_SEG_MQ;
+    }
+    return ((passno < firstpassno + 10) ? JPC_SEG_MQ : JPC_SEG_RAW);
+  } else {
+    return JPC_SEG_MQ;
+  }
 }
 
 unsigned JPC_SEGPASSCNT(unsigned passno, unsigned firstpassno, unsigned numpasses, bool bypass, bool termall)
 {
-	unsigned ret;
+  unsigned ret;
 
-	if (termall) {
-		ret = 1;
-	} else if (bypass) {
-		if (passno < firstpassno + 10) {
-			ret = 10 - (passno - firstpassno);
-		} else {
-			enum jpc_passtype passtype = JPC_PASSTYPE(passno);
-			switch (passtype) {
-			case JPC_SIGPASS:
-				ret = 2;
-				break;
-			case JPC_REFPASS:
-				ret = 1;
-				break;
-			case JPC_CLNPASS:
-				ret = 1;
-				break;
-			default:
-				assert(0);
-				JAS_UNREACHABLE();
-			}
-		}
-	} else {
-		ret = JPC_PREC * 3 - 2;
-	}
-	ret = JAS_MIN(ret, numpasses - passno);
-	return ret;
+  if (termall) {
+    ret = 1;
+  } else if (bypass) {
+    if (passno < firstpassno + 10) {
+      ret = 10 - (passno - firstpassno);
+    } else {
+      enum jpc_passtype passtype = JPC_PASSTYPE(passno);
+      switch (passtype) {
+      case JPC_SIGPASS:
+        ret = 2;
+        break;
+      case JPC_REFPASS:
+        ret = 1;
+        break;
+      case JPC_CLNPASS:
+        ret = 1;
+        break;
+      default:
+        assert(0);
+        JAS_UNREACHABLE();
+      }
+    }
+  } else {
+    ret = JPC_PREC * 3 - 2;
+  }
+  ret = JAS_MIN(ret, numpasses - passno);
+  return ret;
 }
 
 bool JPC_ISTERMINATED(unsigned passno, unsigned firstpassno, unsigned numpasses, bool termall,
   bool lazy)
 {
-	if (passno - firstpassno == numpasses - 1) {
-		return true;
-	} else {
-		unsigned n = JPC_SEGPASSCNT(passno, firstpassno, numpasses, lazy, termall);
-		return n <= 1;
-	}
+  if (passno - firstpassno == numpasses - 1) {
+    return true;
+  } else {
+    unsigned n = JPC_SEGPASSCNT(passno, firstpassno, numpasses, lazy, termall);
+    return n <= 1;
+  }
 }
 
 /******************************************************************************\
@@ -235,254 +237,254 @@ bool JPC_ISTERMINATED(unsigned passno, unsigned firstpassno, unsigned numpasses,
 
 void jpc_initluts(void)
 {
-	float u;
-	float v;
-	float t;
+  float u;
+  float v;
+  float t;
 
 /* XXX - hack */
 jpc_initmqctxs();
 
-	for (unsigned orient = 0; orient < 4; ++orient) {
-		for (unsigned i = 0; i < 256; ++i) {
-			jpc_zcctxnolut[(orient << 8) | i] = jpc_getzcctxno(i, orient);
-		}
-	}
+  for (unsigned orient = 0; orient < 4; ++orient) {
+    for (unsigned i = 0; i < 256; ++i) {
+      jpc_zcctxnolut[(orient << 8) | i] = jpc_getzcctxno(i, orient);
+    }
+  }
 
-	for (unsigned i = 0; i < 256; ++i) {
-		jpc_spblut[i] = jpc_getspb(i << 4);
-	}
+  for (unsigned i = 0; i < 256; ++i) {
+    jpc_spblut[i] = jpc_getspb(i << 4);
+  }
 
-	for (unsigned i = 0; i < 256; ++i) {
-		jpc_scctxnolut[i] = jpc_getscctxno(i << 4);
-	}
+  for (unsigned i = 0; i < 256; ++i) {
+    jpc_scctxnolut[i] = jpc_getscctxno(i << 4);
+  }
 
-	for (unsigned refine = 0; refine < 2; ++refine) {
-		for (unsigned i = 0; i < 2048; ++i) {
-			jpc_magctxnolut[(refine << 11) + i] = jpc_getmagctxno((refine ? JPC_REFINE : 0) | i);
-		}
-	}
+  for (unsigned refine = 0; refine < 2; ++refine) {
+    for (unsigned i = 0; i < 2048; ++i) {
+      jpc_magctxnolut[(refine << 11) + i] = jpc_getmagctxno((refine ? JPC_REFINE : 0) | i);
+    }
+  }
 
-	for (unsigned i = 0; i < (1 << JPC_NMSEDEC_BITS); ++i) {
-		t = (float)(i * jpc_pow2i(-JPC_NMSEDEC_FRACBITS));
-		u = t;
-		v = t - 1.5f;
-		jpc_signmsedec[i] = jpc_dbltofix(floor((u * u - v * v) * jpc_pow2i(JPC_NMSEDEC_FRACBITS) + 0.5) / jpc_pow2i(JPC_NMSEDEC_FRACBITS));
+  for (unsigned i = 0; i < (1 << JPC_NMSEDEC_BITS); ++i) {
+    t = (float)(i * jpc_pow2i(-JPC_NMSEDEC_FRACBITS));
+    u = t;
+    v = t - 1.5f;
+    jpc_signmsedec[i] = jpc_dbltofix(floor((u * u - v * v) * jpc_pow2i(JPC_NMSEDEC_FRACBITS) + 0.5) / jpc_pow2i(JPC_NMSEDEC_FRACBITS));
 /* XXX - this calc is not correct */
-		jpc_signmsedec0[i] = jpc_dbltofix(floor((u * u) * jpc_pow2i(JPC_NMSEDEC_FRACBITS) + 0.5) / jpc_pow2i(JPC_NMSEDEC_FRACBITS));
-		u = t - 1.0f;
-		if (i & (1 << (JPC_NMSEDEC_BITS - 1))) {
-			v = t - 1.5f;
-		} else {
-			v = t - 0.5f;
-		}
-		jpc_refnmsedec[i] = jpc_dbltofix(floor((u * u - v * v) * jpc_pow2i(JPC_NMSEDEC_FRACBITS) + 0.5) / jpc_pow2i(JPC_NMSEDEC_FRACBITS));
+    jpc_signmsedec0[i] = jpc_dbltofix(floor((u * u) * jpc_pow2i(JPC_NMSEDEC_FRACBITS) + 0.5) / jpc_pow2i(JPC_NMSEDEC_FRACBITS));
+    u = t - 1.0f;
+    if (i & (1 << (JPC_NMSEDEC_BITS - 1))) {
+      v = t - 1.5f;
+    } else {
+      v = t - 0.5f;
+    }
+    jpc_refnmsedec[i] = jpc_dbltofix(floor((u * u - v * v) * jpc_pow2i(JPC_NMSEDEC_FRACBITS) + 0.5) / jpc_pow2i(JPC_NMSEDEC_FRACBITS));
 /* XXX - this calc is not correct */
-		jpc_refnmsedec0[i] = jpc_dbltofix(floor((u * u) * jpc_pow2i(JPC_NMSEDEC_FRACBITS) + 0.5) / jpc_pow2i(JPC_NMSEDEC_FRACBITS));
-	}
+    jpc_refnmsedec0[i] = jpc_dbltofix(floor((u * u) * jpc_pow2i(JPC_NMSEDEC_FRACBITS) + 0.5) / jpc_pow2i(JPC_NMSEDEC_FRACBITS));
+  }
 }
 
 static uint_least8_t jpc_getzcctxno(unsigned f, enum jpc_tsfb_orient orient)
 {
-	assert(orient < 4);
+  assert(orient < 4);
 
-	unsigned n;
-	unsigned t;
-	unsigned hv;
+  unsigned n;
+  unsigned t;
+  unsigned hv;
 
-	unsigned h = ((f & JPC_WSIG) != 0) + ((f & JPC_ESIG) != 0);
-	unsigned v = ((f & JPC_NSIG) != 0) + ((f & JPC_SSIG) != 0);
-	const unsigned d = ((f & JPC_NWSIG) != 0) + ((f & JPC_NESIG) != 0) + ((f & JPC_SESIG) != 0) + ((f & JPC_SWSIG) != 0);
-	switch (orient) {
-	case JPC_TSFB_HL:
-		t = h;
-		h = v;
-		v = t;
-		/* fall through */
-	case JPC_TSFB_LL:
-	case JPC_TSFB_LH:
-		if (!h) {
-			if (!v) {
-				if (!d) {
-					n = 0;
-				} else if (d == 1) {
-					n = 1;
-				} else {
-					n = 2;
-				}
-			} else if (v == 1) {
-				n = 3;
-			} else {
-				n = 4;
-			}
-		} else if (h == 1) {
-			if (!v) {
-				if (!d) {
-					n = 5;
-				} else {
-					n = 6;
-				}
-			} else {
-				n = 7;
-			}
-		} else {
-			n = 8;
-		}
-		break;
-	case JPC_TSFB_HH:
-		hv = h + v;
-		if (!d) {
-			if (!hv) {
-				n = 0;
-			} else if (hv == 1) {
-				n = 1;
-			} else {
-				n = 2;
-			}
-		} else if (d == 1) {
-			if (!hv) {
-				n = 3;
-			} else if (hv == 1) {
-				n = 4;
-			} else {
-				n = 5;
-			}
-		} else if (d == 2) {
-			if (!hv) {
-				n = 6;
-			} else {
-				n = 7;
-			}
-		} else {
-			n = 8;
-		}
-		break;
+  unsigned h = ((f & JPC_WSIG) != 0) + ((f & JPC_ESIG) != 0);
+  unsigned v = ((f & JPC_NSIG) != 0) + ((f & JPC_SSIG) != 0);
+  const unsigned d = ((f & JPC_NWSIG) != 0) + ((f & JPC_NESIG) != 0) + ((f & JPC_SESIG) != 0) + ((f & JPC_SWSIG) != 0);
+  switch (orient) {
+  case JPC_TSFB_HL:
+    t = h;
+    h = v;
+    v = t;
+    /* fall through */
+  case JPC_TSFB_LL:
+  case JPC_TSFB_LH:
+    if (!h) {
+      if (!v) {
+        if (!d) {
+          n = 0;
+        } else if (d == 1) {
+          n = 1;
+        } else {
+          n = 2;
+        }
+      } else if (v == 1) {
+        n = 3;
+      } else {
+        n = 4;
+      }
+    } else if (h == 1) {
+      if (!v) {
+        if (!d) {
+          n = 5;
+        } else {
+          n = 6;
+        }
+      } else {
+        n = 7;
+      }
+    } else {
+      n = 8;
+    }
+    break;
+  case JPC_TSFB_HH:
+    hv = h + v;
+    if (!d) {
+      if (!hv) {
+        n = 0;
+      } else if (hv == 1) {
+        n = 1;
+      } else {
+        n = 2;
+      }
+    } else if (d == 1) {
+      if (!hv) {
+        n = 3;
+      } else if (hv == 1) {
+        n = 4;
+      } else {
+        n = 5;
+      }
+    } else if (d == 2) {
+      if (!hv) {
+        n = 6;
+      } else {
+        n = 7;
+      }
+    } else {
+      n = 8;
+    }
+    break;
 
-	default:
-		assert(false);
-		JAS_UNREACHABLE();
-	}
-	assert(n < JPC_NUMZCCTXS);
-	return JPC_ZCCTXNO + n;
+  default:
+    assert(false);
+    JAS_UNREACHABLE();
+  }
+  assert(n < JPC_NUMZCCTXS);
+  return JPC_ZCCTXNO + n;
 }
 
 static bool jpc_getspb(unsigned f)
 {
-	int hc;
-	int vc;
-	bool n;
+  int hc;
+  int vc;
+  bool n;
 
-	hc = JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == JPC_ESIG) + ((f & (JPC_WSIG | JPC_WSGN)) == JPC_WSIG), 1) -
-	  JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == (JPC_ESIG | JPC_ESGN)) + ((f & (JPC_WSIG | JPC_WSGN)) == (JPC_WSIG | JPC_WSGN)), 1);
-	vc = JAS_MIN(((f & (JPC_NSIG | JPC_NSGN)) == JPC_NSIG) + ((f & (JPC_SSIG | JPC_SSGN)) == JPC_SSIG), 1) -
-	  JAS_MIN(((f & (JPC_NSIG | JPC_NSGN)) == (JPC_NSIG | JPC_NSGN)) + ((f & (JPC_SSIG | JPC_SSGN)) == (JPC_SSIG | JPC_SSGN)), 1);
-	if (!hc && !vc) {
-		n = 0;
-	} else {
-		n = (!(hc > 0 || (!hc && vc > 0)));
-	}
-	return n;
+  hc = JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == JPC_ESIG) + ((f & (JPC_WSIG | JPC_WSGN)) == JPC_WSIG), 1) -
+    JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == (JPC_ESIG | JPC_ESGN)) + ((f & (JPC_WSIG | JPC_WSGN)) == (JPC_WSIG | JPC_WSGN)), 1);
+  vc = JAS_MIN(((f & (JPC_NSIG | JPC_NSGN)) == JPC_NSIG) + ((f & (JPC_SSIG | JPC_SSGN)) == JPC_SSIG), 1) -
+    JAS_MIN(((f & (JPC_NSIG | JPC_NSGN)) == (JPC_NSIG | JPC_NSGN)) + ((f & (JPC_SSIG | JPC_SSGN)) == (JPC_SSIG | JPC_SSGN)), 1);
+  if (!hc && !vc) {
+    n = 0;
+  } else {
+    n = (!(hc > 0 || (!hc && vc > 0)));
+  }
+  return n;
 }
 
 static uint_least8_t jpc_getscctxno(unsigned f)
 {
-	int hc;
-	int vc;
+  int hc;
+  int vc;
 
-	hc = JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == JPC_ESIG) + ((f & (JPC_WSIG | JPC_WSGN)) == JPC_WSIG),
-	  1) - JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == (JPC_ESIG | JPC_ESGN)) +
-	  ((f & (JPC_WSIG | JPC_WSGN)) == (JPC_WSIG | JPC_WSGN)), 1);
-	vc = JAS_MIN(((f & (JPC_NSIG | JPC_NSGN)) == JPC_NSIG) + ((f & (JPC_SSIG | JPC_SSGN)) == JPC_SSIG),
-	  1) - JAS_MIN(((f & (JPC_NSIG | JPC_NSGN)) == (JPC_NSIG | JPC_NSGN)) +
-	  ((f & (JPC_SSIG | JPC_SSGN)) == (JPC_SSIG | JPC_SSGN)), 1);
-	assert(hc >= -1 && hc <= 1 && vc >= -1 && vc <= 1);
-	if (hc < 0) {
-		hc = -hc;
-		vc = -vc;
-	}
+  hc = JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == JPC_ESIG) + ((f & (JPC_WSIG | JPC_WSGN)) == JPC_WSIG),
+    1) - JAS_MIN(((f & (JPC_ESIG | JPC_ESGN)) == (JPC_ESIG | JPC_ESGN)) +
+    ((f & (JPC_WSIG | JPC_WSGN)) == (JPC_WSIG | JPC_WSGN)), 1);
+  vc = JAS_MIN(((f & (JPC_NSIG | JPC_NSGN)) == JPC_NSIG) + ((f & (JPC_SSIG | JPC_SSGN)) == JPC_SSIG),
+    1) - JAS_MIN(((f & (JPC_NSIG | JPC_NSGN)) == (JPC_NSIG | JPC_NSGN)) +
+    ((f & (JPC_SSIG | JPC_SSGN)) == (JPC_SSIG | JPC_SSGN)), 1);
+  assert(hc >= -1 && hc <= 1 && vc >= -1 && vc <= 1);
+  if (hc < 0) {
+    hc = -hc;
+    vc = -vc;
+  }
 
-	unsigned n;
-	if (!hc) {
-		if (vc == -1) {
-			n = 1;
-		} else if (!vc) {
-			n = 0;
-		} else {
-			n = 1;
-		}
-	} else {
-		assert(hc == 1);
+  unsigned n;
+  if (!hc) {
+    if (vc == -1) {
+      n = 1;
+    } else if (!vc) {
+      n = 0;
+    } else {
+      n = 1;
+    }
+  } else {
+    assert(hc == 1);
 
-		if (vc == -1) {
-			n = 2;
-		} else if (!vc) {
-			n = 3;
-		} else {
-			n = 4;
-		}
-	}
-	assert(n < JPC_NUMSCCTXS);
-	return JPC_SCCTXNO + n;
+    if (vc == -1) {
+      n = 2;
+    } else if (!vc) {
+      n = 3;
+    } else {
+      n = 4;
+    }
+  }
+  assert(n < JPC_NUMSCCTXS);
+  return JPC_SCCTXNO + n;
 }
 
 static uint_least8_t jpc_getmagctxno(unsigned f)
 {
-	unsigned n;
+  unsigned n;
 
-	if (!(f & JPC_REFINE)) {
-		n = (f & (JPC_OTHSIGMSK)) ? 1 : 0;
-	} else {
-		n = 2;
-	}
+  if (!(f & JPC_REFINE)) {
+    n = (f & (JPC_OTHSIGMSK)) ? 1 : 0;
+  } else {
+    n = 2;
+  }
 
-	assert(n < JPC_NUMMAGCTXS);
-	return JPC_MAGCTXNO + n;
+  assert(n < JPC_NUMMAGCTXS);
+  return JPC_MAGCTXNO + n;
 }
 
 static void jpc_initctxs(jpc_mqctx_t *ctxs)
 {
-	jpc_mqctx_t *ctx;
+  jpc_mqctx_t *ctx;
 
-	ctx = ctxs;
-	for (unsigned i = 0; i < JPC_NUMCTXS; ++i) {
-		ctx->mps = 0;
-		switch (i) {
-		case JPC_UCTXNO:
-			ctx->ind = 46;
-			break;
-		case JPC_ZCCTXNO:
-			ctx->ind = 4;
-			break;
-		case JPC_AGGCTXNO:
-			ctx->ind = 3;
-			break;
-		default:
-			ctx->ind = 0;
-			break;
-		}
-		++ctx;
-	}
+  ctx = ctxs;
+  for (unsigned i = 0; i < JPC_NUMCTXS; ++i) {
+    ctx->mps = 0;
+    switch (i) {
+    case JPC_UCTXNO:
+      ctx->ind = 46;
+      break;
+    case JPC_ZCCTXNO:
+      ctx->ind = 4;
+      break;
+    case JPC_AGGCTXNO:
+      ctx->ind = 3;
+      break;
+    default:
+      ctx->ind = 0;
+      break;
+    }
+    ++ctx;
+  }
 }
 
 static void jpc_initmqctxs(void)
 {
-	jpc_initctxs(jpc_mqctxs);
+  jpc_initctxs(jpc_mqctxs);
 }
 
 /* Calculate the real quantity exp2(n), where x is an integer. */
 static double jpc_pow2i(int n)
 {
-	double x;
-	double a;
+  double x;
+  double a;
 
-	x = 1.0;
-	if (n < 0) {
-		a = 0.5;
-		n = -n;
-	} else {
-		a = 2.0;
-	}
-	while (--n >= 0) {
-		x *= a;
-	}
-	return x;
+  x = 1.0;
+  if (n < 0) {
+    a = 0.5;
+    n = -n;
+  } else {
+    a = 2.0;
+  }
+  while (--n >= 0) {
+    x *= a;
+  }
+  return x;
 }
