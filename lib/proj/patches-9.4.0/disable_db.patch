@@ -1,0 +1,22 @@
+ data/CMakeLists.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/data/CMakeLists.txt b/data/CMakeLists.txt
+index 85ed6ba8..1c9966f3 100644
+--- a/data/CMakeLists.txt
++++ b/data/CMakeLists.txt
+@@ -2,6 +2,8 @@
+ # files containing dictionary of useful projection
+ #
+ 
++if(0) # patch August2111
++
+ set(PROJ_DB_CACHE_DIR "" CACHE PATH "Directory used to cache proj.db")
+ if(NOT IS_DIRECTORY ${PROJ_DB_CACHE_DIR})
+   if(NOT "${PROJ_DB_CACHE_DIR}" STREQUAL "")
+@@ -115,3 +117,5 @@ install(
+   FILES ${ALL_DATA_FILE}
+   DESTINATION ${PROJ_DATA_PATH}
+ )
++
++endif(0) # patch August2111
