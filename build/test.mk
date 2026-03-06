@@ -660,25 +660,30 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Config.cpp \
 	$(SRC)/FLARM/Error.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
+	$(SRC)/FLARM/TrafficDatabases.cpp \
+	$(SRC)/FLARM/NameDatabase.cpp \
 	$(SRC)/FLARM/Id.cpp \
 	$(SRC)/FLARM/Calculations.cpp \
 	$(SRC)/FLARM/List.cpp \
+	$(SRC)/FLARM/Details.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Computer/ClimbAverageCalculator.cpp \
 	$(SRC)/Atmosphere/Pressure.cpp \
 	$(SRC)/Atmosphere/AirDensity.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(SRC)/TransponderMode.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
+	$(SRC)/Engine/GlideSolvers/GlidePolar.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
-TEST_DRIVER_DEPENDS = DRIVER OPERATION LIBNMEA GEO MATH IO OS THREAD UTIL TIME
+TEST_DRIVER_DEPENDS = DRIVER OPERATION LIBNMEA GEO MATH IO OS THREAD UTIL TIME GLIDE COMPUTER TASK LOGGER
 $(eval $(call link-program,TestDriver,TEST_DRIVER))
 
 TEST_WAY_POINT_FILE_SOURCES = \
@@ -741,11 +746,18 @@ DEBUG_PROGRAM_NAMES = \
 	lxn2igc \
 	DebugDisplay \
 	TaskInfo DumpTaskFile \
-	DumpFlarmNet \
 	RunRepositoryParser \
 	NearestWaypoints \
 	RunKalmanFilter1d \
 	ArcApprox
+
+ifeq ($(TARGET_IS_DARWIN),n)
+# These test programs are broken on Mac - or it needs OpenGL, but not included
+# in the moment (August2111: 2026-02-08)
+DEBUG_PROGRAM_NAMES += \
+	DumpFlarmNet \
+
+endif
 
 ifeq ($(TARGET_IS_ANDROID),n)
 # These programs are broken on Android because they require Java code
@@ -844,6 +856,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
@@ -871,8 +884,8 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Task/Stats/ElementStat.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/DebugReplayIGC.cpp \
 	$(TEST_SRC_DIR)/DebugReplayNMEA.cpp \
 	$(TEST_SRC_DIR)/DebugReplay.cpp
@@ -1121,7 +1134,7 @@ $(eval $(call link-program,LoadTopography,LOAD_TOPOGRAPHY))
 LOAD_TERRAIN_SOURCES = \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/LoadTerrain.cpp
+	$(TEST_SRC_DIR)/LoadTerrain.cpp	
 LOAD_TERRAIN_CPPFLAGS = $(SCREEN_CPPFLAGS)
 LOAD_TERRAIN_DEPENDS = TERRAIN OPERATION GEO MATH OS IO ZZIP UTIL
 $(eval $(call link-program,LoadTerrain,LOAD_TERRAIN))
@@ -1129,8 +1142,8 @@ $(eval $(call link-program,LoadTerrain,LOAD_TERRAIN))
 RUN_HEIGHT_MATRIX_SOURCES = \
 	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Projection/WindowProjection.cpp \
-	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunHeightMatrix.cpp
 RUN_HEIGHT_MATRIX_CPPFLAGS = $(SCREEN_CPPFLAGS)
 RUN_HEIGHT_MATRIX_DEPENDS = TERRAIN OPERATION GEO MATH IO OS ZZIP UTIL
@@ -1247,6 +1260,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Device/Util/NMEAWriter.cpp \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/FLARM/Error.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/List.cpp \
@@ -1260,8 +1274,8 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunDeviceDriver.cpp
 RUN_DEVICE_DRIVER_DEPENDS = DRIVER OPERATION IO LIBNMEA OS THREAD GEO MATH UTIL TIME
 $(eval $(call link-program,RunDeviceDriver,RUN_DEVICE_DRIVER))
@@ -1272,6 +1286,7 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
@@ -1295,6 +1310,7 @@ RUN_ENABLE_NMEA_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
@@ -1362,6 +1378,7 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
@@ -1384,6 +1401,7 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Device/Util/NMEAReader.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Config.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/IGC/IGCParser.cpp \
 	$(SRC)/IGC/Generator.cpp \
 	$(SRC)/Operation/ConsoleOperationEnvironment.cpp \
@@ -1787,6 +1805,7 @@ RUN_LIST_CONTROL_SOURCES = \
 	$(SRC)/Dialogs/DialogSettings.cpp \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunListControl.cpp
 RUN_LIST_CONTROL_DEPENDS = FORM SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL
 $(eval $(call link-program,RunListControl,RUN_LIST_CONTROL))
@@ -1809,6 +1828,7 @@ RUN_TEXT_ENTRY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeSystem.cpp \
 	$(TEST_SRC_DIR)/RunTextEntry.cpp
 RUN_TEXT_ENTRY_DEPENDS = GEO FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunTextEntry,RUN_TEXT_ENTRY))
@@ -2249,24 +2269,23 @@ RUN_PROFILE_LIST_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/RunProfileListDialog.cpp
 RUN_PROFILE_LIST_DIALOG_LDADD = $(FAKE_LIBS)
 RUN_PROFILE_LIST_DIALOG_DEPENDS = PROFILE FORM WIDGET DATA_FIELD SCREEN EVENT RESOURCE ASYNC OS IO THREAD MATH UTIL JSON
 $(eval $(call link-program,RunProfileListDialog,RUN_PROFILE_LIST_DIALOG))
 
 PLAY_TONE_SOURCES = \
-	$(SRC)/Hardware/DisplayDPI.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(MORE_SCREEN_SOURCES) \
 	$(TEST_SRC_DIR)/PlayTone.cpp
 PLAY_TONE_DEPENDS = AUDIO MATH SCREEN EVENT ASYNC THREAD OS IO UTIL
 $(eval $(call link-program,PlayTone,PLAY_TONE))
 
 PLAY_VARIO_SOURCES = \
+	$(MORE_SCREEN_SOURCES) \
 	$(SRC)/Formatter/NMEAFormatter.cpp \
-	$(SRC)/Hardware/DisplayDPI.cpp \
 	$(SRC)/TransponderCode.cpp \
 	$(DEBUG_REPLAY_SOURCES) \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/PlayVario.cpp
 PLAY_VARIO_LDADD = $(AUDIO_LDADD) $(SCREEN_LDADD) $(EVENT_LDADD)
 PLAY_VARIO_DEPENDS = $(DEBUG_REPLAY_DEPENDS) AUDIO GEO MATH SCREEN EVENT ASYNC THREAD OS TIME UTIL
@@ -2401,6 +2420,7 @@ $(eval $(call link-program,DumpTaskFile,DUMP_TASK_FILE))
 DUMP_FLARM_NET_SOURCES = \
 	$(SRC)/FLARM/FlarmNetReader.cpp \
 	$(SRC)/FLARM/Id.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(SRC)/FLARM/FlarmNetRecord.cpp \
 	$(SRC)/FLARM/FlarmNetDatabase.cpp \
 	$(TEST_SRC_DIR)/DumpFlarmNet.cpp
@@ -2434,8 +2454,28 @@ TEST_PACKED_FLOAT_SOURCES = \
 TEST_PACKED_FLOAT_DEPENDS = MATH
 $(eval $(call link-program,TestPackedFloat,TEST_PACKED_FLOAT))
 
+TEST_WEGLIDE_SCORING_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestWeglideScoring.cpp
+TEST_WEGLIDE_SCORING_DEPENDS = MATH
+$(eval $(call link-program,TestWeglideScoring,TEST_WEGLIDE_SCORING))
+
+TEST_DMST_SCORING_SOURCES = \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestDMStScoring.cpp
+TEST_DMST_SCORING_DEPENDS = MATH
+$(eval $(call link-program,TestDMStScoring,TEST_DMST_SCORING))
+
 TEST_VERSION_NUMBER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestVersionNumber.cpp
 TEST_VERSION_NUMBER_DEPENDS = MATH UTILS
 $(eval $(call link-program,TestVersionNumber,TEST_VERSION_NUMBER))
+
+TEST_HTTPS_VERIFY_SOURCES = \
+	$(SRC)/net/SocketError.cxx \
+	$(SRC)/Version.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestHttpsVerify.cpp
+TEST_HTTPS_VERIFY_DEPENDS = LIBHTTP ASYNC LIBNET IO OS THREAD UTIL
+$(eval $(call link-program,TestHttpsVerify,TEST_HTTPS_VERIFY))
