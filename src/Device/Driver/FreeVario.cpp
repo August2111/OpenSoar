@@ -3,7 +3,7 @@
 #include "Device/Driver.hpp"
 #include "Device/Port/Port.hpp"
 #include "Device/Util/NMEAWriter.hpp"
-#include "Message.hpp"
+// not used: #include "Message.hpp"
 #include "NMEA/Checksum.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
@@ -18,8 +18,6 @@
 #include "Protection.hpp"
 #include "Input/InputEvents.hpp"
 #include <iostream>
-
-using std::string_view_literals::operator""sv;
 
 /*
  * Commands via NMEA from FreeVario Device to XCSoar:
@@ -236,9 +234,9 @@ FreeVarioDevice::ParseNMEA(const char *_line, NMEAInfo &info)
   if (VerifyNMEAChecksum(_line)) {
     NMEAInputLine line(_line);
     const auto type = line.ReadView();
-    if (type == "$PFV"sv) {
+    if (type == "$PFV") {
         return PFVParser(line, info, port);
-    } else if (type == "$POV"sv) {
+    } else if (type == "$POV") {
         return POVParserAndForward(line);  // no info and port necessary
     }
   }
