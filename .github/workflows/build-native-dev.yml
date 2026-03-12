@@ -614,7 +614,7 @@ jobs:
         if: ${{ matrix.sanitizer }}  # a boolean variable
         run: |
           echo "Unix - Sanitizer Check"
-          ${{ env.BUILDER }} -j${{ env.PHYS_KERNELS }} TARGET=${{ matrix.target }} DEBUG=y USE_CCACHE=y V=${{ env.VERBOSE }} everything VFB=y SANITIZE=y DEBUG_GLIBCXX=y
+          ${{ env.BUILDER }} -j${{ env.PHYS_KERNELS }} TARGET=${{ matrix.target }} DEBUG=n USE_CCACHE=y V=${{ env.VERBOSE }} everything check SANITIZE=y
   
       - name: Compile XCSoar - Release
         if: ${{ startsWith(github.ref, 'refs/tags/v') && !matrix.no_build && !matrix.sanitizer }}
