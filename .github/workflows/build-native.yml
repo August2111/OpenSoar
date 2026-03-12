@@ -549,7 +549,7 @@ jobs:
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
           if [ ${{ matrix.target }} = "UNIX" ]; then
-            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=${{ env.DEBUG }} USE_CCACHE=y V=2 everything check VFB=y SANITIZE=y DEBUG_GLIBCXX=y
+            make -j$(nproc) TARGET=${{ matrix.target }} DEBUG=n USE_CCACHE=y V=2 everything check VFB=y SANITIZE=y DEBUG_GLIBCXX=y
           fi
 
       - name: Compile XCSoar - Release
