@@ -100,10 +100,10 @@ static const struct DeviceRegister *const driver_list[] = {
   &ar62xx_driver,
   &condor3_driver,
   &lx_eos_driver,
+  &stratux_driver,
 #ifdef HAVE_REMOTE_STICK
   &remote_stick_driver,
 #endif
-  &stratux_driver,
   nullptr
 };
 
