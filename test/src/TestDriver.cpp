@@ -1773,6 +1773,18 @@ TestACD()
   delete device;
 }
 
+#ifdef HAVE_REMOTE_STICK
+static void
+TestRemoteStick()
+{
+  NullPort null;
+  Device *device = remote_stick_driver.CreateOnPort(dummy_config, null);
+  ok1(device != NULL);
+
+  delete device;
+}
+#endif
+
 static void
 TestDeclare(const struct DeviceRegister &driver)
 {
@@ -1862,11 +1874,11 @@ TestFlightList(const struct DeviceRegister &driver)
 int main()
 {
 #ifdef HAVE_REMOTE_STICK
-  plan_tests(1006);
+  plan_tests(1014);
 #else
-  plan_tests(1009);
+  plan_tests(1013);
 #endif
-  // August2111: after merge XCSoar: could be more...
+
   TestGeneric();
   TestTasman();
   TestFLARM();
@@ -1896,10 +1908,13 @@ int main()
   TestXCTracer();
   TestACD();
   TestXCVario();
+#ifdef HAVE_REMOTE_STICK
+  TestRemoteStick();
+#endif
 
   /* XXX the Triadis drivers have too many dependencies, not enabling
      for now */
-  //TestDeclare(altair_pro_driver);
+  TestDeclare(altair_pro_driver);
   TestDeclare(cai302_driver);
   TestDeclare(ew_driver);
   TestDeclare(ew_microrecorder_driver);
@@ -1908,11 +1923,7 @@ int main()
   TestDeclare(lx_eos_driver);
   TestDeclare(imi_driver);
   TestDeclare(flarm_driver);
-#ifdef HAVE_REMOTE_STICK
-  TestDeclare(remote_stick_driver);
-#endif
-  //TestDeclare(vega_driver);
-
+  TestDeclare(vega_driver);
   /* XXX Volkslogger doesn't do well with this test case */
   //TestDeclare(volkslogger_driver);
 
