@@ -198,7 +198,7 @@ endif()
     set(${TARGET_CNAME}_LIBRARY  ${_TARGET_LIBRARY})
     set(${TARGET_CNAME}_LIBRARY  ${_TARGET_LIBRARY} PARENT_SCOPE)
 
-# if(${VERBOSE_LEVEL} LESS 100)
+# if(${VERBOSE_LEVEL} LESS 100) 
 if(VERBOSE_LEVEL GREATER 99)
   message(STATUS "++++++ 3rd party  = ${lib_name} =================")
   ## message(STATUS "++++++ _TARGET_LIBS         =  ${_TARGET_LIBS}")
@@ -221,16 +221,16 @@ if(${lib_name} MATCHES "boost")
 
 elseif(EXISTS ${_TARGET_LIBRARY}) 
    set(_COMPLETE_INSTALL ON)
-   if (OFF) #  ON means do enable compiling some projects !!!!
+   if (ON) #  ON means do enable compiling some projects !!!!
      # only a check if some libraries have to be compiled
      if(
         # ${lib_name} STREQUAL "sodium" OR 
         # ${lib_name} STREQUAL "curl" OR 
         # ${lib_name} STREQUAL "sqlite3"  OR 
-        ${lib_name} STREQUAL "proj" OR 
-        # ${lib_name} STREQUAL "geotiff" OR 
-        # ${lib_name} STREQUAL "netcdf" OR
-        # ${lib_name} STREQUAL "netcdf-cxx4" OR
+        # ${lib_name} STREQUAL "proj" OR 
+        ${lib_name} STREQUAL "geotiff" OR 
+        ${lib_name} STREQUAL "netcdf" OR
+        ${lib_name} STREQUAL "netcdf-cxx4" OR
         OFF
      )
        set(_COMPLETE_INSTALL ON)

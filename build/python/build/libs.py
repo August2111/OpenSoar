@@ -11,8 +11,10 @@ from build.linux import SabotageLinuxHeadersProject
 from build.lua import LuaProject
 from build.musl import MuslProject
 
-fmt_version = "11.1.4"
-netcdf_version = "4.6.2"
+fmt_version = ["11.1.4", "ac366b7b4c2e9f0dde63a59b3feb5ee59b67974b14ee5dc9ea8ad78aa2c1ee1e"] 
+netcdf_version = [ "4.6.2", "eda1be377fce86e5d91b30a00b15bb7ea9c97f5c5ef007901145549786781710"]
+# netcdf_version = [ "4.9.3", "0000000000000000000000000000000000000000000000000000000000000000"]
+# netcdf_version = ["4.10.0", "0000000000000000000000000000000000000000000000000000000000000000"]
 
 
 binutils = BinutilsProject(
@@ -145,10 +147,10 @@ openssh = AutotoolsProject(
 
 libfmt = CmakeProject(
     (
-      "https://github.com/fmtlib/fmt/archive/" + fmt_version + ".tar.gz",
-      "https://fossies.org/linux/misc/fmt-" + fmt_version + ".tar.gz"
+      "https://github.com/fmtlib/fmt/archive/" + fmt_version[0] + ".tar.gz",
+      "https://fossies.org/linux/misc/fmt-" + fmt_version[0] + ".tar.gz"
     ),
-    "ac366b7b4c2e9f0dde63a59b3feb5ee59b67974b14ee5dc9ea8ad78aa2c1ee1e",
+    fmt_version[1],    
     "lib/libfmt.a",
     [
         "-DBUILD_SHARED_LIBS=OFF",
@@ -157,8 +159,8 @@ libfmt = CmakeProject(
     ],
     # for KOBO:
     name="fmt",
-    version=fmt_version,
-    base="fmt-" + fmt_version,
+    version=fmt_version[0],
+    base="fmt-" + fmt_version[0],
 )
 
 libsodium = AutotoolsProject(
@@ -500,10 +502,11 @@ libsalsa = AutotoolsProject(
 
 netcdf = AutotoolsProject(
     (
-       'https://storage.googleapis.com/lazyrasp.com/xcsoar/netcdf-c-' + netcdf_version + '.tar.gz',
+       'https://storage.googleapis.com/lazyrasp.com/xcsoar/netcdf-c-' + netcdf_version[0] + '.tar.gz',
       # invalide - new 4.9.3: 'https://fossies.org/linux/misc/netcdf-c-4.9.3.tar.gz',
+        'https://github.com/Unidata/netcdf-c/archive/refs/tags/v' + netcdf_version[0] + '.tar.gz'
     ),
-    'eda1be377fce86e5d91b30a00b15bb7ea9c97f5c5ef007901145549786781710',
+    netcdf_version[1],
     'lib/libnetcdf.a',
     [
         '--disable-netcdf-4',

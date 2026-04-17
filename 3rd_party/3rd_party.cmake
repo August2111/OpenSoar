@@ -83,7 +83,7 @@ if (HAVE_SKYSIGHT)  # SkySight
       set(NETCDF_C_VERSION    "4.6.2")  # 2028-11-19 # functional with OpenSoar(2025-12-23)
       #----------------------------------------------------
       # set(NETCDF_C_VERSION    "4.7.4")  # 2020-03-27
-     set(NETCDF_C_VERSION    "4.9.3")  # 2025-02-07
+      set(NETCDF_C_VERSION    "4.9.3")  # 2025-02-07
     
       set(NETCDF_CXX_VERSION  "4.2")  # XCSoar
       #----------------------------------------------------

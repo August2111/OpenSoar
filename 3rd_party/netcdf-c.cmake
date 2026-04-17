@@ -26,8 +26,21 @@ if (_COMPLETE_INSTALL)
         "-DHAVE_BZ2:BOOL=OFF"
         "-DHAVE_SZIP:BOOL=OFF"
 
-        ######### # "-DENABLE_DAP:BOOL=OFF" # see libs.py
-        ######### "-DNETCDF_ENABLE_DAP:BOOL=OFF" # see libs.py
+        "-DUNDEF_HDF5:BOOL=ON"
+        "-DUNDEF_NETCDF4:BOOL=ON"
+        "-DUNDEF_NETCDF_4:BOOL=ON"
+        
+        "-DHAS_HDF4:BOOL=OFF"
+        "-DHAS_HDF5:BOOL=OFF"
+        "-DUSE_HDF5:BOOL=OFF"
+        "-DNETCDF_ENABLE_HDF5:BOOL=OFF"
+        "-DNETCDF_ENABLE_NETCDF_4:BOOL=OFF"
+        "-DNETCDF_ENABLE_NETCDF4:BOOL=OFF"
+
+        ######### # 
+        "-DENABLE_DAP:BOOL=OFF" # see libs.py
+        ######### 
+        "-DNETCDF_ENABLE_DAP:BOOL=OFF" # see libs.py
         ######### 
   # ?      "-DCURL_DIR:PATH=${CURL_CMAKE_DIR}"
         "-DZLIB_LIBRARY:FILEPATH=${ZLIB_LIBRARY}"
@@ -61,6 +74,7 @@ if (_COMPLETE_INSTALL)
 
         "-DUSE_HDF5:BOOL=OFF" # see libs.py
         "-DENABLE_NETCDF_4:BOOL=OFF" # see libs.py
+        "-DNETCDF_ENABLE_NETCDF4:BOOL=OFF" # see libs.py
 
         "-DENABLE_BASH_SCRIPT_TESTING:BOOL=OFF"
         "-DENABLE_CDF5:BOOL=OFF"
@@ -79,6 +93,7 @@ if (_COMPLETE_INSTALL)
         "-DENABLE_XGETOPT:BOOL=OFF"
       )
     else()
+  ##    message(FATAL_ERROR "### netcdf-Version is greater or equal 4.8! Now version should be >= 4.9.3!")
       list(APPEND CMAKE_ARGS
         ######## "-DBUILD_DLL:BOOL=OFF"
         # "-DNETCDF_BUILD_SHARED_LIBS:BOOL=OFF"
