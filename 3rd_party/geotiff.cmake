@@ -50,7 +50,7 @@ if (_COMPLETE_INSTALL )
         ${_BUILD_TARGET}
         GIT_REPOSITORY "https://github.com/OSGeo/libgeotiff.git"
         GIT_TAG "${${TARGET_CNAME}_VERSION}"           # git tag by libgeotiff!
-  
+
         # PREFIX  "${${TARGET_CNAME}_PREFIX}/libgeotiff"
         PREFIX  "${${TARGET_CNAME}_PREFIX}"
         SOURCE_SUBDIR libgeotiff

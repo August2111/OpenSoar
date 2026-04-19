@@ -153,7 +153,6 @@ message (FATAL_ERROR "xxxx STOP!!!")
     )
     ExternalProject_Add(
           ${_BUILD_TARGET}
-          # URL "https://www.sqlite.org/2024/sqlite-amalgamation-3470000.zip"
 #          URL "https://www.sqlite.org/${SQLITE3_YEAR}/sqlite-amalgamation-${DOWNLOAD_VERSION}.zip"
           URL "https://www.sqlite.org/${SQLITE3_YEAR}/sqlite-autoconf-${DOWNLOAD_VERSION}.tar.gz"
           URL_HASH SHA3_256=${SQLITE3_HASH}
