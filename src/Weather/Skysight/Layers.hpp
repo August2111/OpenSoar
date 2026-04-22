@@ -5,6 +5,10 @@
 
 #include <map>
 
+#include <boost/json/fwd.hpp>
+
+// class boost::json::value;
+
   struct LegendColor {
     unsigned char Red;
     unsigned char Green;
@@ -18,7 +22,8 @@
     const std::string desc;
     std::string projection;
     std::string data_type;
-    time_t last_update = 0;
+    std::string dataname;
+    time_t update_time = 0;
     std::map<float, LegendColor> legend;
     std::string time_name;
 
@@ -35,6 +40,9 @@
 
     float alpha = 0.6;
     time_t forecast_time = 0;
+
+    std::map<time_t, std::string> forecast_links;
+    //boost::json::value datalinks;
   public:
     Layer(std::string _id, std::string _name, std::string _desc) :
       id(_id), name(_name), desc(_desc), tile_layer(false), live_layer(false),
@@ -51,10 +59,13 @@
 
     const Layer &operator =(const Layer &layer) { return layer; }
 
-    bool operator==(std::string_view _id) {
-      if (_id.empty()) return false;
-
-      return (id == _id);
+//    bool operator==(std::string_view _id) {
+//      if (_id.empty()) return false;
+//
+//      return (id == _id);
+//    };
+    bool operator==(const Layer &_layer) {
+       return (id == _layer.id);
     };
   };
 };

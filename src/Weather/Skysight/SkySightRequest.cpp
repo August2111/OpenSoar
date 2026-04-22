@@ -21,7 +21,7 @@
 #include "Version.hpp"
 
 #include "json/Serialize.hxx"
-#include "io/FileOutputStream.hxx"
+#include "json/File.hpp"
 #include "LogFile.hpp"
 
 #include "thread/SafeList.hxx"
@@ -38,6 +38,7 @@
 #ifdef _DEBUG
 # define SKYSIGHT_FILE_DEBUG
 #endif
+# include <mutex>
 
 static const boost::json::value json_null;  //boost::json::null{};
 static std::map<std::string_view, boost::json::value> json_values;
@@ -76,9 +77,12 @@ public:
   }
 
 private:
+  // std::mutex download_mutex;
+
   /* virtual methods from class Net::DownloadListener */
   void OnDownloadAdded(const std::string_view name,
     size_t size, size_t position) noexcept override {
+    // download_mutex.lock();
     if (size == (size_t)-1 && position == (size_t)-1)
         complete = false;
     if (!complete) {
@@ -97,6 +101,7 @@ private:
   }
 
   void OnDownloadComplete(const std::string_view name) noexcept override {
+    // download_mutex.unlock();
     boost::json::value _json = json_null;
     auto api = owner->GetAPI();
     AllocatedPath save_path;
@@ -116,38 +121,41 @@ private:
           save_path = api->GetPath(SkysightCallType::Layers);
         }
         else if (name.starts_with("last_updated")) {
-          success = api->UpdateLastUpdates(_json);
+          if(api->UpdateLastUpdates(_json))
+            save_path = api->GetPath(SkysightCallType::LastUpdates);
+          success = true;
         }
-        else if (name.starts_with("datafiles")) {
+        else if (name.starts_with("datalinks-")) {
           success = api->UpdateDatafiles(_json);
+          save_path = AllocatedPath::Build(api->GetCachePath(),
+            AllocatedPath(name)).WithSuffix(".json");   // api->GetPath(SkysightCallType::DataDetails, layer_id, fctime);
         }
         else {
           Skysight::GetSkysight()->SetUpdateFlag();
           success = true;
         }
         if (!save_path.empty()) {
-          auto file = File::CreateExclusive(save_path);
-          if (file) {
-            FileOutputStream fos(save_path);
-            Json::Serialize(fos, _json);
-          }
+          // if (File::Exists(save_path)) {
+          //   boost::json::value old_json = json_null;
+          //   Json::Load(old_json, save_path);
+          // 
+          // }
+            Json::Save(_json, save_path);
         }
 #if defined(SKYSIGHT_FILE_DEBUG)
-        std::string now_str = DateTime::str_now();
-        std::stringstream s;
-        s << Skysight::GetLocalPath().c_str() << '/' << now_str << " " << name << " .json";
-        auto path = AllocatedPath(s.str().c_str());
-        auto file = File::CreateExclusive(path);
-        if (file) {
-          auto json_text = boost::json::serialize(_json);
-          if (!File::WriteExisting(path, json_text.c_str()))
-            LogFmt("File write not successfully!");
-        }
+        std::stringstream filename;
+        filename << Skysight::GetLocalPath().c_str() << '/' << 
+          DateTime::str_now() << " " << name << ".json";
+        Json::Save(_json, AllocatedPath(filename.str()));
 #endif
       }
       json_values[name] = json_null;  // erasing content
     } else {
       // this is a File-Download...
+      AllocatedPath filename(name);
+      AllocatedPath fullpath = AllocatedPath::Build(Skysight::GetLocalPath(), filename);
+      SkysightImageFile img_file(filename, fullpath);
+      // File::SetTime(fullpath, img_file.update_time);
       success = true;
     }
 #ifdef _DEBUG
@@ -160,6 +168,7 @@ private:
   void OnDownloadError(const std::string_view name,
     std::exception_ptr _error) noexcept override
   {
+    // download_mutex.unlock();
     LogFmt("SkySightRequest error with {}", name);
     if (!complete) {
       complete = true;
@@ -313,9 +322,17 @@ SkysightRequest::DownloadFile(const std::string_view url,
       break;
   }
 
+#ifdef __AUGUST__
+  if (!url.starts_with("https://")) {
+    LogFmt("Request-Error (1) ??? {} -> {}!", url.substr(0, 10), filename.GetBase().c_str());
+    return false;
+  }
+#endif
   Net::DownloadManager::Enqueue(url, filename, std::move(data));
 
 #ifdef __AUGUST__
+  if (!url.starts_with("https://"))
+    LogFmt("Request-Error (2)??? {}!", url.substr(0,10));
   LogFmt("Request {} -> {} ", url, filename.GetBase().c_str());
 #endif
 
