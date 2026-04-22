@@ -26,12 +26,12 @@ if (_COMPLETE_INSTALL)
         "-DBUILD_SHARED_LIBS:BOOL=OFF"
         "-DNETCDF_C_LIBRARY:FILEPATH=${NETCDF_C_LIBRARY}"
         "-DnetCDF_DIR=${NETCDF_C_CMAKE_DIR}"
-        "-DNC_HINCLUDE_DIR=${NETCDF_C_INCLUDE_DIR}"
-        ## ??  "-DDLL_NETCDF:BOOL=OFF"
+        # "-DNC_HINCLUDE_DIR=${NETCDF_C_INCLUDE_DIR}"
+         ## ??  "-DDLL_NETCDF:BOOL=OFF"
     )
 
     list(APPEND CMAKE_ARGS
-        "-DHDF5_DIR:PATH=" 
+    # 1 #    "-DHDF5_DIR:PATH=" 
         "-DUSE_HDF5:BOOL=OFF"  # August2111: special flag because wrong usage of HDF5
     )
 
