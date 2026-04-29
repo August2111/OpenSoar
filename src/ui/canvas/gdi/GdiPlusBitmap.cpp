@@ -5,10 +5,17 @@
 #include "UTF8Win.hpp"
 
 #if defined(_MSC_VER)
-#define GDI_WITH_TESTSAVE
+// #define GDI_WITH_TESTSAVE
 # include <algorithm>
 using std::min;  // to avoid the missing 'min' in the gdiplush headers
 using std::max;  // to avoid the missing 'max' in the gdiplush headers
+#ifdef _AUG_MSC  || 1
+#define TEST_TIFF_LOAD
+#ifdef TEST_TIFF_LOAD
+# include "system/FileUtil.hpp"
+# include "LocalPath.hpp"
+#endif  // TEST_TIFF_LOAD
+#endif  // _AUG_MSC
 #endif           // _MSC_VER
 
 #include "UTF8Win.hpp"
@@ -91,7 +98,24 @@ GdiLoadImage(UncompressedImage &&uncompressed)
   bmi.bmiHeader.biHeight = uncompressed.GetHeight();
   bmi.bmiHeader.biPlanes = 1;
   bmi.bmiHeader.biBitCount = 32;
+#ifdef TEST_TIFF_LOAD
+# include "system/FileUtil.hpp"
+  char buffer[10];
+  AllocatedPath path = LocalPath("debug/test.xxl");
+  File::ReadString(path, buffer, 2);
+  int value = buffer[0] - '0';
+  bmi.bmiHeader.biCompression = value;  // BI_BITFIELDS;
+#else
   bmi.bmiHeader.biCompression = BI_RGB;  // BI_BITFIELDS;
+#endif  // TEST_TIFF_LOAD
+
+// #define BI_RGB        0L
+// #define BI_RLE8       1L
+// #define BI_RLE4       2L
+// #define BI_BITFIELDS  3L
+// #define BI_JPEG       4L
+// #define BI_PNG        5L
+
   bmi.bmiHeader.biSizeImage =
       4 * bmi.bmiHeader.biWidth * bmi.bmiHeader.biHeight;
 
@@ -103,9 +127,7 @@ GdiLoadImage(UncompressedImage &&uncompressed)
   bmfh.bfReserved1 = bmfh.bfReserved2 = 0;
 
 #if defined(GDI_WITH_TESTSAVE)
-  auto path = LocalPath("/skysight/bitmapTest");
-#endif
-#if defined(GDI_WITH_TESTSAVE)
+  auto path = LocalPath("debug/bitmapTest");
   std::ofstream file(path.WithSuffix("XXL.bmp").c_str(), std::ios_base::binary);
   if (!file.is_open())
   {
@@ -138,7 +160,9 @@ GdiLoadImage(UncompressedImage &&uncompressed)
 #endif // GDI_WITH_TESTSAVE
 
   if (bitmap.GetLastStatus() != Gdiplus::Ok) return nullptr;
+  // if (bitmap.GetHBITMAP(Gdiplus::Color::Black, &result)  // or White?
   const Gdiplus::Color color = Gdiplus::Color::White;
-  if (bitmap.GetHBITMAP(color, &result) != Gdiplus::Ok) return nullptr;
+  if (bitmap.GetHBITMAP(color, &result)  // or White?
+    != Gdiplus::Ok) return nullptr;
   return result;
 }
