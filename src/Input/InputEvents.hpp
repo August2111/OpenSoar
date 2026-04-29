@@ -203,6 +203,7 @@ void eventSTFSwitch(const char *misc);
 void eventReplay(const char *misc);
 
 void eventKeyPressed(const char *misc);
+void eventBlurTiff(const char *misc);
 // -------
 
 } // namespace InputEvents

@@ -80,6 +80,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "Interface.hpp"
 #include "InfoBoxes/Content/Thermal.hpp"
 #include "Terrain/RasterTerrain.hpp"
+#include "Weather/Skysight/Skysight.hpp"
 
 #include <cassert>
 #include <algorithm>
@@ -913,4 +914,11 @@ InputEvents::eventSTFSwitch(const char* misc) {
 
 void
 InputEvents::eventReplay([[maybe_unused]] const char *misc) {
+}
+
+void
+InputEvents::eventBlurTiff([[maybe_unused]] const char *misc) {
+
+  // Toggle the tiff view mode
+  Skysight::ToggleBlur();
 }
