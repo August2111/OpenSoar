@@ -399,6 +399,8 @@ try {
       LockSetErrorMessage(what.c_str());
       msg.Format("%s: %s (%s)", _("Unable to open port"), name, what.c_str());
       try {
+        // if (env != INVALID_HANDLE_VALUE && !env.IsCancelled())
+        // Error: env.**** == 0xFFFFFFFFFFFFFFEF
         if (!env.IsCancelled())
           env.SetErrorMessage(msg);
         else
