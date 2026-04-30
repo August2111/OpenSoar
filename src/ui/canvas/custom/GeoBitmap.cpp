@@ -5,6 +5,8 @@
 #include "GeoBitmap.hpp"
 #include "UncompressedImage.hpp"
 #include "Geo/Quadrilateral.hpp"
+#include "Geo/FAISphere.hpp"
+#include "Geo/SimplifiedMath.hpp"
 #include "system/Path.hpp"
 #include "system/FileUtil.hpp"
 #include "Geo/GeoBounds.hpp"
@@ -63,7 +65,11 @@ GeoBitmap::TileData
 GeoBitmap::GetTile(const MapWindowProjection &proj, const uint16_t zoom_min,
   const uint16_t zoom_max)
 {
-  double Earth_circumference = 42e6;  // =~ 42.000 km
+//  double Earth_circumference = 42e6;  // =~ 42.000 km
+  double Earth_circumference = 40030e3;  // =~ 42.000 km
+  // Angle x(M_2PI);
+  // double test = FAISphere::AngleToEarthDistance(Angle(M_2PI));
+  // double test = FAISphere::AngleToEarthDistance(Angle::acos(1));
   double diagonale = proj.GetScreenDistanceMeters();
   double t = Earth_circumference / diagonale;
   double _log = floor(log2(t));

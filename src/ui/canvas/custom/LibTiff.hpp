@@ -23,3 +23,7 @@ LoadTiff(Path path);
  */
 std::pair<UncompressedImage, GeoQuadrilateral>
 LoadGeoTiff(Path path);
+
+bool ToggleBlur();
+bool GetBlur();
+

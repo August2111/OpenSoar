@@ -4,19 +4,11 @@
 #include "GdiPlusBitmap.hpp"
 #include "UTF8Win.hpp"
 
-#if defined(_MSC_VER)
 // #define GDI_WITH_TESTSAVE
+
 # include <algorithm>
 using std::min;  // to avoid the missing 'min' in the gdiplush headers
 using std::max;  // to avoid the missing 'max' in the gdiplush headers
-#ifdef _AUG_MSC  || 1
-#define TEST_TIFF_LOAD
-#ifdef TEST_TIFF_LOAD
-# include "system/FileUtil.hpp"
-# include "LocalPath.hpp"
-#endif  // TEST_TIFF_LOAD
-#endif  // _AUG_MSC
-#endif           // _MSC_VER
 
 #include "UTF8Win.hpp"
 
@@ -98,23 +90,8 @@ GdiLoadImage(UncompressedImage &&uncompressed)
   bmi.bmiHeader.biHeight = uncompressed.GetHeight();
   bmi.bmiHeader.biPlanes = 1;
   bmi.bmiHeader.biBitCount = 32;
-#ifdef TEST_TIFF_LOAD
-# include "system/FileUtil.hpp"
-  char buffer[10];
-  AllocatedPath path = LocalPath("debug/test.xxl");
-  File::ReadString(path, buffer, 2);
-  int value = buffer[0] - '0';
-  bmi.bmiHeader.biCompression = value;  // BI_BITFIELDS;
-#else
+  bmi.bmiHeader.biBitCount = 32;
   bmi.bmiHeader.biCompression = BI_RGB;  // BI_BITFIELDS;
-#endif  // TEST_TIFF_LOAD
-
-// #define BI_RGB        0L
-// #define BI_RLE8       1L
-// #define BI_RLE4       2L
-// #define BI_BITFIELDS  3L
-// #define BI_JPEG       4L
-// #define BI_PNG        5L
 
   bmi.bmiHeader.biSizeImage =
       4 * bmi.bmiHeader.biWidth * bmi.bmiHeader.biHeight;
