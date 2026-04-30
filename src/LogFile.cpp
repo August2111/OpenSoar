@@ -115,9 +115,17 @@ LogString(std::string_view s) noexcept
 void
 LogVFmt(fmt::string_view format_str, fmt::format_args args) noexcept
 {
-	fmt::memory_buffer buffer;
-	fmt::vformat_to(std::back_inserter(buffer), format_str, args);
-	LogString({buffer.data(), buffer.size()});
+  try {
+#if 0
+    LogFormat("LogVFmt with:: %s", format_str.data());
+#else
+    fmt::memory_buffer buffer;
+    fmt::vformat_to(std::back_inserter(buffer), format_str, args);
+    LogString({buffer.data(), buffer.size()});
+#endif
+  } catch (std::exception &e) {
+    LogFormat("LogVFmt threw an exception: %s", e.what());
+  }
 }
 
 void
