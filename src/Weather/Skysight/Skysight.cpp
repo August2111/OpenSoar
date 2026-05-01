@@ -64,7 +64,6 @@
 
 Skysight *Skysight::self = nullptr;
 
-bool Skysight::blur_tiff = false;
 /*
  * Img File
  */
@@ -304,22 +303,27 @@ Skysight::LoadSelectedLayers()
   }
   AddSelectedLayer(am_list.c_str()); // last one
 
-  const PagesState &state = CommonInterface::GetUIState().pages;
-  // auto d = Profile::Get(ProfileKeys::WeatherLayerDisplayed);
-  auto page = state.current_index;
-  std::string profile_key = "Page" + std::to_string(page) + "Overlay";
-  std::string_view overlay = Profile::Get(profile_key);
-  if (overlay.empty())
+
+  std::string profile_key = "Page" + std::to_string(page_state->current_index) + "Overlay";
+  auto key_value = Profile::Get(profile_key);
+  if (key_value == nullptr)
     return;
+  std::string_view overlay(key_value);
   if (overlay.starts_with("skysight:"))
     overlay.remove_prefix(strlen("skysight:"));
-  else 
+    // overlay = overlay.substr(strlen("skysight:"));
+  else
+    return;
+  if (overlay.empty())
     return;
 
   if (!api->IsSelectedLayer(overlay))
     return;
 
   SetActiveLayer(overlay);
+#if  1  && defined (_DEBUG)
+  LogString("LoadSelectedLayers Finish");
+#endif  // 1 // _DEBUG
 }
 
 bool
@@ -349,6 +353,7 @@ Skysight::Init()
 #endif
   }
   active_layer = nullptr;
+  page_state = &CommonInterface::GetUIState().pages;
 
 #if defined(SKYSIGHT_FILE_DEBUG)
   // save in debug case an additional file in folder
@@ -360,6 +365,8 @@ Skysight::Init()
  
   const auto settings =
     CommonInterface::GetComputerSettings().weather.skysight;
+  // const PagesState &
+  // pages = &CommonInterface::GetUIState().pages;
   region = settings.region.c_str();
   email = settings.email.c_str();
   password = settings.password.c_str();
@@ -725,7 +732,7 @@ Skysight::DisplayForecastLayer()
 #endif
 
 bool
-Skysight::UpdateActiveLayer(const uint32_t overlay_index, 
+Skysight::UpdateActiveLayer(const uint32_t overlay_index,
   const Path &filename, GeoBitmap::TileData tile)
 {
   if (!File::Exists(filename))
@@ -734,13 +741,12 @@ Skysight::UpdateActiveLayer(const uint32_t overlay_index,
   if (map == nullptr)
     return false;
 
-  LogFmt("SkySight::UpdateActiveLayer {}", filename.c_str());
   std::unique_ptr<MapOverlayBitmap> bmp;
   try {
-#ifdef SKYSIGHT_FORECAST
+#if defined(SKYSIGHT_FORECAST) && !defined(_WIN32)
     /* For GeoTIFF forecast images, upscale with bilinear interpolation
        to smooth the coarse forecast grid pixels. */
-    if (blur_tiff && filename.EndsWithIgnoreCase(".tiff")) {
+    if (filename.EndsWithIgnoreCase(".tiff")) {
       auto [image, bounds] = LoadGeoTiff(filename);
 
       Bitmap bitmap;
@@ -752,9 +758,7 @@ Skysight::UpdateActiveLayer(const uint32_t overlay_index,
     } else
 #endif  // SKYSIGHT_FORECAST
     {
-      // bmp.reset(new MapOverlayBitmap(filename));
-      bmp = std::make_unique<MapOverlayBitmap>(
-        filename);
+      bmp = std::make_unique<MapOverlayBitmap>(filename);
     }
   }
   catch ([[maybe_unused]] std::exception &e) {
@@ -809,22 +813,31 @@ Skysight::DisplayTileLayer()
   }
 
   time_t refresh_time = DateTime::TimeRaster(DateTime::now(), TEN_MINUTES, 0);
+#if  0  && defined (_DEBUG)  // Testing!!!
+  MapOverlayReset();
+  for (int tile_no = 0; tile_no < max_skysight_overlays; tile_no++) {
+    map->windows->SetOverlay(tile_no, nullptr);
+    tile_filenames[tile_no].clear();
+  }
+#endif
 
   auto map_bounds = map_window->VisibleProjection().GetScreenBounds();
-#ifdef _DEBUG
-  auto map_bounds2 = map_window->RenderProjection().GetScreenBounds();
-  if (!map_bounds2.Check() || !map_bounds2.IsValid())
-    return false;
-#endif
   if (!map_bounds.Check() || !map_bounds.IsValid())
     return false;
 
   auto tile = base_tile;
   size_t tile_no = 0;
   bool timer_start = false;
-  for (tile.x = base_tile.x - 1; tile.x <= base_tile.x + 1; tile.x++)
-    for (tile.y = base_tile.y - 1; tile.y <= base_tile.y + 1; tile.y++,
+  constexpr uint16_t o = TILE_RANGE_OFFSET;
+  for (tile.x = base_tile.x - o; tile.x <= base_tile.x + o; tile.x++)
+    for (tile.y = base_tile.y - o; tile.y <= base_tile.y + o; tile.y++,
       tile_no++) {
+#if 0  && defined (_DEBUG)  // TEST!!! Blendet eine Kachel aus!
+      if ((tile.x == base_tile.x + 1) && (tile.y == base_tile.y + 1)) {
+        tile_filenames[tile_no].clear();
+        break;
+      }
+#endif
 
       if (!GeoBitmap::GetBounds(tile).Overlaps(map_bounds)) {
         map_window->SetOverlay(tile_no, nullptr);
@@ -842,6 +855,8 @@ Skysight::DisplayTileLayer()
           active_layer->forecast_time = 0;
           if (UpdateActiveLayer(tile_no, filename, tile))
             tile_filenames[tile_no] = filename.c_str();
+          else
+            tile_filenames[tile_no].clear();
         }
       } else {
         time_t test_time = refresh_time;
@@ -856,6 +871,8 @@ Skysight::DisplayTileLayer()
               active_layer->forecast_time = test_time;
               if (UpdateActiveLayer(tile_no, filename, tile))
                 tile_filenames[tile_no] = filename.c_str();
+              else
+                tile_filenames[tile_no].clear();
             }
             break;
           } else {

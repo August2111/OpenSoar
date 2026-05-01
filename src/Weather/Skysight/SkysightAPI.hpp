@@ -4,7 +4,8 @@
 #pragma once
 
 #include "SkySightRequest.hpp"
-#ifdef SKYSIGHT_FORECAST 
+#ifdef SKYSIGHT_FORECAST
+# define SKYSIGHT_TIME_DELAY 5
 // TODO(August2111) for this there is to be cleanup all SkysightCallback
 # include "APIQueue.hpp"
 #else
@@ -30,6 +31,8 @@ constexpr time_t  ONE_HOUR = (60 * ONE_MINUTE);
 constexpr time_t  TEN_MINUTES = (10 * ONE_MINUTE);
 constexpr time_t  ONE_DAY = (24 * ONE_HOUR);
 constexpr time_t  HALF_DAY = (12 * ONE_HOUR);
+
+constexpr uint16_t  TILE_RANGE_OFFSET = 2;  //  -> 25 tiles!
 
 #ifdef _DEBUG
 constexpr time_t  ONLINE_FORECAST = (ONE_HOUR);
@@ -67,6 +70,8 @@ class SkysightAPI final {
   friend class CDFDecoder;
   UI::PeriodicTimer timer{ [this] { OnTimer(); } };
   SkysightRequest *co_request = nullptr;
+  // const AllocatedPath &cache_path; // = Skysight::GetSkysight()->GetLocalPath();
+  static AllocatedPath cache_path; // = Skysight::GetSkysight()->GetLocalPath();
 
 public:
   std::string region;
@@ -75,7 +80,9 @@ public:
   std::vector<SkySight::Layer> layers_vector;
   std::vector<SkySight::Layer *> selected_layers;
 
-  SkysightAPI(Path _path) : cache_path(_path) {}
+  SkysightAPI(Path _path) {
+    cache_path = _path;
+  }
   ~SkysightAPI();
 
   void InitAPI(std::string_view email, std::string_view password,
@@ -128,7 +135,9 @@ protected:
   /// The mutex protects the Timer module.
   Mutex mutex;
 
-//  time_t last_request = 0;
+#ifdef SKYSIGHT_TIME_DELAY
+  time_t last_request = 0;
+#endif
   static SkysightAPI *self;
   bool inited_regions = false;
   bool inited_layers = false;
@@ -137,7 +146,6 @@ protected:
 #ifdef SKYSIGHT_FORECAST 
   SkysightAPIQueue queue;
 #endif  // SKYSIGHT_FORECAST 
-  const AllocatedPath cache_path;
 
   void LoadDefaultRegions(const std::string_view select_region);
 

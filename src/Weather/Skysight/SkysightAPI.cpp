@@ -100,6 +100,8 @@ void timer_start(std::function<void(void)> func, uint64_t ms)
 
 #endif  // THREAD_TIMER_START
 
+AllocatedPath SkysightAPI::cache_path = nullptr;
+
 SkysightAPI::~SkysightAPI()
 {
   delete co_request;
@@ -335,6 +337,9 @@ bool
 SkysightAPI::UpdateRegions(const boost::json::value &_regions)
 {
   bool success = false;
+#if defined(_DEBUG) || 1
+  LogFmt("{}: start",__func__);
+#endif
 
   regions.clear();
   for (auto &_region : _regions.as_array()) {
@@ -357,16 +362,23 @@ SkysightAPI::UpdateRegions(const boost::json::value &_regions)
 
     LogFmt("SkySight::Regions count = {}: {}... ",
       regions.size(), str);
-//    last_request = 0;  // the next request can be started
+#ifdef SKYSIGHT_TIME_DELAY
+    last_request = 0;  // the next request can be started
+#endif
     TimerInvoke();
   }
+#if defined(_DEBUG) || 1
+  LogFmt("{}: finished",__func__);
+#endif
   return success;
 }
 
 bool
 SkysightAPI::UpdateLayers(const boost::json::value &_layers)
 {
-
+#if defined(_DEBUG) || 1
+  LogFmt("{}: start",__func__);
+#endif
   layers_vector.clear();
   bool success = false;
 
@@ -378,6 +390,7 @@ SkysightAPI::UpdateLayers(const boost::json::value &_layers)
     "rain", "Rain", "live rain layer", true, true, 8));
   layers_vector.push_back(SkySight::Layer(
     "osm", "Open Street Map", "OSM layer", false, true));
+  layers_vector[2].alpha = 1.0; // 3rd layer is 'OSM'
 #endif
 
   for (auto &_layer : _layers.as_array()) {
@@ -425,19 +438,28 @@ SkysightAPI::UpdateLayers(const boost::json::value &_layers)
 
     LogFmt("SkySight::Layers count = {}: {}... ",
       layers_vector.size(), str);
- //   last_request = 0;  // the next request can be started
+#ifdef SKYSIGHT_TIME_DELAY
+    last_request = 0;  // the next request can be started
+#endif
 
     if (Skysight::GetSkysight()->NumSelectedLayers() == 0)
       Skysight::GetSkysight()->LoadSelectedLayers();
-    TimerInvoke();
+////????    if(co_request)
+////????       TimerInvoke();
   }
 
+#if defined(_DEBUG) || 1
+  LogFmt("{}: finished",__func__);
+#endif
   return success;
 }
 
 bool
 SkysightAPI::UpdateLastUpdates(const boost::json::value &_layers)
 {
+#if defined(_DEBUG)
+  LogFmt("{}: finished",__func__);;
+#endif
   bool success = false;
   auto active_layer = Skysight::GetActiveLayer();
   auto now = DateTime::now();
@@ -454,7 +476,7 @@ SkysightAPI::UpdateLastUpdates(const boost::json::value &_layers)
           layer->update_time = update_time;  // now;
           layer->dataname.clear();  // new update time, so clear old dataname
           success |= true;
-          if (layer_id == active_layer->id)
+          if (active_layer && layer_id == active_layer->id)
             update_layers.push_front(layer); // _id);
           else if (IsSelectedLayer(layer_id))
             update_layers.push_back(layer);  // _id);
@@ -482,7 +504,9 @@ SkysightAPI::UpdateLastUpdates(const boost::json::value &_layers)
     // success = true;
     inited_lastupdates = true;
     lastupdates_time = now;
-//    last_request = 0;  // the next request can be started
+#ifdef SKYSIGHT_TIME_DELAY
+    last_request = 0;  // the next request can be started
+#endif
 #ifdef _DEBUG  // logfile output
     int i = 0;
     std::string str;
@@ -495,6 +519,9 @@ SkysightAPI::UpdateLastUpdates(const boost::json::value &_layers)
  #endif
     TimerInvoke();
   }
+#if defined(_DEBUG)  || 1
+  LogFmt("{}: finished",__func__);
+#endif
   return success;
 }
 
@@ -654,7 +681,7 @@ SkysightAPI::GetTileData(const std::string_view layer_id,
     return false;
 
   // o: 0 -> 1 tile, or 1 -> 9 tiles, (or 2 -> 25 tiles?)
-  constexpr uint16_t o = 1;
+  constexpr uint16_t o = TILE_RANGE_OFFSET;
 
   for (tile.x = base_tile.x - o; tile.x <= base_tile.x + o; tile.x++)
     for (tile.y = base_tile.y - o; tile.y <= base_tile.y + o; tile.y++) {
@@ -855,65 +882,109 @@ SkysightAPI::SelectedLayersFull()
 void
 SkysightAPI::OnTimer()
 {
+#if 1  // test to debug the timer behaviour - and vector.size
+   LogFmt("{}: {} vs.{}", __func__,layers_vector.size(), layers.size());
+#endif
   assert(layers_vector.size() == layers.size());
+#if 1  // test to debug the timer behaviour - and vector.size
+  // LogString("OnTimer: 0");
+#endif
   const std::lock_guard lock{ mutex };
 
   /* TODO(August2111, 2026-04-26):
   * - One Minute before switch to new time rendering create the tiff file from
   *   zip (avoid the empty page w/o overlay (-> only active layer?)
-  * - 
+  * -
   */
 
   // various maintenance actions
   auto now = DateTime::now();
+#if 1  // test to debug the timer behaviour - and vector.size
+  // LogString("OnTimer: 0a");
+#endif
 
 #ifdef THREAD_TIMER_START
   timer_start(the_function_to_delay, 1000);
 #endif  // THREAD_TIMER_START
+#if 1  // test to debug the timer behaviour - and vector.size
+  // LogString("OnTimer: 0b");
+#endif
 
-  if (!co_request)
+  if (!co_request) {
+    // LogString("OnTimer: No CoRequest");
     return;  // do nothing
-
-#if 1
+  }
+#if 1  // test to debug the timer behaviour - and vector.size
+  // LogString("OnTimer: 1");
+#endif
 
   if (!IsLoggedIn()) {
-//    last_request = now;
+#ifdef SKYSIGHT_TIME_DELAY
+    last_request = now;
+#endif
     co_request->RequestCredentialKey();
     // return;
   }
+#if 1  // test to debug the timer behaviour - and vector.size
+  // LogString("OnTimer: 2");
+#endif
 
   if (!inited_regions) {
-  //  if (now < last_request + 5)
-  //    return;
-//    last_request = now;
+#ifdef SKYSIGHT_TIME_DELAY
+#if 1  // test to debug the timer behaviour - and vector.size
+    // LogString("OnTimer: 3");
+#endif
+    if (now < last_request + 5)
+        return;
+    last_request = now;
+#endif
     co_request->RequestJson("regions", "regions");
     return;
   }
   else if (!inited_layers) {
-//    if (now < last_request + 5)
-//      return;
-//    last_request = now;
+#ifdef SKYSIGHT_TIME_DELAY
+#if 1  // test to debug the timer behaviour - and vector.size
+    // LogString("OnTimer: 4");
+#endif
+    if (now < last_request + 5)
+       return;
+    last_request = now;
+#endif
     co_request->RequestJson("layers", "layers?region_id=" + region);
     return;
   }
-  else if (!inited_lastupdates || 
-     (now > lastupdates_time + 5*ONE_MINUTE - 10)) {
-//    if (now < last_request + 5)
-//      return;
-//    last_request = now;
+  else if (!inited_lastupdates ||
+    (now > lastupdates_time + 5 * ONE_MINUTE - 10)) {
+#ifdef SKYSIGHT_TIME_DELAY
+#if 1  // test to debug the timer behaviour - and vector.size
+    // LogString("OnTimer: 5");
+#endif
+    if (now < last_request + 5)
+      return;
+    last_request = now;
+#endif
     co_request->RequestJson("last_updated", "data/last_updated?region_id=" + region);
     return;
   }
   else if (!IsInited()) {
-//    if (now < last_request + 5)
-      return;
-//    last_request = now;
+#ifdef SKYSIGHT_TIME_DELAY
+#if 1  // test to debug the timer behaviour - and vector.size
+    // LogString("OnTimer: 6");
+#endif
+    if (now < last_request + 5)
+        return;
+    last_request = now;
+#else
+    return;
+#endif
   }
 
-#endif
 
+#if 1  // test to debug the timer behaviour - and vector.size
+  LogFmt("{}: 7", __func__);
+#endif
   Skysight::GetSkysight()->SetUpdateFlag();  // every minute
-  for (auto layer : selected_layers) 
+  for (auto layer : selected_layers) {
     if (layer) {
       if (layer->tile_layer) {
         if (!layer->live_layer || IsLoggedIn()) {
@@ -951,19 +1022,23 @@ SkysightAPI::OnTimer()
 #ifdef _DEBUG
           LogFmt("TimeCheck: testtime = {}, diff = {}", DateTime::time_str(test_time), diff_time);
 #endif
-          if (diff_time >= 0 &&  diff_time < 2 * ONE_MINUTE) {
+          if (diff_time >= 0 && diff_time < 2 * ONE_MINUTE) {
             test_time += HALF_HOUR;  // switch to next forecast time
             auto display_file = GetPath(SkysightCallType::Image, layer->id, test_time);
             if (!File::Exists(display_file)) {
               BuildForecastTiff(display_file);
 #ifdef _DEBUG
-              LogFmt("Create new Tiff:  {}", display_file.c_str());
+              // LogFmt("Create new Tiff:  {}", display_file.c_str());
 #endif
             }
           }
         }
-      }  // end forecast layer
-#endif SKYSIGHT_FORECAST 
+#endif  // SKYSIGHT_FORECAST
+      }  // layer->tile_layer
     }
+  }
+#if 1  // test to debug the timer behavior - and vector.size
+  LogFmt("{}: 8", __func__);
+#endif
 }
 

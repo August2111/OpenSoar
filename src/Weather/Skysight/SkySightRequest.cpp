@@ -38,7 +38,6 @@
 #ifdef _DEBUG
 # define SKYSIGHT_FILE_DEBUG
 #endif
-# include <mutex>
 
 static const boost::json::value json_null;  //boost::json::null{};
 static std::map<std::string_view, boost::json::value> json_values;
@@ -188,6 +187,24 @@ private:
 };
 /////////////////////////////////////////////////////////////////////////////
 
+void
+SkysightRequest::OnRequestTimer()
+{
+  std::lock_guard lock{ timer_mutex };
+  if (!pending_requests.empty()) {
+    RequestArgs args = pending_requests.front();
+    if (args.data->type == Net::FILE)
+      args.data->name = args.name;
+    Net::DownloadManager::Enqueue(args.url, args.name, std::move(args.data));
+#ifdef __AUGUST__
+    if (!args.url.starts_with("https://"))
+      LogFmt("Request-Error??? {}!", args.url.substr(0, 10));
+    // LogFmt("Request {} -> {} ", args.url, args.data->name);
+#endif
+    pending_requests.pop_front();
+  }
+}
+
 bool
 SkysightRequest::SetCredentialKey(const boost::json::value &credentials)
 try {
@@ -241,7 +258,7 @@ try {
   url << SKYSIGHTAPI_BASE_URL;
   if (!url_part.empty())
      url << '/' << url_part;
-  Net::DownloadManager::Enqueue(url.str(), name, std::move(data));
+  pending_requests.push_back({url.str(), name.data(), std::move(data)});
   return true;
 }
 catch (...) {
@@ -289,8 +306,11 @@ try {
   data->type = Net::JSON;
 
   request_age = DateTime::now();
-  Net::DownloadManager::Enqueue(
-    "https://skysight.io/api/auth", "authent", std::move(data));
+  pending_requests.push_back(
+    { "https://skysight.io/api/auth", "authent", std::move(data) });
+
+//  Net::DownloadManager::Enqueue(
+//    "https://skysight.io/api/auth", "authent", std::move(data));
   return true;
 }
 catch (...) {
@@ -322,19 +342,8 @@ SkysightRequest::DownloadFile(const std::string_view url,
       break;
   }
 
-#ifdef __AUGUST__
-  if (!url.starts_with("https://")) {
-    LogFmt("Request-Error (1) ??? {} -> {}!", url.substr(0, 10), filename.GetBase().c_str());
-    return false;
-  }
-#endif
-  Net::DownloadManager::Enqueue(url, filename, std::move(data));
-
-#ifdef __AUGUST__
-  if (!url.starts_with("https://"))
-    LogFmt("Request-Error (2)??? {}!", url.substr(0,10));
-  LogFmt("Request {} -> {} ", url, filename.GetBase().c_str());
-#endif
+  pending_requests.push_back({ url.data(), filename.c_str(), std::move(data)});
+  // Net::DownloadManager::Enqueue(url, filename, std::move(data));
 
   return true;
 }
@@ -360,6 +369,7 @@ SkysightRequest::SkysightRequest(SkysightAPI* _api,
   const std::string_view _password) : 
   api(_api), username(_username), password(_password) 
 {
+  request_timer.Schedule(std::chrono::milliseconds(5000));
   skysight_listener = new SkysightListener(this);
   request_headers = new CurlSlist();
   RequestCredentialKey();

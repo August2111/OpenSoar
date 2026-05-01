@@ -13,6 +13,7 @@
 #include "Weather/Skysight/Layers.hpp"
 #include "Weather/Skysight/SkysightAPI.hpp"
 #include "Blackboard/BlackboardListener.hpp"
+#include "PageState.hpp"
 
 #include <map>
 #include <vector>
@@ -21,7 +22,8 @@
 struct DisplayedLayer;
 class CurlGlobal;
 
-constexpr uint32_t max_skysight_overlays = 9;
+constexpr uint32_t max_skysight_overlays =
+  (2*TILE_RANGE_OFFSET+1)*(2*TILE_RANGE_OFFSET+1);
 
 struct SkysightImageFile {
 public:
@@ -43,21 +45,13 @@ class Skysight final: private NullBlackboardListener {
   uint32_t skysight_overlays = 1;
 
   std::string tile_filenames[max_skysight_overlays];
+
+  const PagesState *page_state;
 public:
   std::string region = "EUROPE";
   CurlGlobal *curl;
 
   static SkySight::Layer *GetActiveLayer() { return self->active_layer; }
-  static bool blur_tiff;
-
-  static void ToggleBlur() {
-    blur_tiff = !blur_tiff;
-#ifdef _WIN32
-    Beep(440, 200);
-#endif
-    GetSkysight()->SetUpdateFlag();
-  }
-
   Skysight(CurlGlobal &_curl);
 
   static void APIInited(const std::string details, const bool success,
