@@ -81,6 +81,7 @@ https://xcsoar.readthedocs.io/en/latest/input_events.html
 #include "InfoBoxes/Content/Thermal.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Weather/Skysight/Skysight.hpp"
+#include "ui/canvas/custom/LibTiff.hpp"
 
 #include <cassert>
 #include <algorithm>
@@ -920,5 +921,9 @@ void
 InputEvents::eventBlurTiff([[maybe_unused]] const char *misc) {
 
   // Toggle the tiff view mode
-  Skysight::ToggleBlur();
+#ifdef _WIN32
+  bool blur = ToggleBlur();
+  Beep(blur? 440 : 880, 200);
+  Skysight::GetSkysight()->SetUpdateFlag();
+#endif
 }
