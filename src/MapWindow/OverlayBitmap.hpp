@@ -80,6 +80,13 @@ public:
   }
 
   bool IsInside(GeoPoint p) const noexcept override;
-  void Draw(Canvas &canvas,
-            const WindowProjection &projection) noexcept override;
+
+#if 0 // geht nicht...
+    void Draw(Canvas &canvas,
+      const WindowProjection &projection,
+      const int tile_no = -1) noexcept; //  override;
+#else
+    void Draw(Canvas &canvas,
+      const WindowProjection &projection ) noexcept override;
+#endif
 };

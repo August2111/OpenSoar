@@ -41,9 +41,18 @@ MapWindow::SetOverlay(std::unique_ptr<MapOverlay> &&_overlay) noexcept
 }
 
 void
+MapWindow::SetBasePosition(Angle position, std::unique_ptr<MapOverlay> &&middle_overlay) noexcept
+{
+ // auto &middle_overlay = _overlay[max_skysight_overlays + max_skysight_overlays/2];
+
+//   if(middle_overlay)
+//     middle_overlay->SetBasePosition(position);
+}
+
+void
 MapWindow::SetOverlay(const uint16_t index,std::unique_ptr<MapOverlay> &&_overlay) noexcept
 {
-  if (index < 9)
+  if (index < max_skysight_overlays)  // 25 = max_skysight_overlays is the maximum number of overlays supported by Skysight
   overlay[index] = std::move(_overlay);
 }
 #else

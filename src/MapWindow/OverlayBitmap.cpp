@@ -131,7 +131,8 @@ MapOverlayBitmap::IsInside(GeoPoint p) const noexcept
 
 void
 MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
-                       [[maybe_unused]] const WindowProjection &projection) noexcept
+                       [[maybe_unused]] const WindowProjection &projection)
+                        noexcept
 {
   if (!simple_bounds.Overlaps(projection.GetScreenBounds()))
     /* not visible, outside of screen area */
@@ -141,7 +142,15 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
   if (clipped.empty())
     return;
 
-#ifdef ENABLE_OPENGL
+
+#ifdef _DEBUG
+  // projection.AngleToPixels();
+  auto center_point = projection.GetScreenOrigin();
+  auto center_chord = projection.GetGeoLocation();
+#endif
+
+
+#if defined(ENABLE_OPENGL)  || 0
   GLTexture &texture = *bitmap.GetNative();
   const PixelSize allocated = texture.GetAllocatedSize();
   const double x_factor = double(texture.GetWidth()) / allocated.width;
@@ -180,8 +189,8 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
         bitmap.IsFlipped() ? "FLIPPED" : "not flipped!");
 #endif
 #else
-      if (bitmap.IsFlipped())
 #endif
+      if (bitmap.IsFlipped())
         p.y = 1 - p.y;
       coord[i].x = p.x * x_factor;
       coord[i].y = p.y * y_factor;
@@ -195,6 +204,12 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
   glDisableVertexAttribArray(OpenGL::Attribute::TEXCOORD);
 
 #else  // ENABLE_OPENGL
+//  bitmap.bounds
+ // GeoTo2D(simple_bounds)
+    // GeoBounds b1 = ((GeoBitmap)bitmap).GetBounds(const TileData & data);
+    //GeoQuadrilateral g = bitmap.GetGeoQuadrilateral(const TileData & data);
+  // boost::geometry::model::box<DoublePoint2D> box = ToBox(simple_bounds);
+
   auto ChartWest = simple_bounds.GetWest().Native();
   auto ChartNorth = simple_bounds.GetNorth().Native();
   auto ChartWidth = simple_bounds.GetWidth().Native();
@@ -206,32 +221,39 @@ MapOverlayBitmap::Draw([[maybe_unused]] Canvas &canvas,
   auto MapWest = x.GetWest().Native();
   auto MapNorth = x.GetNorth().Native();
 
-  PixelPoint src_point(
-    (long)(((MapWest  - ChartWest) / ChartWidth)*bitmap.GetWidth()),
-    (long)(((MapNorth - ChartNorth)/-ChartHeight)*bitmap.GetHeight())
-  );
+  // Zusatzoffset:
+  PixelPoint null_point = { 0, 0 };
 
-  PixelSize xsize(
-    (long)((MapWidth/ChartWidth)*bitmap.GetWidth()),
-    (long)((MapHeight/ ChartHeight)*bitmap.GetHeight())
-  );
-
-  // This is painting with big pixels (and not aligned correctly)
-  canvas.Stretch({ 0, 0 }, canvas.GetSize(), bitmap, src_point, xsize);
-
-#if 0  // TestCode (zum Probieren...):
-  // buffer.Copy({ 0,0 }, bitmap.GetSize(), bitmap, { 0,0 });
-//  buffer.Stretch({ 0,0 }, bitmap.GetSize(), bitmap);
-  buffer.Stretch(bitmap, { 0,0 }, bitmap.GetSize());
-
-//  canvas.Copy({0, }, xsize, bitmap, src_point);
-  canvas.CopyAnd({0, 0 }, xsize, bitmap, src_point);
-  canvas.CopyTransparentWhite( {400, 0 }, xsize, buffer, src_point);
-  // canvas.({400, 0}, xsize, bitmap, src_point);
-  canvas.CopyOr({400, 400 }, xsize, bitmap, src_point);
-  canvas.CopyNot({0, 400 }, xsize, bitmap, src_point);
-  // canvas.Stretch(bitmap, {0, 0 }, xsize);
-  canvas.DrawLine({0, 0 }, {200, 200 });
+ if (bitmap.GetWidth() == bitmap.GetHeight() && bitmap.GetWidth() <= 1024) {
+   PixelPoint top_left(
+     (long)round(((ChartWest - center_chord.longitude.Native()) / ChartWidth) * bitmap.GetWidth()),
+    -(long)round(((ChartNorth - center_chord.latitude.Native()) / ChartHeight) * bitmap.GetHeight())
+   );
+   auto center = projection.GetScreenCenter();
+   PixelPoint ref_point = {
+     (long)(center_point.x % bitmap.GetWidth()),
+     (long)(center_point.y % bitmap.GetHeight()) };
+   auto src_point = top_left + center_point;
+#if 1 && defined(_DEBUG)
+ if (src_point.x > 0)
+   src_point.x += (1 + src_point.x / 256) * 5;
+ if (src_point.y > 0)
+   src_point.y += (1 + src_point.y / 256) * 5;
 #endif
+
+   canvas.Copy(src_point, bitmap.GetSize(), bitmap, null_point);  // = Copy..
+ } else {
+   PixelPoint src_point(
+    -(long)(((ChartWest - MapWest) / ChartWidth) * bitmap.GetWidth()),
+    +(long)(((ChartNorth - MapNorth) / ChartHeight) * bitmap.GetHeight())
+   );
+   PixelSize src_size(
+     1+(long)((MapWidth * bitmap.GetWidth()) / ChartWidth),
+     1+(long)((MapHeight * bitmap.GetHeight()) / ChartHeight)
+   );
+   // src_point = -src_point;
+    canvas.Stretch({ 0, 0 }, canvas.GetSize(), bitmap, src_point, src_size);
+ }
+
 #endif  // ENABLE_OPENGL
 }
