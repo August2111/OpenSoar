@@ -39,6 +39,18 @@ public:
   void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
 };
 
+class InfoBoxContentTwoLine : public InfoBoxContent
+{
+public:
+  void OnCustomPaint(Canvas &canvas, const PixelRect &rc) noexcept override;
+};
+
+class InfoBoxContentPosition : public InfoBoxContentTwoLine
+{
+public:
+  void Update(InfoBoxData &data) noexcept override;
+};
+
 void UpdateInfoBoxMousePositionXY(InfoBoxData &data) noexcept;
 void UpdateInfoBoxMousePositionCoord(InfoBoxData &data) noexcept;
 void UpdateInfoBoxMouseDistance(InfoBoxData &data) noexcept;

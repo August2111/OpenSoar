@@ -161,6 +161,32 @@ InfoBoxContentHorizon::Update(InfoBoxData &data) noexcept
                  basic.attitude.pitch_angle_available.ToInteger());
 }
 
+void
+InfoBoxContentTwoLine::OnCustomPaint(Canvas &canvas,
+                                     const PixelRect &rc) noexcept
+{
+  if (CommonInterface::Basic().acceleration.available) {
+    const Look &look = UIGlobals::GetLook();
+//    HorizonRenderer::Draw(canvas, rc,
+//                          look.horizon, CommonInterface::Basic().attitude);
+  }
+}
+
+void
+InfoBoxContentPosition::Update(InfoBoxData &data) noexcept
+{
+  // const auto &basic = CommonInterface::Basic();
+  auto x = UIGlobals::pixel_point.x;
+  auto y = UIGlobals::pixel_point.y;
+
+  data.FmtValue("x: {}", x);
+  data.FmtComment("y: {}", y);
+
+  data.SetCustom(333);
+
+
+}
+
 // TODO: merge with original copy from Dialogs/StatusPanels/SystemStatusPanel.cpp
 [[gnu::pure]]
 static const char *

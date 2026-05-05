@@ -1431,7 +1431,9 @@ static constexpr MetaData meta_data_2nd[] = {
         N_("Coordinates"),
         N_("Coordinates"),
         N_("Mouse Position Coordinates."),
-        UpdateInfoBoxMousePositionCoord,
+        IBFHelper<InfoBoxContentPosition>::Create,
+        //UpdateInfoBoxMousePositionCoord,
+
     },
     // e_MouseDistance,
     {
