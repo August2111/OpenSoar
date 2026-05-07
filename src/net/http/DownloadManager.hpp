@@ -32,14 +32,8 @@ public:
    * @param position the number of bytes already downloaded; -1 if
    * the download is queued, but has not been started yet
    */
-//  virtual void OnDownloadAdded(Path path_relative,
-  virtual void OnDownloadAdded(std::string_view name, // const DownloadType type,
-                               size_t size = 0, size_t position = 0) noexcept = 0;
-//
-//  virtual void OnDownloadComplete(std::string_view name, 
-//                                  const DownloadType type) noexcept = 0;
-//  virtual void OnDownloadAdded(const std::string_view name,
-//                               int64_t size, int64_t position) noexcept = 0;
+  virtual void OnDownloadAdded(std::string_view name,
+                         size_t size = 0, size_t position = 0) noexcept = 0;
 
   virtual void OnDownloadComplete(const std::string_view name) noexcept = 0;
 
@@ -75,8 +69,8 @@ void RemoveListener(DownloadListener &listener) noexcept;
 void Enumerate(DownloadListener &listener) noexcept;
 
 void Enqueue(const std::string_view uri, const Path path_relative) noexcept;
-void Enqueue(const std::string_view uri, const Path path,
-  Net::CurlData *data) noexcept;
+// void Enqueue(const std::string_view uri, const Path path,
+//  Net::CurlData *data) noexcept;
 void Enqueue(const std::string_view uri, const std::string_view name,
   boost::json::value &json) noexcept;
 

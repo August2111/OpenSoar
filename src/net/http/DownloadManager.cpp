@@ -111,21 +111,21 @@ public:
       Start();
   }
 
-  void
-  Enqueue(const std::string_view uri, const Path path,
-    Net::CurlData *data) noexcept
-  {
-    if (data) 
-        data->name = path.c_str();
-    queue.emplace_back(uri, data);
-    std::string_view name = path.GetBase().c_str();
-    listeners.ForEach([name](auto *listener) {
-      listener->OnDownloadAdded(name, -1, -1);
-    });
-
-    if (!task)
-      Start();
-  }
+////  void
+////  Enqueue(const std::string_view uri, const Path path,
+////    Net::CurlData *data) noexcept
+////  {
+////    if (data) 
+////        data->name = path.c_str();
+////    queue.emplace_back(uri, data);
+////    std::string_view name = path.GetBase().c_str();
+////    listeners.ForEach([name](auto *listener) {
+////      listener->OnDownloadAdded(name, -1, -1);
+////    });
+////
+////    if (!task)
+////      Start();
+////  }
   void
   Enqueue(const std::string_view uri, const std::string_view name,
     boost::json::value *json) noexcept
@@ -225,6 +225,7 @@ DownloadTask(CurlGlobal &curl,
 void
 DownloadManagerThread::Start() noexcept
 {
+  const std::lock_guard lock{ mutex };
   if (task)
     return;
   assert(!queue.empty());
@@ -353,16 +354,16 @@ Net::DownloadManager::Enqueue(const std::string_view uri,
   thread->Enqueue(uri, name, data);
 }
 
-void
-Net::DownloadManager::Enqueue(const std::string_view uri,
-  const Path path, Net::CurlData *data) noexcept
-{
-  assert(thread != nullptr);
-
-  if (data)
-    data->name = path.c_str();
-  thread->Enqueue(uri, path, data);
-}
+///// void
+///// Net::DownloadManager::Enqueue(const std::string_view uri,
+/////   const Path path, Net::CurlData *data) noexcept
+///// {
+/////   assert(thread != nullptr);
+///// 
+/////   if (data)
+/////     data->name = path.c_str();
+/////   thread->Enqueue(uri, path, data);
+///// }
 
 void
 Net::DownloadManager::Cancel(const std::string_view name) noexcept
