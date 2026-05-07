@@ -233,16 +233,23 @@ SkysightAPI::GetPath(SkysightCallType type, const std::string_view layer_id,
     bool is_osm = layer_id.starts_with("osm");
     servername = is_osm ? OSM_BASE_URL : SKYSIGHTAPI_BASE_URL;
     auto path = GetUrl(type, layer_id, fctime, tile)
-                      .substr(servername.length() + 1);
+      .substr(servername.length() + 1);
     // substitute '/' with '-':
     for (auto &ch : path)
       if (ch == '/') ch = '-';
 
-    if (is_osm)
-      filename = path;  // has already extension .png
-    else
+    if (is_osm) {
+      auto osm_path = AllocatedPath::Build(::GetCachePath(), "osm");
+      if (!Directory::Exists(osm_path)) {
+        Directory::Create(AllocatedPath::Build(::GetCachePath(), "osm"));
+      }
+      Directory::Create(AllocatedPath::Build(::GetCachePath(), "osmX"));
+      return AllocatedPath::Build(::GetCachePath(), filename);
+    }
+    else {
       filename = path + (GetLayer(layer_id)->live_layer ? ".jpg" : ".nc");
     }
+  }
     break;
   case SkysightCallType::Image:
     if (GetLayer(layer_id)->tile_layer)
