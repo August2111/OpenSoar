@@ -280,7 +280,6 @@ SkysightAPI::InitAPI(std::string_view email, std::string_view password,
   // Check for maintenance actions every minute - if co_request active only
   if (co_request)
     timer.Schedule(std::chrono::minutes(1));
-  
 }
 
 bool
@@ -882,6 +881,7 @@ SkysightAPI::SelectedLayersFull()
 void
 SkysightAPI::OnTimer()
 {
+  const std::lock_guard lock{ mutex };
 #if 1  // test to debug the timer behaviour - and vector.size
    LogFmt("{}: {} vs.{}", __func__,layers_vector.size(), layers.size());
 #endif
@@ -889,7 +889,8 @@ SkysightAPI::OnTimer()
 #if 1  // test to debug the timer behaviour - and vector.size
   // LogString("OnTimer: 0");
 #endif
-  const std::lock_guard lock{ mutex };
+
+  timer.Schedule(std::chrono::seconds(60));
 
   /* TODO(August2111, 2026-04-26):
   * - One Minute before switch to new time rendering create the tiff file from
@@ -981,7 +982,7 @@ SkysightAPI::OnTimer()
 
 
 #if 1  // test to debug the timer behaviour - and vector.size
-  LogFmt("{}: 7", __func__);
+  // LogFmt("{}: 7", __func__);
 #endif
   Skysight::GetSkysight()->SetUpdateFlag();  // every minute
   for (auto layer : selected_layers) {

@@ -369,7 +369,7 @@ SkysightRequest::SkysightRequest(SkysightAPI* _api,
   const std::string_view _password) : 
   api(_api), username(_username), password(_password) 
 {
-  request_timer.Schedule(std::chrono::milliseconds(5000));
+  request_timer.Schedule(std::chrono::milliseconds(1000));
   skysight_listener = new SkysightListener(this);
   request_headers = new CurlSlist();
   RequestCredentialKey();
