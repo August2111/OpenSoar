@@ -78,7 +78,9 @@ ConfigurationConfigPanel::Prepare(ContainerWindow &parent,
     ProfileKeys::ConfigurationClubProfileFile, "*.prf\0",
     FileType::PROFILE);
 
+#ifndef ANDROID
   AddDirectory(_("IGC file location"), _("IGC file location help"), ProfileKeys::ConfigurationIGCFileFolder);
+#endif
   
   SetEnabled(configuration.enabled);
 }
@@ -97,11 +99,12 @@ ConfigurationConfigPanel::Save(bool &_changed) noexcept
   changed |= SaveValue(ConfigurationClubEnabled,
                        ProfileKeys::ConfigurationClubEnabled,
                        configuration.club_usage_enabled);
-  
+// #ifndef ANDROID
   bool ClubProfileChanged = SaveValueFileReader(ConfigurationClubProfile,
     ProfileKeys::ConfigurationClubProfileFile);
 
   changed |= ClubProfileChanged;
+// #endif
 
   _changed |= changed;
 
