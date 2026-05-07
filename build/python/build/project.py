@@ -15,14 +15,15 @@ class Project:
         if base is None:
             basename = download_basename(url)
             m = re.match(r'^(.+)\.(tar(\.(gz|bz2|xz|lzma))?|zip)$', basename)
-            if not m: raise RuntimeError('Could not identify tarball name: ' + basename)
+            if not m: raise RuntimeError('Could not identify tarball basename: ' + basename)
             self.base = m.group(1)
         else:
-            self.base = base
+            self.base = base + '.tar.gz'
 
         if name is None or version is None:
             m = re.match(r'^([-\w]+)-(\d[\d.]*[a-z]?[\d.]*(?:-(?:alpha|beta)\d+)?)(\+.*)?$', self.base)
-            if not m: raise RuntimeError('Could not identify tarball name: ' + self.base)
+            if not m: raise RuntimeError('Could not identify tarball name, version: ' + self.base + 
+                                         ', name: ' + str(name) + ', version: ' + str(version))
             if name is None: name = m.group(1)
             if version is None: version = m.group(2)
 
