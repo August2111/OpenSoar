@@ -12,7 +12,9 @@
 #include <algorithm> // for std::clamp()
 #include <cassert>
 
+static constexpr unsigned BaseScale = 111200;
 static constexpr unsigned ScaleList[] = {
+#if 0
   100,           // 
   200,           // 2
   300,           // 1.5
@@ -33,6 +35,23 @@ static constexpr unsigned ScaleList[] = {
   300000,        // 1.5     = 150
   500000,        // 1.67    = 250
   1000000,       // 2       = 500
+#else
+  BaseScale / 1024,
+  BaseScale / 512,
+  BaseScale / 256,
+  BaseScale / 128,
+  BaseScale / 64,
+  BaseScale / 32,
+  BaseScale / 16,
+  BaseScale / 8,
+  BaseScale / 4,
+  BaseScale / 2,
+  BaseScale * 1,
+  BaseScale * 2,
+  BaseScale * 4,
+  BaseScale * 8,
+//  BaseScale * 16,
+#endif
 };
 
 #ifdef IS_OPENVARIO
