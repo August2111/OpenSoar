@@ -18,6 +18,10 @@ else ifeq ($(TARGET_IS_DARWIN),y)
   # and not IOS!
   # HOST_TRIPLET = aarch64-apple-darwin (arm) or x86_64-apple-darwin (intel)
 #2026-04-14:  USE_THIRDPARTY_LIBS = y
+else ifeq ($(TARGET_IS_OPENVARIO),y)
+  HOST_TRIPLET = x86_64-linux-gnu
+  USE_THIRDPARTY_LIBS = y
+  TARGET_IS_UNIX = y
 else
   # UNIX???
   HOST_TRIPLET = x86_64-linux-gnu

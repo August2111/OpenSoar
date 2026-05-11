@@ -18,7 +18,8 @@ class Project:
             if not m: raise RuntimeError('Could not identify tarball basename: ' + basename)
             self.base = m.group(1)
         else:
-            self.base = base + '.tar.gz'
+            # self.base = base + '.tar.gz'
+            self.base = base
 
         if name is None or version is None:
             m = re.match(r'^([-\w]+)-(\d[\d.]*[a-z]?[\d.]*(?:-(?:alpha|beta)\d+)?)(\+.*)?$', self.base)
@@ -55,7 +56,10 @@ class Project:
             parent_path = toolchain.src_path
         else:
             parent_path = toolchain.build_path
-
+        print("build_path:  ", toolchain.build_path)
+        print("src_path:    ", toolchain.src_path)
+        print("parent_path: ", parent_path)
+        print("base:        ", self.base)
         # protect concurrent builds by holding an exclusive lock
         os.makedirs(parent_path, exist_ok=True)
         self.__unpack_lockfile = open(os.path.join(parent_path, 'lock.' + self.base), 'wb')
@@ -83,6 +87,10 @@ class Project:
         pass
 
     def build(self, toolchain: AnyToolchain) -> None:
+        print("def build", toolchain)
+        print("build_path:  ", toolchain.build_path)
+        print("src_path:    ", toolchain.src_path)
+        print("base:        ", self.base)
         try:
             self._build(toolchain)
         finally:

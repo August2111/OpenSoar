@@ -12,11 +12,13 @@ from build.lua import LuaProject
 from build.musl import MuslProject
 
 fmt_version        = ["11.1.4", "ac366b7b4c2e9f0dde63a59b3feb5ee59b67974b14ee5dc9ea8ad78aa2c1ee1e"] 
-netcdf_version     = [ "4.6.2", "eda1be377fce86e5d91b30a00b15bb7ea9c97f5c5ef007901145549786781710"]
+netcdf_version     = [ "4.6.2", # "eda1be377fce86e5d91b30a00b15bb7ea9c97f5c5ef007901145549786781710"]
+  "673936C76AE0C496F6DDE7E077F5BE480AFC1E300ADB2C200BF56FBE22E5A82A"]
 # netcdf_version   = [ "4.9.3", "990F46D49525D6AB5DC4249F8684C6DEEAF54DE6FEC63A187E9FB382CC0FFDFF"]
 # netcdf_version   = [ "4.10.0", "CE160F9C1483B32D1BA8B7633D7984510259E4E439C48A218B95A023DC02FD4C"]
 netcdfcxx_version = [ "4.2",   "95ed6ab49a0ee001255eac4e44aacb5ca4ea96ba850c08337a3e4c9a0872ccd1" ]
 # netcdfcxx_version = [ "4.3.1", "6A1189A181EED043B5859E15D5C080C30D0E107406FBB212C8FB9814E90F3445" ]
+
 
 
 binutils = BinutilsProject(
@@ -502,11 +504,14 @@ libsalsa = AutotoolsProject(
     patches=abspath("lib/salsa-lib/patches"),
 )
 
-netcdf = AutotoolsProject(
+if netcdf_version[0] == '4.6.2':
+    # Caz extra compilation! 
+  netcdf_version[1] = "EDA1BE377FCE86E5D91B30A00B15BB7EA9C97F5C5EF007901145549786781710"
+
+  netcdf = AutotoolsProject(
     (
- #      'https://github.com/Unidata/netcdf-c/archive/refs/tags/v' + netcdf_version[0] + '.tar.gz', 
-       'https://storage.googleapis.com/lazyrasp.com/xcsoar/netcdf-c-' + netcdf_version[0] + '.tar.gz',
-      # invalide - new 4.9.3: 'https://fossies.org/linux/misc/netcdf-c-4.9.3.tar.gz',
+      'https://storage.googleapis.com/lazyrasp.com/xcsoar/netcdf-c-' + netcdf_version[0] + '.tar.gz',
+      # -------------------------------------------------------------------------------------------------
     ),
     netcdf_version[1],
     'lib/libnetcdf.a',
@@ -522,16 +527,71 @@ netcdf = AutotoolsProject(
         '--disable-examples',
         '--disable-shared', '--enable-static'
     ],
+    name="netcdf-c",
+    version=netcdf_version[0],
+    base="netcdf-c-" + netcdf_version[0],
     # patches=abspath('lib/netcdf/patches'),
     cppflags='-DHAVE_STRLCAT',
     ldflags='-Wl,--gc-sections'
 )
 
+else:
+  netcdf = CmakeProject(
+    (
+      # 'https://storage.googleapis.com/lazyrasp.com/xcsoar/netcdf-c-' + netcdf_version[0] + '.tar.gz',
+      # -------------------------------------------------------------------------------------------------
+      # https://fossies.org/linux/misc/netcdf-c-4.10.0.tar.gz/
+      # #'https://fossies.org/linux/misc/netcdf-c-' + netcdf_version[0] + '.tar.gz',
+      'https://github.com/Unidata/netcdf-c/archive/refs/tags/v' + netcdf_version[0] + '.tar.gz', 
+    ),
+    netcdf_version[1],
+    'lib/libnetcdf.a',
+    [
+        ## "-DCMAKE_INSTALL_PREFIX=${NETCDF_C_DIR}"
+        ## "-DCMAKE_INSTALL_LIBDIR:PATH=${_INSTALL_LIB_DIR}"
+        ## "-DCMAKE_INSTALL_INCLUDEDIR=include"
+        ## "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+
+        "-DBUILD_SHARED_LIBS:BOOL=OFF",
+        "-DBUILD_TESTING:BOOL=OFF",
+        "-DHAVE_BZ2:BOOL=OFF",
+        "-DNETCDF_BUILD_UTILITIES:BOOL=OFF",
+        "-DNETCDF_ENABLE_ATEXIT_FINALIZE:BOOL=OFF",
+        "-DNETCDF_ENABLE_BASH_SCRIPT_TESTING:BOOL=OFF",
+        "-DNETCDF_ENABLE_CDF5:BOOL=OFF",
+        "-DNETCDF_ENABLE_DAP:BOOL=OFF", # see libs.py
+        "-DNETCDF_ENABLE_DAP2:BOOL=OFF",
+        "-DNETCDF_ENABLE_DAP4:BOOL=OFF",
+        "-DNETCDF_ENABLE_FILTER_BLOSC:BOOL=OFF",
+        "-DNETCDF_ENABLE_FILTER_BZ2:BOOL=OFF",
+        "-DNETCDF_ENABLE_FILTER_SZIP:BOOL=OFF",
+        "-DNETCDF_ENABLE_HDF5:BOOL=OFF",
+        "-DNETCDF_ENABLE_LIBXML2:BOOL=OFF",
+        "-DNETCDF_ENABLE_NETCDF4:BOOL=OFF",
+        "-DNETCDF_ENABLE_TESTS:BOOL=OFF",
+        "-DNETCDF_ENABLE_UNIT_TESTS:BOOL=OFF",
+        "-DNETCDF_ENABLE_NCZARR:BOOL=OFF",
+        "-DZLIB_LIBRARY:FILEPATH=${ZLIB_LIBRARY}",
+        "-DZLIB_INCLUDE_DIR=${ZLIB_INCLUDE_DIR}",
+        "-DBUILD_TESTSETS:BOOL=OFF",
+    ],
+    name="netcdf-c",
+    version=netcdf_version[0],
+    base="netcdf-c-" + netcdf_version[0],
+    # patches=abspath('lib/netcdf/patches'),
+    # cppflags='-DHAVE_STRLCAT',
+    # ldflags='-Wl,--gc-sections'
+)
+
+
+
 netcdfcxx = AutotoolsProject(
     (
+    "https://storage.googleapis.com/lazyrasp.com/xcsoar/netcdf-cxx-" + netcdfcxx_version[0] + ".tar.gz",
+    # -------------------------------------------------------------------------------------------------
      # "https://github.com/Unidata/netcdf-cxx4/archive/refs/tags/netcdf4-cxx-" + netcdfcxx_version[0] + ".tar.gz", 
      # "https://github.com/Unidata/netcdf-cxx4/archive/refs/tags/v" + netcdfcxx_version[0] + ".tar.gz", 
-     "https://storage.googleapis.com/lazyrasp.com/xcsoar/netcdf-cxx-" + netcdfcxx_version[0] + ".tar.gz",
+     # 'https://fossies.org/linux/misc/netcdf-cxx4-' + netcdfcxx_version[0] + '.tar.gz',
     ),
     netcdfcxx_version[1],
     'lib/libnetcdf_c++.a',
@@ -541,6 +601,9 @@ netcdfcxx = AutotoolsProject(
         '--disable-extra-tests',
         '--disable-valgrind-tests'
     ],
+    ## name="netcdf-cxx4",
+    ## version=netcdfcxx_version[0],
+    ## base="netcdf-cxx4-" + netcdfcxx_version[0],
     autogen=True,
     add_include=[ '../src/netcdf-c-' + netcdf_version[0] + '/include']
 )
